@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R6S 武器配件数据库</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">⬡</span>
+                <span class="logo-text">R6S</span>
+                <span class="logo-sub">武器配件数据库</span>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-link active" data-tab="weapons">武器库</a>
+                <a href="#" class="nav-link" data-tab="attachments">配件图鉴</a>
+                <a href="#" class="nav-link" data-tab="compare">对比工具</a>
+                <a href="#" class="nav-link" data-tab="updates">官方更新</a>
+            </nav>
+            <div class="version-badge">Y10S4 / Y11S1</div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main">
+        <!-- 武器库页面 -->
+        <section id="tab-weapons" class="tab-content active">
+            <div class="toolbar">
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input type="text" id="weapon-search" placeholder="搜索武器名称、干员..." autocomplete="off">
+                </div>
+                <div class="filter-group">
+                    <button class="filter-btn active" data-type="all">全部</button>
+                    <span class="filter-divider">主武器</span>
+                    <button class="filter-btn" data-type="ar">突击步枪</button>
+                    <button class="filter-btn" data-type="smg">冲锋枪</button>
+                    <button class="filter-btn" data-type="lmg">轻机枪</button>
+                    <button class="filter-btn" data-type="sniper">狙击步枪</button>
+                    <button class="filter-btn" data-type="dmr">射手步枪</button>
+                    <button class="filter-btn" data-type="shotgun">霰弹枪</button>
+                    <button class="filter-btn" data-type="slug">独头霰弹枪</button>
+                    <span class="filter-divider">副武器</span>
+                    <button class="filter-btn" data-type="shotgun_sec">霰弹枪(次要)</button>
+                    <button class="filter-btn" data-type="pistol">手枪</button>
+                    <button class="filter-btn" data-type="smg_sec">冲锋枪(次要)</button>
+                    <button class="filter-btn" data-type="revolver">左轮手枪</button>
+                </div>
+            </div>
+            <div class="stats-bar">
+                <span id="weapon-count">正在加载...</span>
+                <div class="sort-group">
+                    <label>排序：</label>
+                    <select id="weapon-sort">
+                        <option value="name">名称</option>
+                        <option value="damage">伤害 ↓</option>
+                        <option value="rpm">射速 ↓</option>
+                        <option value="dps">DPS ↓</option>
+                    </select>
+                </div>
+            </div>
+            <div id="weapon-grid" class="weapon-grid"></div>
+        </section>
+
+        <!-- 配件图鉴页面 -->
+        <section id="tab-attachments" class="tab-content">
+            <div class="attachment-overview">
+                <h2 class="section-title">配件属性总览</h2>
+                <p class="section-desc">每个配件的精确属性修改数值（来源：Fandom Wiki 数据挖掘 + 官方设计师笔记）</p>
+                <div id="attachment-cards" class="attachment-cards"></div>
+            </div>
+            <div class="attachment-compat">
+                <h2 class="section-title">配件兼容性查询</h2>
+                <p class="section-desc">选择一个配件，查看哪些武器可以装备它</p>
+                <div class="compat-controls">
+                    <select id="compat-slot">
+                        <option value="barrel">枪管配件</option>
+                        <option value="grip">握把配件</option>
+                    </select>
+                    <select id="compat-attachment"></select>
+                </div>
+                <div id="compat-results" class="compat-results"></div>
+            </div>
+        </section>
+
+        <!-- 对比工具页面 -->
+        <section id="tab-compare" class="tab-content">
+            <h2 class="section-title">武器对比工具</h2>
+            <p class="section-desc">选择2-4把武器进行属性横向对比</p>
+            <div class="compare-selectors">
+                <div class="compare-slot" data-slot="0">
+                    <select class="compare-select"><option value="">选择武器...</option></select>
+                </div>
+                <div class="compare-slot" data-slot="1">
+                    <select class="compare-select"><option value="">选择武器...</option></select>
+                </div>
+                <div class="compare-slot" data-slot="2">
+                    <select class="compare-select"><option value="">选择武器...</option></select>
+                </div>
+                <div class="compare-slot" data-slot="3">
+                    <select class="compare-select"><option value="">选择武器...</option></select>
+                </div>
+            </div>
+            <div id="compare-table" class="compare-table"></div>
+        </section>
+
+        <!-- 官方更新页面 -->
+        <section id="tab-updates" class="tab-content">
+            <h2 class="section-title">R6S 官方更新追踪</h2>
+            <p class="section-desc">自动收集育碧官方更新信息和设计师笔记</p>
+            <div id="updates-feed" class="updates-feed"></div>
+        </section>
+    </main>
+
+    <!-- 武器详情弹窗 -->
+    <div id="weapon-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>R6S 武器配件数据库 · 数据来源: Fandom Wiki / Ubisoft 官方设计师笔记 / 社区数据挖掘</p>
+        <p>版本基准: Year 10 Season 4 / Year 11 Season 1 · 最后更新: 2026-03-24</p>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

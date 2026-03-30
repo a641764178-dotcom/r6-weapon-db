@@ -561,6 +561,944 @@ const WEAPONS = [
       notes: '.44 Mag 左轮（非半自动版）' }
 ];
 
+// ---- 武器详细档案 ----
+// 数据来源: Fandom Wiki / R6灰机Wiki / Ubisoft官方
+const WEAPON_DETAILS = {
+    // ===== 突击步枪 =====
+    'M4': {
+        realName: 'Remington R4',
+        caliber: '5.56x45mm NATO',
+        country: '🇺🇸 美国',
+        manufacturer: 'Remington Arms',
+        trivia: [
+            '游戏内模型基于 Remington R4（非军用 M4 卡宾枪），可从枪身刻印和无前托设计区分。',
+            'Maverick 是唯一可以使用该武器的干员，他的背景设定为在阿富汗长期独立行动的 Delta Force 队员。'
+        ]
+    },
+    'Commando 9': {
+        realName: 'CAA RONI Glock Carbine Kit',
+        caliber: '9x19mm Parabellum',
+        country: '🇮🇱 以色列',
+        manufacturer: 'CAA Industries',
+        trivia: [
+            '游戏中名为"Commando 9"，实际原型为 CAA RONI 套件——一种可将 Glock 手枪转换为卡宾枪的转换架。',
+            '虽然归类为突击步枪但发射 9mm 手枪弹，这解释了其较低的 36 点基础伤害。'
+        ]
+    },
+    'L85A2': {
+        realName: 'SA80 L85A2',
+        caliber: '5.56x45mm NATO',
+        country: '🇬🇧 英国',
+        manufacturer: 'Royal Small Arms Factory / H&K',
+        trivia: [
+            '原型 L85A1 因可靠性问题臭名昭著（故障率极高），后由 H&K 德国公司全面翻新为 A2 版本。',
+            '这是英国军队的标准制式步枪，采用犊牛式布局，弹匣在扳机后方。',
+            'Sledge 和 Thatcher 均来自英国 SAS，与该武器的英军背景一致。'
+        ]
+    },
+    'AR33': {
+        realName: 'H&K HK33',
+        caliber: '5.56x45mm NATO',
+        country: '🇩🇪 德国',
+        manufacturer: 'Heckler & Koch',
+        trivia: [
+            'HK33 是 G3 步枪的 5.56mm 版本，采用相同的滚柱延迟闭锁机构。',
+            '是 Thatcher 的备选步枪，现实中 SAS 并不常规使用此武器。'
+        ]
+    },
+    'G36C': {
+        realName: 'H&K G36C',
+        caliber: '5.56x45mm NATO',
+        country: '🇩🇪 德国',
+        manufacturer: 'Heckler & Koch',
+        trivia: [
+            'G36C 是 G36 突击步枪的紧凑版本，"C"代表 Compact。缩短的枪管和折叠枪托使其适合 CQB。',
+            '现实中被德国 GSG-9、西班牙 GEO 和多个北约特种部队使用。'
+        ]
+    },
+    'R4-C': {
+        realName: 'Remington R4',
+        caliber: '5.56x45mm NATO',
+        country: '🇺🇸 美国',
+        manufacturer: 'Remington Arms',
+        trivia: [
+            '后缀"-C"代表 Compact，是 R4 的短管版本。Ash 的标志性武器，以高射速和极佳的手感著称。',
+            '曾一度被认为是进攻方最强突击步枪之一，因此多次被削弱（移除 ACOG、调整后坐力）。'
+        ]
+    },
+    '556XI': {
+        realName: 'SIG Sauer 556xi',
+        caliber: '5.56x45mm NATO',
+        country: '🇨🇭 瑞士 / 🇺🇸 美国',
+        manufacturer: 'SIG Sauer',
+        trivia: [
+            'SIG 556xi 是一种模块化步枪，可以通过更换枪管和弹匣适配器切换口径（5.56mm / 7.62x39mm / .300 BLK）。',
+            '"xi"代表该系列的最新迭代版本，修复了早期 SIG 556 的一些可靠性问题。'
+        ]
+    },
+    'F2': {
+        realName: 'FAMAS F1/G2',
+        caliber: '5.56x45mm NATO',
+        country: '🇫🇷 法国',
+        manufacturer: 'GIAT Industries (Nexter)',
+        trivia: [
+            'FAMAS 绰号"Le Clairon"（军号），是法国军队的标准制式步枪（已被 HK416F 替代）。',
+            '以 980 RPM 的超高射速著称，是游戏中射速最高的突击步枪之一，理论 DPS 极高。',
+            '采用独特的杠杆延迟闭锁系统，在军用步枪中非常少见。'
+        ]
+    },
+    'AK-12': {
+        realName: 'AK-12 (2018 production model)',
+        caliber: '5.45x39mm',
+        country: '🇷🇺 俄罗斯',
+        manufacturer: 'Kalashnikov Concern',
+        trivia: [
+            'AK-12 是 AK 系列的现代化版本，2018 年被俄军正式列装。保留了 AK 经典的长行程活塞导气系统。',
+            '游戏中的模型更接近早期原型（带四面皮卡汀尼导轨），而非最终量产版。'
+        ]
+    },
+    'AUG A2': {
+        realName: 'Steyr AUG A2',
+        caliber: '5.56x45mm NATO',
+        country: '🇦🇹 奥地利',
+        manufacturer: 'Steyr Mannlicher',
+        trivia: [
+            'AUG（Armee-Universal-Gewehr，"军队通用步枪"）是世界上最成功的犊牛式步枪之一。',
+            '奥地利军队自 1978 年起列装，至今仍在使用。在游戏中分配给同为 GSG-9（德国）的 IQ。'
+        ]
+    },
+    '552 Commando': {
+        realName: 'SIG SG 552 Commando',
+        caliber: '5.56x45mm NATO',
+        country: '🇨🇭 瑞士',
+        manufacturer: 'SIG Sauer (Swiss Arms)',
+        trivia: [
+            'SG 552 是 SG 550 突击步枪的紧凑卡宾版本，枪管长度从 528mm 缩短至 226mm。',
+            '在多个特种部队中服役，因其在紧凑尺寸下依然保持的高精度而受到好评。'
+        ]
+    },
+    '416-C CARBINE': {
+        realName: 'H&K HK416C',
+        caliber: '5.56x45mm NATO',
+        country: '🇩🇪 德国',
+        manufacturer: 'Heckler & Koch',
+        trivia: [
+            'HK416C 是 HK416 的超短版本，最初为特种部队设计。采用短行程活塞系统，比 M4 更可靠。',
+            'Jäger 作为德国 GSG-9 成员使用此武器在设定上合理——GSG-9 实际装备 HK416。',
+            'HK416 的标准版本于 2011 年被美国海军海豹突击队用于击毙本·拉登的行动中。'
+        ]
+    },
+    'C8-SFW': {
+        realName: 'Colt Canada C8 SFW',
+        caliber: '5.56x45mm NATO',
+        country: '🇨🇦 加拿大',
+        manufacturer: 'Colt Canada',
+        trivia: [
+            'C8 SFW（Special Forces Weapon）是加拿大特种部队专用版本，配有重枪管以提高持续射击能力。',
+            'Buck 无法使用握把配件，因为下挂的 Skeleton Key（M26 MASS 霰弹枪模块）占用了握把导轨。'
+        ]
+    },
+    'Mk17 CQB': {
+        realName: 'FN SCAR-H CQC',
+        caliber: '7.62x51mm NATO',
+        country: '🇧🇪 比利时',
+        manufacturer: 'FN Herstal',
+        trivia: [
+            'SCAR-H（Heavy）发射 7.62mm 全威力步枪弹，CQC 版本采用缩短枪管以适应近距离作战。',
+            '高伤害低射速的特性反映了 7.62mm 的大口径子弹特点。',
+            '现实中主要装备美军特种作战司令部（USSOCOM）。'
+        ]
+    },
+    'PARA-308': {
+        realName: 'FN FAL PARA',
+        caliber: '7.62x51mm NATO',
+        country: '🇧🇪 比利时 / 🇧🇷 巴西',
+        manufacturer: 'FN Herstal / IMBEL',
+        trivia: [
+            'FAL（Fusil Automatique Léger，"轻型自动步枪"）绰号"自由世界的右臂"，冷战期间被 90 多个国家采用。',
+            'PARA 版本配有折叠枪托，最初为伞兵设计。巴西版由 IMBEL 授权生产。',
+            'Capitão 作为巴西 BOPE 成员使用此武器非常契合——巴西军警大量使用 FAL 系列。'
+        ]
+    },
+    'Type-89': {
+        realName: '89式 5.56mm 小銃',
+        caliber: '5.56x45mm NATO',
+        country: '🇯🇵 日本',
+        manufacturer: '豊和工業 (Howa)',
+        trivia: [
+            '89 式步枪是日本自卫队的现役制式步枪，由丰和工业制造。仅 20 发弹匣是游戏平衡考虑。',
+            '由于日本武器出口限制，89 式几乎不可能在日本以外见到，使其成为游戏中最"稀有"的真实武器之一。'
+        ]
+    },
+    'C7E': {
+        realName: 'Colt Canada C7',
+        caliber: '5.56x45mm NATO',
+        country: '🇨🇦 加拿大',
+        manufacturer: 'Colt Canada',
+        trivia: [
+            'C7 是加拿大版的 M16A2，带有一些本土改进。"E"可能代表某种电子光学版本。',
+            '被誉为攻方最平衡的突击步枪之一——46 伤害配 800 射速提供极佳的 DPS。'
+        ]
+    },
+    'M762': {
+        realName: 'FB Beryl M762',
+        caliber: '7.62x39mm M43',
+        country: '🇵🇱 波兰',
+        manufacturer: 'FB Radom',
+        trivia: [
+            'Beryl 是波兰基于 AK 平台自主研发的突击步枪，名字来源于绿宝石矿物 Beryl。',
+            'M762 是出口型号，发射 7.62x39mm 弹药，而波兰军队标准型号发射 5.56mm NATO。',
+            'Zofia 作为波兰 GROM 成员使用此武器完美契合背景设定。'
+        ]
+    },
+    'V308': {
+        realName: 'KRISS Vector (虚构改型)',
+        caliber: '7.62x51mm NATO (游戏设定)',
+        country: '🇺🇸 美国',
+        manufacturer: 'KRISS USA (虚构版)',
+        trivia: [
+            'V308 是游戏虚构武器——现实中不存在 7.62mm NATO 口径的 KRISS Vector。',
+            '50 发弹匣 + 全威力步枪弹的组合在现实中会导致武器过重、后坐力难以控制。',
+            '名字中的"V"来自 Vector，"308"指 .308 Winchester（7.62x51mm 的民用名称）。'
+        ]
+    },
+    'Spear .308': {
+        realName: 'SIG MCX Spear',
+        caliber: '.277 SIG Fury / 7.62x51mm (游戏设定 .308)',
+        country: '🇺🇸 美国',
+        manufacturer: 'SIG Sauer',
+        trivia: [
+            '现实中 SIG MCX Spear 赢得了美军 NGSW（Next Generation Squad Weapon）竞标，被命名为 XM7。',
+            '原型设计使用全新的 .277 SIG Fury 弹药（6.8x51mm），具有比传统 5.56mm 更远的有效射程和更强的穿甲能力。',
+            '游戏中命名为".308"是简化处理——实际口径设定并不完全准确。'
+        ]
+    },
+    'AR-15.50': {
+        realName: 'Beowulf AR-15 (.50 Beowulf)',
+        caliber: '.50 Beowulf',
+        country: '🇺🇸 美国',
+        manufacturer: 'Alexander Arms',
+        trivia: [
+            '.50 Beowulf 是一种大口径 AR-15 平台弹药，专为近距离高停止力设计。',
+            '10 发弹匣和半自动模式反映了大口径弹药的实际限制——后坐力太大不适合全自动。',
+            '62 点基础伤害是突击步枪中最高的。'
+        ]
+    },
+    'AK-74M': {
+        realName: 'AK-74M',
+        caliber: '5.45x39mm',
+        country: '🇷🇺 俄罗斯',
+        manufacturer: 'Kalashnikov Concern',
+        trivia: [
+            'AK-74M 是 AK-74 的现代化版本，"M"代表 Modernized。采用聚合物折叠枪托和导轨系统。',
+            '无握把槽是平衡考虑——该武器拥有 40 发大弹匣。'
+        ]
+    },
+    'ARX200': {
+        realName: 'Beretta ARX200',
+        caliber: '7.62x51mm NATO',
+        country: '🇮🇹 意大利',
+        manufacturer: 'Beretta',
+        trivia: [
+            'ARX200 是 ARX160 的放大版本，发射 7.62mm NATO 弹药，设计为班用自动武器/精确射手角色。',
+            '具有模块化设计，可快速更换枪管组件以适应不同战术需求。'
+        ]
+    },
+    'F90': {
+        realName: 'Thales F90',
+        caliber: '5.56x45mm NATO',
+        country: '🇦🇺 澳大利亚',
+        manufacturer: 'Thales Australia',
+        trivia: [
+            'F90 是 Steyr AUG 的澳大利亚现代化版本，由 Thales 澳大利亚分公司开发。',
+            '2016 年被澳大利亚国防军选为 F88 Austeyr 的替代品，是该国最新的制式步枪。',
+            'Gridlock 作为 SASR（澳大利亚特种空勤团）成员使用此武器完全合理。'
+        ]
+    },
+    'SC3000K': {
+        realName: 'FN FNC (改型)',
+        caliber: '5.56x45mm NATO',
+        country: '🇧🇪 比利时',
+        manufacturer: 'FN Herstal',
+        trivia: [
+            '游戏中的 SC3000K 外观高度接近 FN FNC，但名称是虚构的。',
+            'Zero（Sam Fisher）在彩虹六号与细胞分裂联动中带来了这把武器，呼应了 FN 在美国特战圈的广泛使用。'
+        ]
+    },
+    'POF-9': {
+        realName: 'POF-9 (Pakistan Ordnance Factories)',
+        caliber: '9x19mm Parabellum',
+        country: '🇵🇰 巴基斯坦',
+        manufacturer: 'Pakistan Ordnance Factories',
+        trivia: [
+            'POF-9 是巴基斯坦军工厂生产的冲锋枪/卡宾枪，虽然归类为突击步枪但发射 9mm 弹药。',
+            '是 Sens 的主武器，37 伤害的低数值反映了 9mm 口径的特性。'
+        ]
+    },
+    'PCX-33': {
+        realName: '虚构武器',
+        caliber: '9x19mm Parabellum (推测)',
+        country: '🇨🇴 哥伦比亚 (设定)',
+        manufacturer: '虚构',
+        trivia: [
+            'PCX-33 没有明确的现实原型，外观融合了多种现代冲锋枪/卡宾枪的设计元素。',
+            '作为 Solis 的武器引入，Solis 来自哥伦比亚。'
+        ]
+    },
+
+    // ===== 冲锋枪 =====
+    'FMG-9': {
+        realName: 'Magpul FMG-9',
+        caliber: '9x19mm Parabellum',
+        country: '🇺🇸 美国',
+        manufacturer: 'Magpul Industries',
+        trivia: [
+            'FMG-9（Folding Machine Gun-9）可以折叠成一个类似手电筒的长方体，展开后成为功能完整的冲锋枪。',
+            '该武器是概念原型，从未量产。基于 Glock 18 机匣，使用 Glock 弹匣。'
+        ]
+    },
+    'MP5K': {
+        realName: 'H&K MP5K',
+        caliber: '9x19mm Parabellum',
+        country: '🇩🇪 德国',
+        manufacturer: 'Heckler & Koch',
+        trivia: [
+            'MP5K（K = Kurz，德语"短"）是 MP5 的超紧凑版本，枪管仅 115mm。',
+            '专为 VIP 保护和隐蔽携带设计，可以放入公文包射击（配合特殊公文包装置）。'
+        ]
+    },
+    'UMP45': {
+        realName: 'H&K UMP45',
+        caliber: '.45 ACP',
+        country: '🇩🇪 德国',
+        manufacturer: 'Heckler & Koch',
+        trivia: [
+            'UMP（Universal Machine Pistol）是 MP5 的低成本继任者，大量使用聚合物材料降低成本和重量。',
+            '.45 ACP 弹药使其拥有较高的单发伤害（38）但射速较低（600 RPM），与现实特性一致。'
+        ]
+    },
+    'MP5': {
+        realName: 'H&K MP5A2',
+        caliber: '9x19mm Parabellum',
+        country: '🇩🇪 德国',
+        manufacturer: 'Heckler & Koch',
+        trivia: [
+            'MP5 可能是世界上最著名的冲锋枪，自 1966 年问世以来被超过 40 个国家的军警采用。',
+            '采用独特的滚柱延迟闭锁系统（源自 G3 步枪），射击精度远超同类吹回式冲锋枪。',
+            '1980 年伊朗大使馆人质事件中 SAS 使用 MP5 突入的画面让这把枪一夜成名。'
+        ]
+    },
+    'P90': {
+        realName: 'FN P90',
+        caliber: '5.7x28mm',
+        country: '🇧🇪 比利时',
+        manufacturer: 'FN Herstal',
+        trivia: [
+            'P90 采用革命性的顶部水平弹匣设计，50 发弹匣水平放置在枪身上方。',
+            '5.7x28mm 弹药专为穿透软质护甲设计，这也是 NATO 要求开发此弹药的原因。',
+            '因其未来感的外形在科幻影视中大量出镜，最著名的是《星际之门》系列。'
+        ]
+    },
+    'MP5SD': {
+        realName: 'H&K MP5SD',
+        caliber: '9x19mm Parabellum',
+        country: '🇩🇪 德国',
+        manufacturer: 'Heckler & Koch',
+        trivia: [
+            'MP5SD 的"SD"代表 Schalldämpfer（德语"消音器"），拥有一体化消音枪管。',
+            '枪管上有30个小孔将火药气体导入消音器罩，同时将弹头减速至亚音速，无需使用亚音速弹药。',
+            '游戏中无法更换枪管配件是因为消音器是枪管的一部分，不可拆卸。'
+        ]
+    },
+    '9x19VSN': {
+        realName: 'PP-19-01 Vityaz-SN',
+        caliber: '9x19mm Parabellum',
+        country: '🇷🇺 俄罗斯',
+        manufacturer: 'Kalashnikov Concern',
+        trivia: [
+            'Vityaz-SN 基于 AK 平台改造为发射 9mm 弹药的冲锋枪，保留了 AK 标志性的操作方式。',
+            '"Vityaz"在俄语中意为"勇士"，该武器被俄罗斯 FSB、MVD 等多个安全部队使用。'
+        ]
+    },
+    'MP7': {
+        realName: 'H&K MP7A1',
+        caliber: '4.6x30mm',
+        country: '🇩🇪 德国',
+        manufacturer: 'Heckler & Koch',
+        trivia: [
+            'MP7 开发目的是在紧凑尺寸下提供穿透 NATO CRISAT 标准护甲的能力。',
+            '4.6x30mm 弹药是 H&K 对 FN 5.7x28mm 的竞争回应，两种弹药在穿甲测试中互有胜负。',
+            '折叠后仅 415mm 长（比很多手枪加消音器还短），非常适合隐蔽携带。'
+        ]
+    },
+    '9mm C1': {
+        realName: 'Sterling L2A3 (加拿大版)',
+        caliber: '9x19mm Parabellum',
+        country: '🇨🇦 加拿大 / 🇬🇧 英国',
+        manufacturer: 'Sterling Armaments',
+        trivia: [
+            'C1 是加拿大版的 Sterling 冲锋枪，从 1953 年一直服役到 1990 年代。',
+            'Sterling 以其侧面插入的弧形弹匣和高可靠性著称，在包括马尔维纳斯/福克兰群岛战争中实战使用。'
+        ]
+    },
+    'MPX': {
+        realName: 'SIG Sauer MPX',
+        caliber: '9x19mm Parabellum',
+        country: '🇺🇸 美国',
+        manufacturer: 'SIG Sauer',
+        trivia: [
+            'MPX 采用短行程活塞系统（而非传统冲锋枪的反冲式），可靠性更高、射击更平稳。',
+            '26 点的低伤害使其在数据上不太吸引人，但极低的后坐力让它成为一把"激光枪"。'
+        ]
+    },
+    'M12': {
+        realName: 'Beretta M12',
+        caliber: '9x19mm Parabellum',
+        country: '🇮🇹 意大利',
+        manufacturer: 'Beretta',
+        trivia: [
+            'Beretta M12 是 1958 年设计的冲锋枪，采用包络式枪机设计以缩短全枪长度。',
+            '曾被意大利军队、巴西军警以及多个国家的安全部队使用。',
+            'Caveira 作为巴西 BOPE 成员使用此武器——巴西确实大量进口了 M12。'
+        ]
+    },
+    'PDW9': {
+        realName: '虚构武器 (类似 SIG MPX/LWRC SMG-45)',
+        caliber: '9x19mm Parabellum',
+        country: '🇪🇸 西班牙 (设定)',
+        manufacturer: '虚构',
+        trivia: [
+            'PDW9 没有明确的现实原型，外观融合了多种现代 PDW 设计。',
+            '50 发大弹匣使其成为进攻方的持续火力选项。'
+        ]
+    },
+    'Vector .45': {
+        realName: 'KRISS Vector Gen II',
+        caliber: '.45 ACP',
+        country: '🇺🇸 美国',
+        manufacturer: 'KRISS USA',
+        trivia: [
+            'KRISS Vector 采用革命性的"Super V"系统，将后坐力向下方重新引导，大幅降低射击时的枪口上跳。',
+            '1200 RPM 的极高射速是游戏中冲锋枪之最，反映了 Vector 实际的高射速能力。',
+            '25 发弹匣配 1200 RPM 意味着一秒钟就能清空弹匣。'
+        ]
+    },
+    'T-5 SMG': {
+        realName: '虚构武器 (类似 JS 9mm)',
+        caliber: '9x19mm Parabellum',
+        country: '🇨🇳 中国 (设定)',
+        manufacturer: '虚构',
+        trivia: [
+            '游戏中的 T-5 SMG 外观类似中国 JS 9mm 冲锋枪，但名称和具体设计为虚构。',
+            '900 RPM 的高射速配合适中的后坐力，使其成为防守方热门选择。'
+        ]
+    },
+    'Scorpion EVO': {
+        realName: 'CZ Scorpion EVO 3 A1',
+        caliber: '9x19mm Parabellum',
+        country: '🇨🇿 捷克',
+        manufacturer: 'CZ (Česká zbrojovka)',
+        trivia: [
+            'EVO 3 A1 是全新设计，与经典的 Vz.61 蝎式冲锋枪除了名字外没有关系。',
+            '1080 RPM 超高射速配 40 发弹匣，数据上非常凶猛，但后坐力是游戏中最难控制的之一。',
+            'Ela 是波兰 GROM 干员，现实中捷克 EVO 确实出口到了波兰。'
+        ]
+    },
+    'K1A': {
+        realName: 'Daewoo K1A',
+        caliber: '5.56x45mm NATO',
+        country: '🇰🇷 韩国',
+        manufacturer: 'S&T Motiv (前大宇精密)',
+        trivia: [
+            'K1A 在韩国被归类为冲锋枪（SMG），但实际发射 5.56mm 步枪弹——这种分类在全球是独特的。',
+            '是韩国特种部队和军官的标准武器，在游戏中分配给韩国 707 特殊任务营的 Vigil。'
+        ]
+    },
+    'Mx4 Storm': {
+        realName: 'Beretta Mx4 Storm',
+        caliber: '9x19mm Parabellum',
+        country: '🇮🇹 意大利',
+        manufacturer: 'Beretta',
+        trivia: [
+            'Mx4 Storm 是 Cx4 Storm 民用卡宾枪的军用/执法全自动版本。',
+            '可与 Beretta Px4 Storm 手枪共用弹匣，体现了 Beretta Storm 系列的模块化理念。'
+        ]
+    },
+    'AUG A3': {
+        realName: 'Steyr AUG A3 SMG',
+        caliber: '9x19mm Parabellum',
+        country: '🇦🇹 奥地利',
+        manufacturer: 'Steyr Mannlicher',
+        trivia: [
+            'AUG 系列的模块化设计允许通过更换枪管组件将步枪转换为 9mm 冲锋枪。',
+            'A3 版本增加了标准皮卡汀尼导轨，取代了早期型号的内置光学瞄准具。'
+        ]
+    },
+    'P10 RONI': {
+        realName: 'CAA RONI Kit + CZ P-10 C',
+        caliber: '9x19mm Parabellum',
+        country: '🇮🇱 以色列 / 🇨🇿 捷克',
+        manufacturer: 'CAA Industries / CZ',
+        trivia: [
+            '与 Commando 9 类似，P10 RONI 也是将手枪（CZ P-10 C）装入 RONI 套件转换为卡宾枪。',
+            '15 发的小弹匣是其最大弱点，反映了底层仍是手枪弹匣的限制。'
+        ]
+    },
+    'UZK50GI': {
+        realName: '虚构武器 (类似 UZI PRO)',
+        caliber: '.50 GI (游戏设定)',
+        country: '🇮🇪 爱尔兰 (设定)',
+        manufacturer: '虚构',
+        trivia: [
+            '外观类似以色列 UZI PRO，但名称和口径（.50 GI）为游戏虚构。',
+            '.50 GI 在现实中确实存在——是一种将 .45 ACP 口径放大到 .50 的手枪弹。'
+        ]
+    },
+
+    // ===== 轻机枪 =====
+    'M249': {
+        realName: 'FN M249 SAW',
+        caliber: '5.56x45mm NATO',
+        country: '🇧🇪 比利时 / 🇺🇸 美国',
+        manufacturer: 'FN Herstal',
+        trivia: [
+            'M249 SAW（Squad Automatic Weapon）是美军标准班组自动武器，基于 FN Minimi 设计。',
+            '100 发弹链箱是其标准配置，可提供持续的压制火力。',
+            '游戏中 48 伤害 + 100 发弹匣的组合使其成为强力的区域封锁武器。'
+        ]
+    },
+    '6P41': {
+        realName: 'RPK-16',
+        caliber: '5.45x39mm',
+        country: '🇷🇺 俄罗斯',
+        manufacturer: 'Kalashnikov Concern',
+        trivia: [
+            '6P41 是 RPK-16 的俄军 GRAU 编号。RPK-16 是基于 AK-12 平台的现代化轻机枪。',
+            '可以使用标准 AK 弹匣或 96 发弹鼓，游戏中的 100 发设定接近弹鼓容量。'
+        ]
+    },
+    'G8A1': {
+        realName: 'H&K HK21 / G8',
+        caliber: '7.62x51mm NATO (原型) / 5.56mm (游戏)',
+        country: '🇩🇪 德国',
+        manufacturer: 'Heckler & Koch',
+        trivia: [
+            'G8A1 基于 HK21 通用机枪的轻量化版本，采用 HK 标志性的滚柱延迟闭锁系统。',
+            '游戏中 850 RPM 的高射速使其成为最具攻击性的轻机枪，适合积极推进的玩法。'
+        ]
+    },
+    'T-95 LSW': {
+        realName: '95 式班用机枪 (QJB-95)',
+        caliber: '5.8x42mm DBP-87',
+        country: '🇨🇳 中国',
+        manufacturer: '中国兵器工业集团',
+        trivia: [
+            'QJB-95 是 95 式自动步枪的班用机枪版本，配有重枪管和弹鼓。',
+            '发射中国自主研发的 5.8x42mm 弹药，这种口径不属于任何 NATO 或华约标准。',
+            '犊牛式布局使其在同类武器中长度最短，适合室内作战。'
+        ]
+    },
+    'LMG-E': {
+        realName: 'FN Minimi（机枪版）',
+        caliber: '5.56x45mm NATO',
+        country: '🇧🇪 比利时',
+        manufacturer: 'FN Herstal',
+        trivia: [
+            '游戏内的 LMG-E 外观非常接近 FN Minimi Mk3 或其出口型号。',
+            '150 发的巨大弹匣容量使其成为游戏中弹药最多的自动武器之一。'
+        ]
+    },
+    'ALDA 5.56': {
+        realName: 'Beretta ARX200 LMG (虚构衍生)',
+        caliber: '5.56x45mm NATO',
+        country: '🇮🇹 意大利',
+        manufacturer: 'Beretta',
+        trivia: [
+            '游戏中的 ALDA 5.56 没有精确对应的现实原型，可能基于 Beretta 的轻武器概念。',
+            '900 RPM 是 LMG 类别中最高的射速，配合 80 发弹匣提供恐怖的持续火力。'
+        ]
+    },
+    'M249 SAW': {
+        realName: 'FN M249 SAW (短枪管版)',
+        caliber: '5.56x45mm NATO',
+        country: '🇧🇪 比利时 / 🇺🇸 美国',
+        manufacturer: 'FN Herstal',
+        trivia: [
+            '与 Capitão 的 M249 不同，Gridlock 的 M249 SAW 使用短枪管配置和 60 发弹匣。',
+            '较少的弹匣容量（60 vs 100）通过更灵活的操控性来平衡。'
+        ]
+    },
+    'DP27': {
+        realName: 'DP-27 (Degtyaryov)',
+        caliber: '7.62x54mmR',
+        country: '🇷🇺 俄罗斯/苏联',
+        manufacturer: 'Degtyaryov Plant',
+        trivia: [
+            'DP-27 是二战时期苏联的标准轻机枪，1928 年列装，以极高的可靠性著称。',
+            '其标志性的圆形弹盘（pan magazine）放在枪身上方，给人留下深刻印象。',
+            '游戏中 Tachanka 使用这把"古董"级武器，呼应了他"Lord Tachanka"的 meme 形象和苏联军人设定。'
+        ]
+    },
+
+    // ===== 狙击步枪 =====
+    'CSRX 300': {
+        realName: '虚构武器 (类似 PGM Ultima Ratio)',
+        caliber: '.300 Win Mag',
+        country: '🇫🇷 法国 (推测)',
+        manufacturer: '虚构',
+        trivia: [
+            'CSRX 300 没有精确的现实原型，但设计风格接近法国 PGM 系列或 AI AX 系列栓动步枪。',
+            '127 伤害是全游戏最高，即使打四肢也能造成巨大伤害。',
+            '栓动射速极低（50 RPM），错过一发可能就意味着死亡。Kali 是唯一使用此武器的干员。'
+        ]
+    },
+
+    // ===== 射手步枪 =====
+    '417': {
+        realName: 'H&K HK417',
+        caliber: '7.62x51mm NATO',
+        country: '🇩🇪 德国',
+        manufacturer: 'Heckler & Koch',
+        trivia: [
+            'HK417 是 HK416 的 7.62mm 版本，定位为精确射手步枪。采用相同的短行程活塞系统。',
+            '被法国军队选为 Fusil à Tir de Précision（精确射击步枪），与游戏中分配给法国干员一致。'
+        ]
+    },
+    'OTs-03': {
+        realName: 'SVU-AS (OTs-03)',
+        caliber: '7.62x54mmR',
+        country: '🇷🇺 俄罗斯',
+        manufacturer: 'TsKIB SOO',
+        trivia: [
+            'SVU 是 SVD 狙击步枪的犊牛式改型，大幅缩短了全枪长度以适应城市作战。',
+            '"OTs-03"是该武器的设计局编号，AS 后缀表示可全自动射击（游戏中未体现）。',
+            'Glaz 作为 Spetsnaz 狙击手使用此武器非常契合。'
+        ]
+    },
+    'CAMRS': {
+        realName: 'Colt Canada C20 (CAMRS)',
+        caliber: '7.62x51mm NATO',
+        country: '🇨🇦 加拿大',
+        manufacturer: 'Colt Canada',
+        trivia: [
+            'CAMRS（Canadian Army Marksman Rifle System）是加拿大军队的精确射手步枪。',
+            '基于 AR-10 平台，与 SR-25 有很多共同点。'
+        ]
+    },
+    'SR-25': {
+        realName: 'KAC SR-25 / M110 SASS',
+        caliber: '7.62x51mm NATO',
+        country: '🇺🇸 美国',
+        manufacturer: 'Knight\'s Armament Company',
+        trivia: [
+            'SR-25 被美军采用为 M110 SASS（Semi-Automatic Sniper System）。',
+            '20 发弹匣比大多数 DMR 的 10 发大一倍，提供了更好的持续火力。'
+        ]
+    },
+    'Mk 14 EBR': {
+        realName: 'Mk 14 Enhanced Battle Rifle',
+        caliber: '7.62x51mm NATO',
+        country: '🇺🇸 美国',
+        manufacturer: 'Smith Enterprise / Sage International',
+        trivia: [
+            'Mk 14 EBR 是经典 M14 步枪的现代化改造版，安装了新的可折叠枪托和皮卡汀尼导轨。',
+            '在阿富汗和伊拉克战场上因其远距离精度和 7.62mm 的停止力而受到特种部队青睐。'
+        ]
+    },
+    'PMR90A2': {
+        realName: '虚构武器',
+        caliber: '7.62x51mm NATO (推测)',
+        country: '未知',
+        manufacturer: '虚构',
+        trivia: [
+            'Y11S1 新增的射手步枪，分配给 Thatcher、Capitão、Nøkk 和 Solid Snake。',
+            '没有明确的现实原型，名称中的 PMR 可能暗示"Precision Marksman Rifle"。'
+        ]
+    },
+
+    // ===== 霰弹枪 =====
+    'M870': {
+        realName: 'Remington 870',
+        caliber: '12 Gauge',
+        country: '🇺🇸 美国',
+        manufacturer: 'Remington Arms',
+        trivia: [
+            'Remington 870 是历史上产量最大的泵动霰弹枪之一，累计生产超过 1100 万支。',
+            '被全球无数军队、警察和民用市场使用，是泵动霰弹枪的标杆产品。'
+        ]
+    },
+    'M590A1': {
+        realName: 'Mossberg 590A1',
+        caliber: '12 Gauge',
+        country: '🇺🇸 美国',
+        manufacturer: 'O.F. Mossberg & Sons',
+        trivia: [
+            'M590A1 是唯一通过美军 MIL-S-3443 标准测试的泵动霰弹枪。',
+            '与 Remington 870 的竞争是霰弹枪界的"可口可乐 vs 百事可乐"。SAS 两把霰弹枪都有。'
+        ]
+    },
+    'M1014': {
+        realName: 'Benelli M4 Super 90 (M1014)',
+        caliber: '12 Gauge',
+        country: '🇮🇹 意大利',
+        manufacturer: 'Benelli Armi',
+        trivia: [
+            'M1014 是 Benelli M4 的美军编号，是一款半自动战术霰弹枪。',
+            '采用独特的 ARGO（Auto Regulating Gas Operated）导气系统，极其可靠。'
+        ]
+    },
+    'SG-CQB': {
+        realName: 'Remington 870 CQB',
+        caliber: '12 Gauge',
+        country: '🇺🇸 美国',
+        manufacturer: 'Remington Arms',
+        trivia: [
+            '实际上是 870 的近距离作战特化版本，配有短枪管和战术配件。',
+            '分配给法国 GIGN 的 Doc 和 Rook。'
+        ]
+    },
+    'SASG-12': {
+        realName: 'Saiga-12',
+        caliber: '12 Gauge',
+        country: '🇷🇺 俄罗斯',
+        manufacturer: 'Kalashnikov Concern',
+        trivia: [
+            'Saiga-12 是基于 AK 平台的半自动霰弹枪，使用可拆卸弹匣供弹。',
+            '是少数基于步枪平台设计的霰弹枪之一。'
+        ]
+    },
+    'SUPER 90': {
+        realName: 'Benelli M1 Super 90',
+        caliber: '12 Gauge',
+        country: '🇮🇹 意大利',
+        manufacturer: 'Benelli Armi',
+        trivia: [
+            'Benelli M1 Super 90 是 M4 的前代产品，采用惯性闭锁系统（而非导气系统）。',
+            '分配给加拿大 JTF2 的 Frost。'
+        ]
+    },
+    'SPAS-12': {
+        realName: 'Franchi SPAS-12',
+        caliber: '12 Gauge',
+        country: '🇮🇹 意大利',
+        manufacturer: 'Luigi Franchi S.p.A.',
+        trivia: [
+            'SPAS-12 可在泵动和半自动模式之间切换，在影视作品中极其知名（《终结者》《侏罗纪公园》）。',
+            '1994 年在美国被禁止进口，目前已停产，但因影视影响力保持着极高知名度。'
+        ]
+    },
+    'SPAS-15': {
+        realName: 'Franchi SPAS-15',
+        caliber: '12 Gauge',
+        country: '🇮🇹 意大利',
+        manufacturer: 'Luigi Franchi S.p.A.',
+        trivia: [
+            'SPAS-15 是 SPAS-12 的改进型，最大的变化是采用可拆卸弹匣供弹替代管式弹仓。',
+            '保留了泵动/半自动双模式切换的设计。'
+        ]
+    },
+    'SuperNova': {
+        realName: 'Benelli SuperNova',
+        caliber: '12 Gauge',
+        country: '🇮🇹 意大利',
+        manufacturer: 'Benelli Armi',
+        trivia: [
+            'SuperNova 是 Benelli Nova 的改进版，采用 ComforTech 后坐力缓冲系统。',
+            '游戏中它是少数可以装消音器的霰弹枪之一。'
+        ]
+    },
+    'FO-12': {
+        realName: 'Origin-12 (Foster Industries)',
+        caliber: '12 Gauge',
+        country: '🇺🇸 美国',
+        manufacturer: 'Foster Industries',
+        trivia: [
+            'Origin-12 是一款全自动战术霰弹枪，可以极快的速度倾泻弹药。',
+            '游戏中它是唯一的全自动主武器霰弹枪，10 发弹匣可以在瞬间清空。'
+        ]
+    },
+    'SIX12': {
+        realName: 'Crye Precision SIX12',
+        caliber: '12 Gauge',
+        country: '🇺🇸 美国',
+        manufacturer: 'Crye Precision',
+        trivia: [
+            'SIX12 采用旋转弹仓（类似左轮手枪），可容纳 6 发霰弹。',
+            '设计上可以作为独立武器或安装在 M4/M16 下挂使用。'
+        ]
+    },
+    'SIX12 SD': {
+        realName: 'Crye Precision SIX12 SD',
+        caliber: '12 Gauge',
+        country: '🇺🇸 美国',
+        manufacturer: 'Crye Precision',
+        trivia: [
+            '带消音器的 SIX12 版本，SD = Suppressed。',
+            '是游戏中唯一自带消音的霰弹枪，适合隐蔽破墙。'
+        ]
+    },
+
+    // ===== 独头霰弹枪 =====
+    'BOSG.12.2': {
+        realName: '虚构武器 (类似 TP-82)',
+        caliber: '12 Gauge Slug',
+        country: '🇰🇷 韩国 (设定)',
+        manufacturer: '虚构',
+        trivia: [
+            'BOSG.12.2 是一把只有 2 发子弹的双管独头弹霰弹枪，125 伤害可一发爆头击杀。',
+            '被社区戏称为"手持加农炮"——两发打空后就只剩下副武器可用。',
+            '"BOSG"的名称来源不明，可能是"Breach, Overwatch, Support Gun"的缩写。'
+        ]
+    },
+    'ACS12': {
+        realName: 'Origin-12 (独头弹版)',
+        caliber: '12 Gauge Slug',
+        country: '🇺🇸 美国',
+        manufacturer: 'Foster Industries',
+        trivia: [
+            'ACS12 与 FO-12 共享相同的平台（Origin-12），但配置为发射独头弹。',
+            '30 发弹匣 + 半自动的独头弹组合使其可以像步枪一样使用。'
+        ]
+    },
+    'TCSG12': {
+        realName: '虚构武器',
+        caliber: '12 Gauge Slug',
+        country: '🇲🇦 摩洛哥 (设定)',
+        manufacturer: '虚构',
+        trivia: [
+            'TCSG12 最初伤害高达 84 点，后被多次削弱至 57 点。',
+            '可装消音器的独头弹霰弹枪，在远距离仍有不错的精度。'
+        ]
+    },
+
+    // ===== 副武器 - 冲锋枪 =====
+    'C75 Auto': {
+        realName: 'CZ 75 Automatic',
+        caliber: '9x19mm Parabellum',
+        country: '🇨🇿 捷克',
+        manufacturer: 'CZ (Česká zbrojovka)',
+        trivia: [
+            'CZ 75 是世界上被仿制最多的手枪设计之一，全自动版本极其少见。',
+            '1000 RPM 的射速使其在近距离极其致命，但铁瞄具阻挡严重是最大缺点。'
+        ]
+    },
+    'SMG-11': {
+        realName: 'MAC-11 (Ingram)',
+        caliber: '.380 ACP (现实) / 9mm (游戏)',
+        country: '🇺🇸 美国',
+        manufacturer: 'Military Armament Corporation',
+        trivia: [
+            'MAC-11 是 MAC-10 的缩小版本，原版发射 .380 ACP 弹药。',
+            '1270 RPM 的极端射速意味着 16 发弹匣不到一秒就能清空，控枪难度极高。',
+            '是 SAS 干员的标志性副武器，也是游戏中技巧上限最高的武器之一。'
+        ]
+    },
+    'SMG-12': {
+        realName: 'Brügger & Thomet MP9',
+        caliber: '9x19mm Parabellum',
+        country: '🇨🇭 瑞士',
+        manufacturer: 'B&T AG',
+        trivia: [
+            'B&T MP9 基于 Steyr TMP 发展而来，是一款极其紧凑的冲锋手枪。',
+            '32 发弹匣比 SMG-11 大一倍，但后坐力同样难以控制。'
+        ]
+    },
+    'Bearing 9': {
+        realName: 'Minebea PM-9',
+        caliber: '9x19mm Parabellum',
+        country: '🇯🇵 日本',
+        manufacturer: 'Minebea (现 MinebeaMitsumi)',
+        trivia: [
+            'PM-9 是日本自卫队的冲锋枪，外观非常紧凑。',
+            '1100 RPM 的高射速使其成为副武器中的火力强手。'
+        ]
+    },
+    'SPSMG9': {
+        realName: 'B&T USW-G (推测)',
+        caliber: '9x19mm Parabellum',
+        country: '🇨🇭 瑞士',
+        manufacturer: 'B&T AG',
+        trivia: [
+            '外观接近 B&T 的 Universal Service Weapon 概念，是一款紧凑的冲锋手枪。',
+            '分配给 Kali 和 Clash 作为副武器。'
+        ]
+    },
+    'Reaper MK2': {
+        realName: '虚构武器',
+        caliber: '9x19mm Parabellum (推测)',
+        country: '未知',
+        manufacturer: '虚构',
+        trivia: [
+            'Y10S3 引入并大量分配给多个干员（Oryx、Pulse、Rook、Sledge、Ying 等）。',
+            '作为通用副武器冲锋枪，提供中等但可控的火力输出。'
+        ]
+    },
+
+    // ===== 副武器 - 手枪精选 =====
+    'D-50': {
+        realName: 'IMI Desert Eagle .50 AE',
+        caliber: '.50 Action Express',
+        country: '🇮🇱 以色列 / 🇺🇸 美国',
+        manufacturer: 'IMI / Magnum Research',
+        trivia: [
+            '沙漠之鹰是影视作品中最知名的大口径手枪，.50 AE 版本的后坐力巨大。',
+            '71 点伤害是手枪类别中最高之一，两枪就能击杀满血敌人。'
+        ]
+    },
+    'PMM': {
+        realName: 'PM Makarov (PMM)',
+        caliber: '9x18mm Makarov',
+        country: '🇷🇺 俄罗斯',
+        manufacturer: 'Izhevsk Mechanical Plant',
+        trivia: [
+            'PMM 是 PM 马卡洛夫手枪的现代化版本，通过增加膛室压力提高了弹道性能。',
+            '61 点伤害配合不错的射速，是游戏中最强手枪之一。'
+        ]
+    },
+    'Luison': {
+        realName: 'Taurus PT92 (游戏改型)',
+        caliber: '9x19mm Parabellum',
+        country: '🇧🇷 巴西',
+        manufacturer: 'Taurus',
+        trivia: [
+            'Luison 是 Caveira 的专属手枪，内置消音器。名字可能来自巴西民间传说。',
+            '可用于审讯倒地的敌方干员获取全队位置信息，是游戏中独一无二的机制。'
+        ]
+    },
+    'GONNE-6': {
+        realName: '虚构武器 (单发榴弹/破障器)',
+        caliber: '特殊破障弹',
+        country: '未知',
+        manufacturer: '虚构',
+        trivia: [
+            'GONNE-6 只有 1 发弹药，专门用于摧毁防弹设备（如 Maestro 的邪眼、防弹摄像头等）。',
+            '不能杀死满血干员（10 伤害），纯粹是战术工具。'
+        ]
+    },
+
+    // ===== 副武器 - 左轮 =====
+    'LFP586': {
+        realName: 'Manurhin MR 73',
+        caliber: '.357 Magnum',
+        country: '🇫🇷 法国',
+        manufacturer: 'Manurhin',
+        trivia: [
+            'MR 73 被认为是世界上精度最高的左轮手枪之一，是法国 GIGN 的标志性武器。',
+            'GIGN 前指挥官曾称赞它"是唯一一把你可以信赖用单手在 25 米击中目标的手枪"。'
+        ]
+    },
+    'Keratos .357': {
+        realName: 'Chiappa Rhino 60DS',
+        caliber: '.357 Magnum',
+        country: '🇮🇹 意大利',
+        manufacturer: 'Chiappa Firearms',
+        trivia: [
+            'Chiappa Rhino 独特之处在于枪管对齐最下面的弹膛（而非通常的最上面），大幅降低了射击时枪口上跳。',
+            '是游戏中唯一可以装消音器的左轮手枪。'
+        ]
+    }
+};
+
 // ---- 官方更新信息 ----
 const UPDATES = [
     {

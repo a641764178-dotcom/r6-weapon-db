@@ -95,6 +95,7 @@
             const dpsPercent = w.rpm > 0 ? Math.round(dps / maxDPS * 100) : 0;
             const typeColor = `var(--${w.type})`;
             const category = isPrimary(w.type) ? 'primary' : 'secondary';
+            const detail = (typeof WEAPON_DETAILS !== 'undefined') ? WEAPON_DETAILS[w.name] : null;
 
             // 配件预览标签
             const attTags = [];
@@ -116,6 +117,11 @@
                         <span class="weapon-name">${w.name}</span>
                         <span class="weapon-type-badge ${w.type}">${TYPE_NAMES[w.type]}</span>
                     </div>
+                    ${detail ? `
+                    <div class="weapon-real-info">
+                        <span class="real-name" title="现实原型">${detail.realName}</span>
+                        <span class="real-origin">${detail.country}</span>
+                    </div>` : ''}
                     <div class="weapon-stats">
                         <div class="stat-item">
                             <div class="stat-value">${w.damage}</div>
@@ -130,10 +136,11 @@
                             <div class="stat-label">弹匣</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-value">${w.rpm > 0 ? ttk + '<small style="font-size:10px;color:var(--text-muted)">ms</small>' : '—'}</div>
-                            <div class="stat-label">TTK</div>
+                            <div class="stat-value">${w.rpm > 0 ? dps : '—'}</div>
+                            <div class="stat-label">DPS</div>
                         </div>
                     </div>
+                    ${detail && detail.caliber ? `<div class="weapon-caliber"><span>⊕</span> ${detail.caliber}</div>` : ''}
                     <div class="weapon-operators">
                         <span>干员：</span>${w.operators.join(', ')}
                     </div>
@@ -179,6 +186,48 @@
         const modal = $('#weapon-modal');
         const body = $('#modal-body');
         const category = isPrimary(w.type) ? '主武器' : '副武器';
+        const detail = (typeof WEAPON_DETAILS !== 'undefined') ? WEAPON_DETAILS[w.name] : null;
+
+        // 武器档案（现实原型信息）
+        let profileHTML = '';
+        if (detail) {
+            profileHTML = `
+            <div class="modal-section">
+                <div class="modal-section-title">武器档案</div>
+                <div class="weapon-profile">
+                    <div class="profile-grid">
+                        <div class="profile-item">
+                            <div class="profile-label">现实原型</div>
+                            <div class="profile-value">${detail.realName}</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">口径</div>
+                            <div class="profile-value">${detail.caliber}</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">产地</div>
+                            <div class="profile-value">${detail.country}</div>
+                        </div>
+                        <div class="profile-item">
+                            <div class="profile-label">制造商</div>
+                            <div class="profile-value">${detail.manufacturer}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        // 琐事/冷知识
+        let triviaHTML = '';
+        if (detail && detail.trivia && detail.trivia.length > 0) {
+            triviaHTML = `
+            <div class="modal-section">
+                <div class="modal-section-title">冷知识 & 琐事</div>
+                <div class="trivia-list">
+                    ${detail.trivia.map(t => `<div class="trivia-item"><span class="trivia-bullet">▸</span>${t}</div>`).join('')}
+                </div>
+            </div>`;
+        }
 
         // 枪管配件
         let barrelHTML = '';
@@ -258,6 +307,7 @@
         body.innerHTML = `
             <div class="modal-weapon-name">${w.name}</div>
             <div class="modal-weapon-type">${category} · ${TYPE_NAMES[w.type]}${w.notes ? ' · ' + w.notes : ''}</div>
+            ${detail ? `<div class="modal-weapon-real">${detail.realName} · ${detail.country}</div>` : ''}
 
             <div class="modal-stats-grid">
                 <div class="modal-stat">
@@ -276,7 +326,17 @@
                     <div class="modal-stat-value">${w.rpm > 0 ? ttk + 'ms' : '—'}</div>
                     <div class="modal-stat-label">TTK</div>
                 </div>
+                ${detail ? `<div class="modal-stat">
+                    <div class="modal-stat-value" style="font-size:13px">${detail.caliber}</div>
+                    <div class="modal-stat-label">口径</div>
+                </div>` : ''}
+                <div class="modal-stat">
+                    <div class="modal-stat-value">${w.mag}</div>
+                    <div class="modal-stat-label">弹匣容量</div>
+                </div>
             </div>
+
+            ${profileHTML}
 
             <div class="modal-section">
                 <div class="modal-section-title">使用干员</div>
@@ -318,6 +378,8 @@
                     </div>
                 </div>
             </div>` : ''}
+
+            ${triviaHTML}
         `;
 
         modal.classList.add('active');

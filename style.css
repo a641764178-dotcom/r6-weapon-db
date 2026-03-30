@@ -332,7 +332,48 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
+}
+
+/* ---- 武器卡片 - 现实原型信息 ---- */
+.weapon-real-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.real-name {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 65%;
+}
+
+.real-origin {
+    font-size: 11px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.weapon-caliber {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-family: var(--font-mono);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.weapon-caliber span {
+    color: var(--accent-dim);
+    font-size: 10px;
 }
 
 .weapon-name {
@@ -806,7 +847,7 @@ body {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     width: 90%;
-    max-width: 720px;
+    max-width: 800px;
     max-height: 85vh;
     overflow-y: auto;
     padding: 32px;
@@ -852,12 +893,79 @@ body {
 .modal-weapon-type {
     font-size: 13px;
     color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.modal-weapon-real {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
     margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* ---- 武器档案 ---- */
+.weapon-profile {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.profile-item {
+    padding: 8px 0;
+}
+
+.profile-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.profile-value {
+    font-size: 13px;
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* ---- 琐事/冷知识 ---- */
+.trivia-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.trivia-item {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--accent-dim);
+}
+
+.trivia-bullet {
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 2px;
 }
 
 .modal-stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
     margin-bottom: 24px;
 }
@@ -1054,5 +1162,9 @@ body {
 
     .modal-stats-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .profile-grid {
+        grid-template-columns: 1fr;
     }
 }

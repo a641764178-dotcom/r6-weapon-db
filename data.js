@@ -155,7 +155,7 @@ const WEAPONS = [
     // ============================================================
 
     // ===== 突击步枪 (AR) =====
-    { name: 'M4', type: 'ar', damage: 44, rpm: 750, mag: 30, operators: ['Maverick'], side: 'atk',
+    { name: 'M4', type: 'ar', damage: 44, rpm: 750, mag: 30, operators: ['Maverick','Striker'], side: 'atk',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
@@ -353,7 +353,7 @@ const WEAPONS = [
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
 
     // ===== 轻机枪 (LMG) =====
-    { name: 'M249', type: 'lmg', damage: 48, rpm: 650, mag: 100, operators: ['Capitão'], side: 'atk',
+    { name: 'M249', type: 'lmg', damage: 48, rpm: 650, mag: 100, operators: ['Capitão','Striker'], side: 'atk',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['muzzle_brake'], grips: ['angled_grip'] } },
@@ -408,7 +408,7 @@ const WEAPONS = [
       grips: [],
       y7s3_new: { barrels: [], grips: [] },
       notes: 'Skeleton Key占用握把槽' },
-    { name: 'SR-25', type: 'dmr', damage: 61, rpm: 450, mag: 20, operators: ['Blackbeard','Flores'], side: 'atk',
+    { name: 'SR-25', type: 'dmr', damage: 61, rpm: 450, mag: 20, operators: ['Blackbeard','Flores','Striker'], side: 'atk',
       barrels: ['muzzle_brake','flash_hider','suppressor'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: ['angled_grip'] } },
@@ -464,7 +464,7 @@ const WEAPONS = [
     // ============================================================
 
     // ===== 霰弹枪·次要 (Secondary Shotgun) =====
-    { name: 'ITA12S', type: 'shotgun_sec', damage: 38, rpm: 0, mag: 5, operators: ['Jackal','Mira','Goyo'], side: 'mixed',
+    { name: 'ITA12S', type: 'shotgun_sec', damage: 38, rpm: 0, mag: 5, operators: ['Jackal','Mira','Goyo','Striker'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '副武器泵动霰弹枪' },
     { name: 'Super Shorty', type: 'shotgun_sec', damage: 35, rpm: 0, mag: 3, operators: ['Castle','Gridlock','Wamai','Melusi','Lesion'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '副武器短管霰弹枪' },
@@ -472,7 +472,7 @@ const WEAPONS = [
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '副武器泵动霰弹枪' },
 
     // ===== 手枪 (Pistol) =====
-    { name: '5.7 USG', type: 'pistol', damage: 42, rpm: 0, mag: 20, operators: ['IQ','Ash','Nøkk'], side: 'atk',
+    { name: '5.7 USG', type: 'pistol', damage: 42, rpm: 0, mag: 20, operators: ['IQ','Ash','Nøkk','Striker'], side: 'atk',
       barrels: ['muzzle_brake','suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] } },
     { name: 'P226 MK 25', type: 'pistol', damage: 50, rpm: 0, mag: 15, operators: ['Sledge','Thatcher'], side: 'atk',
       barrels: ['muzzle_brake','suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] } },
@@ -566,23 +566,25 @@ const WEAPONS = [
 const WEAPON_DETAILS = {
     // ===== 突击步枪 =====
     'M4': {
-        realName: 'Remington R4',
+        realName: 'Colt M4A1 Block II',
         caliber: '5.56x45mm NATO',
         country: '🇺🇸 美国',
-        manufacturer: 'Remington Arms',
+        manufacturer: 'Colt',
         trivia: [
-            '游戏内模型基于 Remington R4（非军用 M4 卡宾枪），可从枪身刻印和无前托设计区分。',
-            'Maverick 是唯一可以使用该武器的干员，他的背景设定为在阿富汗长期独立行动的 Delta Force 队员。'
+            '游戏内模型为 M4A1 Block II，采用 SOPMOD II 计划的 Daniel Defense RIS II Mk18 护木和 12.5 英寸枪管。',
+            '配件细节充满 Maverick 的战地个性：消音器包布减少热气，弹匣底部绑绳圈充当土制 Ranger Plate。',
+            '从护木前方看进去，游戏中的 M4 没有导气系统——被玩家戏称为"魔法驱动"。'
         ]
     },
     'Commando 9': {
-        realName: 'CAA RONI Glock Carbine Kit',
+        realName: 'Colt 9mm SMG (RO635 系列)',
         caliber: '9x19mm Parabellum',
-        country: '🇮🇱 以色列',
-        manufacturer: 'CAA Industries',
+        country: '🇺🇸 美国',
+        manufacturer: 'Colt',
         trivia: [
-            '游戏中名为"Commando 9"，实际原型为 CAA RONI 套件——一种可将 Glock 手枪转换为卡宾枪的转换架。',
-            '虽然归类为突击步枪但发射 9mm 手枪弹，这解释了其较低的 36 点基础伤害。'
+            '原型为柯尔特 9mm 冲锋枪系列（9mm AR Commando），游戏建模融合了 RO639 的照门和 RO635 的快慢机等多个型号特征。',
+            '虽然归类为突击步枪但发射 9mm 手枪弹，Y8S4 前一直错误地套用冲锋枪的伤害衰减。',
+            '现实中柯尔特冲锋枪弹匣只有 20 发和 32 发两种规格，游戏中的 25 发弹匣并不存在。'
         ]
     },
     'L85A2': {
@@ -617,13 +619,14 @@ const WEAPON_DETAILS = {
         ]
     },
     'R4-C': {
-        realName: 'Remington R4',
+        realName: 'Remington R4 Compact',
         caliber: '5.56x45mm NATO',
         country: '🇺🇸 美国',
         manufacturer: 'Remington Arms',
         trivia: [
-            '后缀"-C"代表 Compact，是 R4 的短管版本。Ash 的标志性武器，以高射速和极佳的手感著称。',
-            '曾一度被认为是进攻方最强突击步枪之一，因此多次被削弱（移除 ACOG、调整后坐力）。'
+            'R4-C 的"C"代表 Compact，是雷明顿 R4 系列的短枪管版本，配备 7 英寸（177.8mm）枪管。',
+            '雷明顿 2012 年获得美军合同后生产 R4，但因与柯尔特的法律纠纷，美军转向 FN 采购，R4 随后转入民用和执法市场。',
+            '游戏中配有 Magpul MOE® 握把、CTR® 枪托和雷明顿 RAHG 四面导轨护木。'
         ]
     },
     '556XI': {
@@ -648,13 +651,14 @@ const WEAPON_DETAILS = {
         ]
     },
     'AK-12': {
-        realName: 'AK-12 (2018 production model)',
+        realName: 'AK-12 (2012 原型版)',
         caliber: '5.45x39mm',
         country: '🇷🇺 俄罗斯',
-        manufacturer: 'Kalashnikov Concern',
+        manufacturer: 'Izhmash (卡拉什尼科夫集团)',
         trivia: [
-            'AK-12 是 AK 系列的现代化版本，2018 年被俄军正式列装。保留了 AK 经典的长行程活塞导气系统。',
-            '游戏中的模型更接近早期原型（带四面皮卡汀尼导轨），而非最终量产版。'
+            '游戏中的 AK-12 严格基于 2012 年"雷特尼克"竞标原型，与 2016 年俄军列装的量产版（AK-400/6P70）完全不同。',
+            '2012 原型版特征：全长度顶部导轨、旋钮式快慢机（取代传统 AK 大拨片）、可拆式枪机拉柄和四段可调枪托。',
+            '该原型因零组件强度不足和可靠性问题在测试中失败，最终被放弃，项目回归传统 AK 设计。'
         ]
     },
     'AUG A2': {
@@ -663,8 +667,9 @@ const WEAPON_DETAILS = {
         country: '🇦🇹 奥地利',
         manufacturer: 'Steyr Mannlicher',
         trivia: [
-            'AUG（Armee-Universal-Gewehr，"军队通用步枪"）是世界上最成功的犊牛式步枪之一。',
-            '奥地利军队自 1978 年起列装，至今仍在使用。在游戏中分配给同为 GSG-9（德国）的 IQ。'
+            'AUG（Armee-Universal-Gewehr，"军队通用步枪"）在竞标中击败 FN FAL、FN CAL、Vz58 和 M16，凭精度、重量和可靠性全面胜出。',
+            'A2 版本将 A1 一体式 1.5 倍镜座改为销针固定的可拆卸式，允许更换不同镜座和皮卡汀尼导轨。',
+            '游戏中的枪管长度介于全尺寸和 AUG-P 短枪管之间，属于游戏化调整。'
         ]
     },
     '552 Commando': {
@@ -683,18 +688,19 @@ const WEAPON_DETAILS = {
         country: '🇩🇪 德国',
         manufacturer: 'Heckler & Koch',
         trivia: [
-            'HK416C 是 HK416 的超短版本，最初为特种部队设计。采用短行程活塞系统，比 M4 更可靠。',
-            'Jäger 作为德国 GSG-9 成员使用此武器在设定上合理——GSG-9 实际装备 HK416。',
-            'HK416 的标准版本于 2011 年被美国海军海豹突击队用于击毙本·拉登的行动中。'
+            'HK416C 的研发源于 2001 年三角洲部队需求：用 H&K G36 的短行程活塞系统替换 M4 的直接导气，解决可靠性问题。',
+            '约 2009 年公开，为响应英国 SAS 对紧凑短突击步枪的需求。9 英寸短枪管搭配类似 MP5A3 的滑管式折叠枪托，折叠后极为紧凑。',
+            '机瞄瞄准时，后照门和前准星组成类似"●ω●"的颜文字表情，被玩家认为十分可爱。'
         ]
     },
     'C8-SFW': {
         realName: 'Colt Canada C8 SFW',
         caliber: '5.56x45mm NATO',
         country: '🇨🇦 加拿大',
-        manufacturer: 'Colt Canada',
+        manufacturer: 'Colt Canada (前 Diemaco)',
         trivia: [
-            'C8 SFW（Special Forces Weapon）是加拿大特种部队专用版本，配有重枪管以提高持续射击能力。',
+            'C8 SFW（Special Forces Weapon）基于 C8 卡宾枪（M725），配有改进的 400mm 重型枪管和 RIS 导轨护木。',
+            '游戏建模实际上更接近柯尔特 933 型（11.5 英寸枪管），而非 C8-SFW 标志性的 16 英寸重型枪管。',
             'Buck 无法使用握把配件，因为下挂的 Skeleton Key（M26 MASS 霰弹枪模块）占用了握把导轨。'
         ]
     },
@@ -710,13 +716,13 @@ const WEAPON_DETAILS = {
         ]
     },
     'PARA-308': {
-        realName: 'FN FAL PARA',
+        realName: 'IMBEL PARAFAL (FAL 现代化改型)',
         caliber: '7.62x51mm NATO',
-        country: '🇧🇪 比利时 / 🇧🇷 巴西',
-        manufacturer: 'FN Herstal / IMBEL',
+        country: '🇧🇷 巴西 / 🇧🇪 比利时',
+        manufacturer: 'IMBEL / FN Herstal',
         trivia: [
-            'FAL（Fusil Automatique Léger，"轻型自动步枪"）绰号"自由世界的右臂"，冷战期间被 90 多个国家采用。',
-            'PARA 版本配有折叠枪托，最初为伞兵设计。巴西版由 IMBEL 授权生产。',
+            '原型为巴西 IMBEL 对已服役 30+ 年 FAL 步枪的现代化改装（PARAFAL/MD-97L），包括短枪管、聚合物部件和导轨。',
+            '游戏建模融合了 DSA SA58 OSW 的上机匣和旧式 FAL 的下机匣，弹匣形似 DSA 25 发弹匣但游戏设定为 30 发。',
             'Capitão 作为巴西 BOPE 成员使用此武器非常契合——巴西军警大量使用 FAL 系列。'
         ]
     },
@@ -731,13 +737,14 @@ const WEAPON_DETAILS = {
         ]
     },
     'C7E': {
-        realName: 'Colt Canada C7',
+        realName: 'Colt Canada C7NLD (荷兰定制版)',
         caliber: '5.56x45mm NATO',
-        country: '🇨🇦 加拿大',
+        country: '🇨🇦 加拿大 / 🇳🇱 荷兰',
         manufacturer: 'Colt Canada',
         trivia: [
-            'C7 是加拿大版的 M16A2，带有一些本土改进。"E"可能代表某种电子光学版本。',
-            '被誉为攻方最平衡的突击步枪之一——46 伤害配 800 射速提供极佳的 DPS。'
+            'C7E 实际是荷兰订购的 C7A1 改型（C7NLD），装备 Magpul PRS 精密步枪枪托和四轨前护木。',
+            '配备 20 英寸长枪管，游戏模型非常长，被玩家戏称为"西班牙长矛"。',
+            '现实中 GEO（西班牙特种作战小组）并未装备 AR15 系列步枪，这是育碧的艺术加工。'
         ]
     },
     'M762': {
@@ -816,13 +823,14 @@ const WEAPON_DETAILS = {
         ]
     },
     'SC3000K': {
-        realName: 'FN FNC (改型)',
-        caliber: '5.56x45mm NATO',
+        realName: 'FN F2000 Tactical',
+        caliber: '5.56x45mm NATO (现实) / .300 BLK (游戏设定)',
         country: '🇧🇪 比利时',
         manufacturer: 'FN Herstal',
         trivia: [
-            '游戏中的 SC3000K 外观高度接近 FN FNC，但名称是虚构的。',
-            'Zero（Sam Fisher）在彩虹六号与细胞分裂联动中带来了这把武器，呼应了 FN 在美国特战圈的广泛使用。'
+            '名称来自育碧《细胞分裂》系列中 Sam Fisher 使用的 SC3000 步枪，现实原型为 FN F2000 Tactical（取消原厂光学瞄准镜版）。',
+            'F2000 最独特的设计是"前抛壳"系统——空弹壳通过枪管上方的抛壳管从前方排出，左撇子也能使用。',
+            '游戏中进行了大量魔改：口径改为 .300 BLK、枪托和弹匣井形状修改、拉机柄改为 AUG 式固定设计。'
         ]
     },
     'POF-9': {
@@ -878,14 +886,14 @@ const WEAPON_DETAILS = {
         ]
     },
     'MP5': {
-        realName: 'H&K MP5A2',
+        realName: 'H&K MP5A5 (2014 现代化版)',
         caliber: '9x19mm Parabellum',
         country: '🇩🇪 德国',
         manufacturer: 'Heckler & Koch',
         trivia: [
-            'MP5 可能是世界上最著名的冲锋枪，自 1966 年问世以来被超过 40 个国家的军警采用。',
-            '采用独特的滚柱延迟闭锁系统（源自 G3 步枪），射击精度远超同类吹回式冲锋枪。',
-            '1980 年伊朗大使馆人质事件中 SAS 使用 MP5 突入的画面让这把枪一夜成名。'
+            '游戏内型号为 2014 SHOT SHOW 上推出的沙黄色现代化 MP5A5，带三面导轨护木和 MP5F 加厚橡胶底板枪托。',
+            '1977 年摩加迪沙劫机事件和 1980 年伊朗大使馆人质事件中，GSG-9 和 SAS 使用 MP5 的画面让这把枪一夜成名。',
+            '采用独特的滚柱延迟闭锁系统（源自 G3/CETME），射击精度远超同类吹回式冲锋枪。'
         ]
     },
     'P90': {
@@ -1142,14 +1150,14 @@ const WEAPON_DETAILS = {
 
     // ===== 狙击步枪 =====
     'CSRX 300': {
-        realName: '虚构武器 (类似 PGM Ultima Ratio)',
-        caliber: '.300 Win Mag',
-        country: '🇫🇷 法国 (推测)',
-        manufacturer: '虚构',
+        realName: '定制直拉式栓动步枪 (无明确现实原型)',
+        caliber: '.300 Winchester Magnum',
+        country: '未知',
+        manufacturer: '虚构 / 定制',
         trivia: [
-            'CSRX 300 没有精确的现实原型，但设计风格接近法国 PGM 系列或 AI AX 系列栓动步枪。',
-            '127 伤害是全游戏最高，即使打四肢也能造成巨大伤害。',
-            '栓动射速极低（50 RPM），错过一发可能就意味着死亡。Kali 是唯一使用此武器的干员。'
+            '官方描述为"定制直拉式栓动步枪"，采用直拉枪机操作而非传统的旋转后拉式，在游戏中独一无二。',
+            '自带不可拆卸的 5x/12x 双倍率瞄准镜，可穿透软墙留下大洞、一击摧毁封阻板、击退所有防弹护盾。',
+            '射击后弹道轨迹可见 1 秒（57 米长），所有玩家可见，因此连续射击会暴露位置。'
         ]
     },
 

@@ -504,39 +504,39 @@ const WEAPONS = [
       notes: 'Y11S1新增射手步枪' },
 
     // ===== 霰弹枪 (Shotgun - 弹丸) =====
-    { name: 'M870', type: 'shotgun', damage: 60, rpm: 0, mag: 5, operators: ['Bandit','Jäger'], side: 'def',
+    // 伤害为单颗弹丸伤害（每发8颗弹丸），数据源: GitHub实测Y11S1.1 + 灰机wiki面板
+    { name: 'M870', type: 'shotgun', damage: 42, rpm: 0, mag: 7, operators: ['Bandit','Jäger','Thorn'], side: 'def',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '泵动霰弹枪' },
-    { name: 'M590A1', type: 'shotgun', damage: 48, rpm: 0, mag: 7, operators: ['Smoke','Mute','Thatcher'], side: 'mixed',
+    { name: 'M590A1', type: 'shotgun', damage: 48, rpm: 0, mag: 7, operators: ['Smoke','Mute','Thatcher','Sledge','Warden','Deimos'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '泵动霰弹枪' },
-    { name: 'M1014', type: 'shotgun', damage: 34, rpm: 0, mag: 8, operators: ['Thermite','Castle','Pulse'], side: 'mixed',
+    { name: 'M1014', type: 'shotgun', damage: 28, rpm: 0, mag: 8, operators: ['Thermite','Castle','Pulse'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '半自动霰弹枪' },
-    { name: '14', type: 'shotgun', damage: 53, rpm: 0, mag: 7, operators: ['Capitão'], side: 'atk',
+    { name: 'SG-CQB', type: 'shotgun', damage: 44, rpm: 0, mag: 7, operators: ['Doc','Rook'], side: 'def',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '泵动霰弹枪' },
-    { name: 'SG-CQB', type: 'shotgun', damage: 53, rpm: 0, mag: 7, operators: ['Doc','Rook'], side: 'def',
-      barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '泵动霰弹枪' },
-    { name: 'SASG-12', type: 'shotgun', damage: 50, rpm: 0, mag: 8, operators: ['Fuze','Finka','Kapkan'], side: 'mixed',
+    { name: 'SASG-12', type: 'shotgun', damage: 26, rpm: 0, mag: 10, operators: ['Fuze','Finka','Kapkan','Fenrir'], side: 'mixed',
       barrels: [], grips: ['vertical_grip','angled_grip'], y7s3_new: { barrels: [], grips: [] }, notes: '半自动霰弹枪' },
-    { name: 'SUPER 90', type: 'shotgun', damage: 35, rpm: 0, mag: 8, operators: ['Frost'], side: 'def',
+    { name: 'SUPER 90', type: 'shotgun', damage: 27, rpm: 0, mag: 8, operators: ['Frost','Melusi'], side: 'def',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '半自动霰弹枪' },
-    { name: 'SPAS-12', type: 'shotgun', damage: 34, rpm: 0, mag: 7, operators: ['Valkyrie'], side: 'def',
-      barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '泵动霰弹枪' },
-    { name: 'SPAS-15', type: 'shotgun', damage: 30, rpm: 0, mag: 6, operators: ['Caveira'], side: 'def',
+    { name: 'SPAS-12', type: 'shotgun', damage: 31, rpm: 0, mag: 7, operators: ['Valkyrie','Oryx'], side: 'def',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '半自动霰弹枪' },
-    { name: 'SuperNova', type: 'shotgun', damage: 55, rpm: 0, mag: 7, operators: ['Echo','Hibana'], side: 'mixed',
+    { name: 'SPAS-15', type: 'shotgun', damage: 24, rpm: 0, mag: 6, operators: ['Caveira'], side: 'def',
+      barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '半自动霰弹枪' },
+    { name: 'SuperNova', type: 'shotgun', damage: 48, rpm: 0, mag: 7, operators: ['Echo','Hibana'], side: 'mixed',
       barrels: ['suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '泵动霰弹枪' },
-    { name: 'FO-12', type: 'shotgun', damage: 25, rpm: 0, mag: 10, operators: ['Ela'], side: 'def',
+    { name: 'FO-12', type: 'shotgun', damage: 24, rpm: 0, mag: 10, operators: ['Ela'], side: 'def',
       barrels: ['extended_barrel'], grips: ['vertical_grip','angled_grip'], y7s3_new: { barrels: [], grips: [] }, notes: '全自动霰弹枪' },
-    { name: 'SIX12', type: 'shotgun', damage: 35, rpm: 0, mag: 6, operators: ['Ying','Lesion'], side: 'mixed',
+    { name: 'SIX12', type: 'shotgun', damage: 46, rpm: 0, mag: 6, operators: ['Ying','Lesion'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '左轮式霰弹枪' },
-    { name: 'SIX12 SD', type: 'shotgun', damage: 35, rpm: 0, mag: 6, operators: ['Ying','Lesion','Nøkk'], side: 'mixed',
+    { name: 'SIX12 SD', type: 'shotgun', damage: 46, rpm: 0, mag: 6, operators: ['Lesion','Nøkk'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '消音版左轮式霰弹枪' },
 
     // ===== 独头霰弹枪 (Slug) =====
+    // 伤害为单发伤害（单颗独头弹），数据源: GitHub实测Y11S1.1 + 灰机wiki面板
     { name: 'BOSG.12.2', type: 'slug', damage: 125, rpm: 0, mag: 2, operators: ['Vigil','Dokkaebi'], side: 'mixed',
       barrels: [], grips: ['vertical_grip','angled_grip'], y7s3_new: { barrels: [], grips: [] }, notes: '双管独头弹' },
-    { name: 'ACS12', type: 'slug', damage: 69, rpm: 300, mag: 30, operators: ['Maestro','Alibi'], side: 'def',
+    { name: 'ACS12', type: 'slug', damage: 69, rpm: 300, mag: 30, operators: ['Maestro','Alibi','Azami'], side: 'def',
       barrels: [], grips: ['angled_grip'], y7s3_new: { barrels: [], grips: [] }, notes: '半自动独头弹' },
-    { name: 'TCSG12', type: 'slug', damage: 57, rpm: 450, mag: 10, operators: ['Kaid','Goyo'], side: 'def',
+    { name: 'TCSG12', type: 'slug', damage: 75, rpm: 450, mag: 10, operators: ['Kaid','Goyo','Sentry'], side: 'def',
       barrels: ['suppressor'], grips: ['vertical_grip','angled_grip'], y7s3_new: { barrels: [], grips: [] }, notes: '半自动独头弹' },
 
 
@@ -545,11 +545,11 @@ const WEAPONS = [
     // ============================================================
 
     // ===== 霰弹枪·次要 (Secondary Shotgun) =====
-    { name: 'ITA12S', type: 'shotgun_sec', damage: 38, rpm: 0, mag: 5, operators: ['Jackal','Mira','Goyo','Striker'], side: 'mixed',
+    { name: 'ITA12S', type: 'shotgun_sec', damage: 29, rpm: 0, mag: 5, operators: ['Jackal','Mira','Goyo','Striker'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '副武器泵动霰弹枪' },
-    { name: 'Super Shorty', type: 'shotgun_sec', damage: 35, rpm: 0, mag: 3, operators: ['Castle','Gridlock','Wamai','Melusi','Lesion'], side: 'mixed',
+    { name: 'Super Shorty', type: 'shotgun_sec', damage: 35, rpm: 0, mag: 3, operators: ['Castle','Gridlock','Wamai','Brava','Clash'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '副武器短管霰弹枪' },
-    { name: 'ITA12S (Frost)', type: 'shotgun_sec', damage: 38, rpm: 0, mag: 5, operators: ['Frost'], side: 'def',
+    { name: 'ITA12S (Frost)', type: 'shotgun_sec', damage: 29, rpm: 0, mag: 5, operators: ['Frost'], side: 'def',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '副武器泵动霰弹枪' },
 
     // ===== 手枪 (Pistol) =====
@@ -1104,84 +1104,84 @@ const WEAPON_EXTENDED = {
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，单发后坐力大但有充足恢复时间' },
-        falloff: null // 暂无可靠数据来源
+        falloff: { start: 5, midStart: 6, mid: 31, midEnd: 10, end: 13, min: 18, pellets: 8 } // [GitHub实测Y11S1.1] 42→31→18
     },
     'M590A1': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，后坐力大但可控' },
-        falloff: null // 暂无可靠数据来源
+        falloff: { start: 5, midStart: 6, mid: 36, midEnd: 10, end: 13, min: 21, pellets: 8 } // [GitHub实测Y11S1.1] 48→36→21
     },
     'M1014': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，连续射击后坐力累积' },
-        falloff: { start: 6, midStart: 9, mid: 29, midEnd: 10, end: 19, min: 15, pellets: 8 } // [Fandom-verified] 34→29→15
+        falloff: { start: 5, midStart: 6, mid: 21, midEnd: 10, end: 13, min: 12, pellets: 8 } // [GitHub实测Y11S1.1] 28→21→12
     },
     'SG-CQB': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，单发伤害高' },
-        falloff: null // Fandom只有两段数据(53/26)，中间值无可靠来源
+        falloff: { start: 5, midStart: 6, mid: 33, midEnd: 10, end: 13, min: 19, pellets: 8 } // [GitHub实测Y11S1.1] 44→33→19
     },
     'SASG-12': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '半自动，AK平台，弹匣供弹可快速换弹' },
-        falloff: null // Fandom只有两段数据(50/14)，中间值无可靠来源
+        falloff: { start: 5, midStart: 6, mid: 19, midEnd: 10, end: 13, min: 11, pellets: 8 } // [GitHub实测Y11S1.1] 26→19→11
     },
     'SUPER 90': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，惯性闭锁系统后坐力适中' },
-        falloff: null // 暂无可靠数据来源
+        falloff: { start: 5, midStart: 6, mid: 20, midEnd: 10, end: 13, min: 12, pellets: 8 } // [GitHub实测Y11S1.1] 27→20→12
     },
     'SPAS-12': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
-        recoil: { vertical: 'medium', horizontal: 'low', pattern: '泵动/半自动双模式，后坐力中等' },
-        falloff: null // 曾获取到35/27/20但无法二次验证，暂不采用
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，后坐力中等' },
+        falloff: { start: 5, midStart: 6, mid: 23, midEnd: 10, end: 13, min: 13, pellets: 8 } // [GitHub实测Y11S1.1] 31→23→13
     },
     'SPAS-15': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，弹匣供弹，后坐力平稳' },
-        falloff: null // 暂无可靠数据来源
+        falloff: { start: 5, midStart: 6, mid: 18, midEnd: 10, end: 13, min: 10, pellets: 8 } // [GitHub实测Y11S1.1] 24→18→10
     },
     'SuperNova': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，ComforTech缓冲系统' },
-        falloff: null // 暂无可靠数据来源
+        falloff: { start: 5, midStart: 6, mid: 36, midEnd: 10, end: 13, min: 21, pellets: 8 } // [GitHub实测Y11S1.1] 48→36→21
     },
     'FO-12': {
         sights: ['red_dot','holographic','reflex','scope_1_5x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.34, reloadEmpty: 3.29,
         recoil: { vertical: 'very_high', horizontal: 'high', pattern: '全自动霰弹枪，极高射速带来剧烈后坐力' },
-        falloff: { start: 6, midStart: 12, mid: 24, midEnd: 18, end: 21, min: 12, pellets: 8 } // [Fandom-verified] 35→24→12
+        falloff: { start: 5, midStart: 6, mid: 18, midEnd: 10, end: 13, min: 10, pellets: 8 } // [GitHub实测Y11S1.1] 24→18→10
     },
     'SIX12': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 4.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '旋转弹仓供弹，后坐力中等' },
-        falloff: null // Fandom只有两段数据(35/24)，中间值无可靠来源
+        falloff: { start: 5, midStart: 6, mid: 34, midEnd: 10, end: 13, min: 20, pellets: 8 } // [GitHub实测Y11S1.1] 46→34→20
     },
     'SIX12 SD': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 4.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '自带消音器的旋转弹仓霰弹枪' },
-        falloff: null // 同SIX12，暂无可靠数据来源
+        falloff: { start: 5, midStart: 6, mid: 34, midEnd: 10, end: 13, min: 20, pellets: 8 } // [GitHub实测Y11S1.1] 46→34→20（与SIX12相同）
     },
 
     // === 独头霰弹枪 ===
@@ -1192,21 +1192,21 @@ const WEAPON_EXTENDED = {
         underbarrel: false, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.0,
         recoil: { vertical: 'very_high', horizontal: 'low', pattern: '双管独头弹，巨大的单发后坐力' },
-        falloff: null // 暂无可靠数据来源
+        falloff: { start: 15, end: 25, min: 75 } // [GitHub实测Y11S1.1] 125→75 (Y9S4.2: 衰减15-25m, 最低60%)
     },
     'ACS12': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.8,
         recoil: { vertical: 'high', horizontal: 'medium', pattern: '半自动独头弹，30发弹匣持续输出' },
-        falloff: null // Fandom数据(69→52)与之前代码不符，暂清除待确认
+        falloff: { start: 15, end: 25, min: 41 } // [GitHub实测Y11S1.1] 69→41 (Y9S4.2: 衰减15-25m, 最低60%)
     },
     'TCSG12': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动独头弹，450RPM射速' },
-        falloff: null // 暂无可靠数据来源
+        falloff: { start: 15, end: 25, min: 45 } // [GitHub实测Y11S1.1] 75→45 (Y9S4.2: 57→75buff, 衰减15-25m, 最低60%)
     },
 
     // === 副武器 - 霰弹枪 ===
@@ -1215,21 +1215,21 @@ const WEAPON_EXTENDED = {
         underbarrel: false, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.0,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '副武器泵动霰弹枪，用于破墙' },
-        falloff: null // 暂无可靠数据来源
+        falloff: { start: 5, midStart: 6, mid: 21, midEnd: 10, end: 13, min: 13, pellets: 8 } // [GitHub实测Y11S1.1] 29→21→13
     },
     'Super Shorty': {
         sights: [],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 2.5,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '短管霰弹枪，散布极大，用于破墙' },
-        falloff: null // 暂无可靠数据来源
+        falloff: { start: 5, midStart: 6, mid: 26, midEnd: 10, end: 13, min: 15, pellets: 8 } // [灰机wiki面板35×8 + 同类衰减模式推算] 35→26→15
     },
     'ITA12S (Frost)': {
         sights: [],
         underbarrel: false, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.0,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '副武器泵动霰弹枪，用于破墙' },
-        falloff: null // 暂无可靠数据来源
+        falloff: { start: 5, midStart: 6, mid: 21, midEnd: 10, end: 13, min: 13, pellets: 8 } // [GitHub实测Y11S1.1] 与ITA12S相同 29→21→13
     },
 
     // === 副武器 - 冲锋枪 ===

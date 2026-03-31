@@ -335,6 +335,113 @@ body {
     margin-bottom: 4px;
 }
 
+/* ---- 武器缩略图（卡片） ---- */
+.weapon-thumb-row {
+    display: flex;
+    justify-content: center;
+    margin: 6px 0 10px;
+    padding: 8px;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius);
+    min-height: 48px;
+}
+
+.weapon-thumb {
+    max-height: 56px;
+    max-width: 100%;
+    object-fit: contain;
+    filter: brightness(0.9) contrast(1.1);
+    transition: filter 0.2s;
+}
+
+.weapon-card:hover .weapon-thumb {
+    filter: brightness(1) contrast(1.15);
+}
+
+/* ---- 武器大图（弹窗） ---- */
+.modal-weapon-image {
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, rgba(79,195,247,0.03), rgba(255,255,255,0.02));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.modal-weapon-image img {
+    max-height: 100px;
+    max-width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+}
+
+/* ---- 后坐力图片 ---- */
+.recoil-image-wrap {
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.recoil-image {
+    max-width: 280px;
+    width: 100%;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: #1a1a2e;
+}
+
+.recoil-image-caption {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+/* ---- 伤害衰减 SVG 折线图 ---- */
+.falloff-chart-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.falloff-svg {
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.falloff-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.falloff-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.falloff-legend-item strong {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+}
+
+.falloff-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.falloff-dot.full { background: var(--success); }
+.falloff-dot.trans { background: var(--warning); }
+.falloff-dot.min { background: var(--danger); }
+
 /* ---- 武器卡片 - 现实原型信息 ---- */
 .weapon-real-info {
     display: flex;
@@ -945,6 +1052,17 @@ body {
     gap: 10px;
 }
 
+/* 暂无数据占位提示 */
+.no-data-placeholder {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius);
+    border: 1px dashed var(--border);
+}
+
 .trivia-item {
     display: flex;
     gap: 8px;
@@ -965,8 +1083,8 @@ body {
 
 .modal-stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
     margin-bottom: 24px;
 }
 
@@ -1074,6 +1192,233 @@ body {
 .modal-op-tag.def {
     border-color: rgba(74,158,255,0.3);
     color: var(--defense);
+}
+
+/* ---- 后坐力模式 ---- */
+.recoil-container {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.recoil-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.recoil-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.recoil-bar-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    min-width: 32px;
+    text-align: right;
+    font-weight: 500;
+}
+
+.recoil-bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.recoil-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.recoil-bar-value {
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 36px;
+    font-family: var(--font-mono);
+}
+
+.recoil-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+}
+
+/* ---- 伤害衰减 ---- */
+.falloff-container {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.falloff-visual {
+    margin-bottom: 4px;
+}
+
+.falloff-bar {
+    display: flex;
+    height: 32px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+
+.falloff-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    min-width: 40px;
+}
+
+.falloff-zone.full {
+    background: rgba(102,187,106,0.2);
+    color: var(--success);
+}
+
+.falloff-zone.transition {
+    background: rgba(255,167,38,0.15);
+    color: var(--warning);
+    font-size: 16px;
+}
+
+.falloff-zone.reduced {
+    background: rgba(239,83,80,0.15);
+    color: var(--danger);
+}
+
+.falloff-dmg {
+    text-shadow: 0 0 8px currentColor;
+}
+
+.falloff-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    padding: 0 2px;
+}
+
+/* ---- 配件效果面板（点击展开） ---- */
+.att-effect-panel {
+    margin-top: 12px;
+    padding: 14px;
+    background: rgba(79,195,247,0.05);
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: var(--radius);
+    animation: panelIn 0.2s ease;
+}
+
+@keyframes panelIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.att-effect-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(79,195,247,0.15);
+}
+
+.att-effect-icon {
+    font-size: 20px;
+}
+
+.att-effect-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.att-effect-name-en {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.att-effect-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.att-effect-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    padding: 3px 0;
+}
+
+.att-effect-row.positive { color: var(--success); }
+.att-effect-row.negative { color: var(--danger); }
+.att-effect-row.neutral { color: var(--text-secondary); }
+.att-effect-row.info { color: var(--accent); }
+
+.att-effect-val {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    min-width: 80px;
+}
+
+.att-effect-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(79,195,247,0.15);
+}
+
+.att-effect-best {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--accent);
+}
+
+/* 配件选中状态 */
+.modal-att-item[data-att-key] {
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.modal-att-item[data-att-key]:hover {
+    border-color: var(--accent-dim);
+    background: rgba(79,195,247,0.1);
+}
+
+.modal-att-item.att-selected {
+    background: rgba(79,195,247,0.15) !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+    box-shadow: 0 0 0 2px rgba(79,195,247,0.2);
+}
+
+/* 瞄具项特殊样式 */
+.modal-att-item.sight-item {
+    background: rgba(171,71,188,0.08);
+    border-color: rgba(171,71,188,0.2);
+    color: #ce93d8;
+}
+
+.modal-att-item.sight-item:hover {
+    border-color: rgba(171,71,188,0.4);
+    background: rgba(171,71,188,0.15);
 }
 
 /* ---- Scrollbar ---- */

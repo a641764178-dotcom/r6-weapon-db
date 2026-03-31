@@ -92,6 +92,87 @@ const ATTACHMENT_DATA = {
             description: '只影响不开镜时的射击精度。红色激光点会暴露位置和瞄准方向，但远距离几乎看不到。霰弹枪几乎必装。',
             bestFor: '霰弹枪、冲锋手枪、盾牌干员'
         }
+    },
+    sights: {
+        red_dot: {
+            name: '红点瞄准镜', nameEn: 'Red Dot Sight', slot: 'sight', icon: '🔴',
+            mag: '1.0x',
+            effects: [
+                { type: 'info', label: '放大倍率', value: '1.0x' },
+                { type: 'positive', label: '视野', value: '最大' },
+                { type: 'neutral', label: 'ADS速度影响', value: '无' }
+            ],
+            description: '无放大倍率的反射式瞄具，视野最大，适合近距离快速交战。',
+            bestFor: '近距离CQB、快速清角'
+        },
+        holographic: {
+            name: '全息瞄准镜', nameEn: 'Holographic Sight', slot: 'sight', icon: '🟢',
+            mag: '1.0x',
+            effects: [
+                { type: 'info', label: '放大倍率', value: '1.0x' },
+                { type: 'positive', label: '准星清晰度', value: '高' },
+                { type: 'neutral', label: 'ADS速度影响', value: '无' }
+            ],
+            description: '全息投影技术，准星环形设计便于快速对准目标中心，框架稍大但准星辨识度高。',
+            bestFor: '中近距离、需要精准瞄点'
+        },
+        reflex: {
+            name: '反射瞄准镜', nameEn: 'Reflex Sight', slot: 'sight', icon: '🔺',
+            mag: '1.0x',
+            effects: [
+                { type: 'info', label: '放大倍率', value: '1.0x' },
+                { type: 'positive', label: '框架遮挡', value: '最小' },
+                { type: 'neutral', label: 'ADS速度影响', value: '无' }
+            ],
+            description: '三角形准星、开放式框架遮挡最少。个人偏好差异大，部分玩家觉得三角准星不如圆点直觉。',
+            bestFor: '偏好开放视野的玩家'
+        },
+        scope_1_5x: {
+            name: '1.5倍镜', nameEn: 'Scope 1.5x', slot: 'sight', icon: '🔍',
+            mag: '1.5x',
+            effects: [
+                { type: 'info', label: '放大倍率', value: '1.5x' },
+                { type: 'positive', label: '中距离辨识', value: '略有提升' },
+                { type: 'negative', label: 'ADS灵敏度乘数', value: '0.9x' }
+            ],
+            description: '最低倍率放大镜，视野损失最小，适合需要轻微放大又不想牺牲太多视野的场景。',
+            bestFor: '防守方替代高倍镜'
+        },
+        scope_2_0x: {
+            name: '2.0倍镜', nameEn: 'Scope 2.0x', slot: 'sight', icon: '🔍',
+            mag: '2.0x',
+            effects: [
+                { type: 'info', label: '放大倍率', value: '2.0x' },
+                { type: 'neutral', label: '视野', value: '中等' },
+                { type: 'negative', label: 'ADS灵敏度乘数', value: '0.8x' }
+            ],
+            description: '平衡的中距离倍镜，适合需要一定放大但又不想太窄视野的情况。',
+            bestFor: '中距离交战'
+        },
+        scope_2_5x: {
+            name: '2.5倍镜', nameEn: 'Scope 2.5x (ACOG)', slot: 'sight', icon: '🔭',
+            mag: '2.5x',
+            effects: [
+                { type: 'info', label: '放大倍率', value: '2.5x' },
+                { type: 'positive', label: '中远距离优势', value: '显著' },
+                { type: 'negative', label: 'ADS灵敏度乘数', value: '0.7x' },
+                { type: 'negative', label: '近距离劣势', value: '视野窄' }
+            ],
+            description: '经典ACOG倍镜，曾是进攻方的标志性配件。中远距离优势明显，但近距离视野受限。',
+            bestFor: '中远距离架点、进攻方长距离交战'
+        },
+        scope_3_0x: {
+            name: '3.0倍镜', nameEn: 'Scope 3.0x', slot: 'sight', icon: '🔭',
+            mag: '3.0x',
+            effects: [
+                { type: 'info', label: '放大倍率', value: '3.0x' },
+                { type: 'positive', label: '远距离精度', value: '极佳' },
+                { type: 'negative', label: 'ADS灵敏度乘数', value: '0.6x' },
+                { type: 'negative', label: '近距离', value: '严重劣势' }
+            ],
+            description: '高倍率瞄具，仅适合远距离交战。近距离CQB中使用几乎是自杀行为。',
+            bestFor: 'DMR、远距离架点'
+        }
     }
 };
 
@@ -560,6 +641,679 @@ const WEAPONS = [
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] },
       notes: '.44 Mag 左轮（非半自动版）' }
 ];
+
+// ---- 武器扩展数据 ----
+// 瞄具/下挂/机动性/换弹时间/后坐力模式/伤害衰减
+// 数据来源: Fandom Wiki 数据挖掘 + 社区测试
+const WEAPON_EXTENDED = {
+    // === 突击步枪 ===
+    'M4': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.7, reloadEmpty: 3.3,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '稳定上升，略向右偏' },
+        falloff: { start: 25, end: 35, min: 26 }
+    },
+    'Commando 9': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.4, reloadEmpty: 3.1,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '非常平稳，几乎直线上升' },
+        falloff: { start: 18, end: 28, min: 22 }
+    },
+    'L85A2': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.7, reloadEmpty: 3.3,
+        recoil: { vertical: 'low', horizontal: 'high', pattern: '垂直后坐力低，水平晃动大' },
+        falloff: { start: 25, end: 35, min: 28 }
+    },
+    'AR33': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.9, reloadEmpty: 3.6,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，有轻微左右摇摆' },
+        falloff: { start: 25, end: 35, min: 24 }
+    },
+    'G36C': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.9, reloadEmpty: 3.4,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '后坐力非常小，容易控制' },
+        falloff: { start: 25, end: 35, min: 23 }
+    },
+    'R4-C': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.7, reloadEmpty: 3.4,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '垂直后坐力高，水平偏移小' },
+        falloff: { start: 25, end: 35, min: 23 }
+    },
+    '556XI': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.9, reloadEmpty: 3.6,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，稳定可控' },
+        falloff: { start: 25, end: 35, min: 28 }
+    },
+    'F2': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.6, reloadEmpty: 3.3,
+        recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '极高射速导致极高垂直后坐力，需要强力下压' },
+        falloff: { start: 25, end: 35, min: 22 }
+    },
+    'AK-12': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.6, reloadEmpty: 3.4,
+        recoil: { vertical: 'high', horizontal: 'high', pattern: '前几发稳定，第4发后水平后坐力恶化' },
+        falloff: { start: 25, end: 35, min: 22 }
+    },
+    'AUG A2': {
+        sights: ['red_dot','holographic','reflex','scope_2_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.5, reloadEmpty: 3.0,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '非常稳定，适合新手' },
+        falloff: { start: 25, end: 35, min: 25 }
+    },
+    '552 Commando': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.9, reloadEmpty: 3.6,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，弹道略向右偏' },
+        falloff: { start: 25, end: 35, min: 28 }
+    },
+    '416-C CARBINE': {
+        sights: ['red_dot','holographic','reflex'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.6,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '垂直上跳明显但水平稳定' },
+        falloff: { start: 25, end: 35, min: 23 }
+    },
+    'C8-SFW': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.7, reloadEmpty: 3.3,
+        recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '极高后坐力，Skeleton Key占用下挂' },
+        falloff: { start: 25, end: 35, min: 24 }
+    },
+    'Mk17 CQB': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.6,
+        recoil: { vertical: 'high', horizontal: 'medium', pattern: '7.62mm大口径，单发后坐力大但射速低补偿' },
+        falloff: { start: 25, end: 35, min: 29 }
+    },
+    'PARA-308': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 3.0, reloadEmpty: 3.8,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，弹道偏右' },
+        falloff: { start: 25, end: 35, min: 29 }
+    },
+    'Type-89': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.3, reloadEmpty: 3.0,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等垂直后坐力，水平稳定' },
+        falloff: { start: 25, end: 35, min: 24 }
+    },
+    'C7E': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.7, reloadEmpty: 3.3,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '非常平稳的弹道，容易全自动控枪' },
+        falloff: { start: 25, end: 35, min: 27 }
+    },
+    'M762': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'high', horizontal: 'high', pattern: '高后坐力，弹道呈S形左右摇摆' },
+        falloff: { start: 25, end: 35, min: 27 }
+    },
+    'V308': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 3.2, reloadEmpty: 4.0,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，50发弹匣提供持续火力' },
+        falloff: { start: 25, end: 35, min: 26 }
+    },
+    'Spear .308': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，非常容易控制' },
+        falloff: { start: 25, end: 35, min: 25 }
+    },
+    'AR-15.50': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，单发后坐力大但有恢复时间' },
+        falloff: { start: 25, end: 35, min: 37 }
+    },
+    'AK-74M': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '典型AK后坐力模式，无握把加剧控枪难度' },
+        falloff: { start: 25, end: 35, min: 26 }
+    },
+    'ARX200': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.6, reloadEmpty: 3.2,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，水平稳定' },
+        falloff: { start: 25, end: 35, min: 28 }
+    },
+    'F90': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.5, reloadEmpty: 3.0,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，适合远距离连射' },
+        falloff: { start: 25, end: 35, min: 23 }
+    },
+    'SC3000K': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.6, reloadEmpty: 3.3,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，整体平稳' },
+        falloff: { start: 25, end: 35, min: 27 }
+    },
+    'POF-9': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.5, reloadEmpty: 3.2,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '9mm口径，后坐力非常小' },
+        falloff: { start: 18, end: 28, min: 22 }
+    },
+    'PCX-33': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.5, reloadEmpty: 3.2,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，防守方可用' },
+        falloff: { start: 18, end: 28, min: 22 }
+    },
+
+    // === 冲锋枪 ===
+    'FMG-9': {
+        sights: ['red_dot','holographic','reflex'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.2, reloadEmpty: 2.8,
+        recoil: { vertical: 'low', horizontal: 'medium', pattern: '低垂直，中等水平后坐力' },
+        falloff: { start: 18, end: 28, min: 20 }
+    },
+    'MP5K': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.3, reloadEmpty: 2.9,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，适合近距离扫射' },
+        falloff: { start: 18, end: 28, min: 18 }
+    },
+    'UMP45': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.3, reloadEmpty: 2.9,
+        recoil: { vertical: 'very_low', horizontal: 'very_low', pattern: '几乎无后坐力，激光般稳定' },
+        falloff: { start: 18, end: 28, min: 23 }
+    },
+    'MP5': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.3, reloadEmpty: 2.9,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，滚柱闭锁带来平稳射击' },
+        falloff: { start: 18, end: 28, min: 16 }
+    },
+    'P90': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.4, reloadEmpty: 3.0,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，高射速需要控制' },
+        falloff: { start: 18, end: 28, min: 13 }
+    },
+    'MP5SD': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.3, reloadEmpty: 2.9,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '与MP5相似的低后坐力' },
+        falloff: { start: 18, end: 28, min: 18 }
+    },
+    '9x19VSN': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.4, reloadEmpty: 3.0,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '非常稳定的弹道' },
+        falloff: { start: 18, end: 28, min: 20 }
+    },
+    'MP7': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.2, reloadEmpty: 2.8,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等垂直后坐力，水平稳定' },
+        falloff: { start: 18, end: 28, min: 19 }
+    },
+    '9mm C1': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.2, reloadEmpty: 2.8,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来极低后坐力' },
+        falloff: { start: 18, end: 28, min: 21 }
+    },
+    'MPX': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.2, reloadEmpty: 2.8,
+        recoil: { vertical: 'very_low', horizontal: 'very_low', pattern: '接近零后坐力，被称为"激光枪"' },
+        falloff: { start: 18, end: 28, min: 15 }
+    },
+    'M12': {
+        sights: ['red_dot','holographic','reflex'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.2, reloadEmpty: 2.8,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来稳定后坐力' },
+        falloff: { start: 18, end: 28, min: 25 }
+    },
+    'PDW9': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.5, reloadEmpty: 3.1,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，50发弹匣提供持续火力' },
+        falloff: { start: 18, end: 28, min: 20 }
+    },
+    'Vector .45': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.0, reloadEmpty: 2.8,
+        recoil: { vertical: 'very_low', horizontal: 'high', pattern: '垂直极低(Super V系统)，水平随机且大' },
+        falloff: { start: 18, end: 28, min: 16 }
+    },
+    'T-5 SMG': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.3, reloadEmpty: 2.9,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，近距离非常好用' },
+        falloff: { start: 18, end: 28, min: 17 }
+    },
+    'Scorpion EVO': {
+        sights: ['red_dot','holographic','reflex'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.5, reloadEmpty: 3.1,
+        recoil: { vertical: 'very_high', horizontal: 'very_high', pattern: '极高后坐力，全游戏最难控制的冲锋枪之一' },
+        falloff: { start: 18, end: 28, min: 14 }
+    },
+    'K1A': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.4, reloadEmpty: 3.0,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，容易控制' },
+        falloff: { start: 18, end: 28, min: 21 }
+    },
+    'Mx4 Storm': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.2, reloadEmpty: 2.8,
+        recoil: { vertical: 'low', horizontal: 'medium', pattern: '低垂直，中等水平后坐力' },
+        falloff: { start: 18, end: 28, min: 15 }
+    },
+    'AUG A3': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.5, reloadEmpty: 3.0,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '犊牛式布局，后坐力稳定' },
+        falloff: { start: 18, end: 28, min: 21 }
+    },
+    'P10 RONI': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.2, reloadEmpty: 2.8,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，15发弹匣限制火力持续' },
+        falloff: { start: 18, end: 28, min: 15 }
+    },
+    'UZK50GI': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.4, reloadEmpty: 3.0,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，整体可控' },
+        falloff: { start: 18, end: 28, min: 21 }
+    },
+
+    // === 轻机枪 ===
+    'M249': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 5.5, reloadEmpty: 6.5,
+        recoil: { vertical: 'high', horizontal: 'medium', pattern: '高垂直后坐力，弹链供弹换弹极慢' },
+        falloff: { start: 25, end: 35, min: 29 }
+    },
+    '6P41': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 5.0, reloadEmpty: 6.0,
+        recoil: { vertical: 'high', horizontal: 'high', pattern: '高后坐力，弹道不可预测' },
+        falloff: { start: 25, end: 35, min: 29 }
+    },
+    'G8A1': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 4.5, reloadEmpty: 5.5,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，高射速要求持续下压' },
+        falloff: { start: 25, end: 35, min: 22 }
+    },
+    'T-95 LSW': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 3.4, reloadEmpty: 4.4,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，弹鼓供弹' },
+        falloff: { start: 25, end: 35, min: 27 }
+    },
+    'LMG-E': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 5.0, reloadEmpty: 6.0,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，150发弹匣' },
+        falloff: { start: 25, end: 35, min: 24 }
+    },
+    'ALDA 5.56': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 4.5, reloadEmpty: 5.5,
+        recoil: { vertical: 'medium', horizontal: 'high', pattern: '高射速LMG，水平后坐力较大' },
+        falloff: { start: 25, end: 35, min: 21 }
+    },
+    'M249 SAW': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 4.5, reloadEmpty: 5.5,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，短枪管版本' },
+        falloff: { start: 25, end: 35, min: 26 }
+    },
+    'DP27': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 4.0, reloadEmpty: 5.0,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来稳定的后坐力' },
+        falloff: { start: 25, end: 35, min: 29 }
+    },
+
+    // === 狙击步枪 ===
+    'CSRX 300': {
+        sights: [],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 3.8, reloadEmpty: 4.5,
+        recoil: { vertical: 'n/a', horizontal: 'n/a', pattern: '栓动步枪，单发射击无连射后坐力' },
+        falloff: { start: 0, end: 0, min: 127 },
+        specialNote: '内置5x/12x双倍率瞄准镜，不可更换'
+    },
+
+    // === 射手步枪 ===
+    '417': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.9, reloadEmpty: 3.6,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，单发上跳大但回正快' },
+        falloff: { start: 35, end: 45, min: 41 }
+    },
+    'OTs-03': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，后坐力大但射速慢有恢复时间' },
+        falloff: { start: 35, end: 45, min: 42 },
+        specialNote: '热感瞄准镜可切换'
+    },
+    'CAMRS': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，后坐力中等' },
+        falloff: { start: 35, end: 45, min: 41 }
+    },
+    'SR-25': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.9, reloadEmpty: 3.6,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，20发弹匣提供持续火力' },
+        falloff: { start: 35, end: 45, min: 37 }
+    },
+    'Mk 14 EBR': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，中等后坐力' },
+        falloff: { start: 35, end: 45, min: 36 }
+    },
+    'PMR90A2': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动射手步枪，Y11S1新增' },
+        falloff: { start: 35, end: 45, min: 37 }
+    },
+
+    // === 霰弹枪 (弹丸) ===
+    // 霰弹枪伤害衰减: 每发射出8颗弹丸, falloff的damage值为单颗弹丸伤害
+    // falloff格式: { start: 全额伤害结束距离, midStart: 中间伤害开始距离, mid: 中间伤害值, midEnd: 中间伤害结束距离, end: 最低伤害开始距离, min: 最低伤害, pellets: 弹丸数 }
+    // ⚠️ 数据可信度说明:
+    //   - 标注 [Fandom-verified] 的数据经 Fandom Wiki Siege 页面二次验证
+    //   - falloff 为 null 表示暂无可靠来源，宁缺毋错
+    //   - 数据源优先级: 育碧官网 > 灰机wiki > Fandom Wiki (需确认为Siege数据)
+    'M870': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 4.6, reloadEmpty: 4.6,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，单发后坐力大但有充足恢复时间' },
+        falloff: null // 暂无可靠数据来源
+    },
+    'M590A1': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 4.6, reloadEmpty: 4.6,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，后坐力大但可控' },
+        falloff: null // 暂无可靠数据来源
+    },
+    'M1014': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 4.6, reloadEmpty: 4.6,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，连续射击后坐力累积' },
+        falloff: { start: 6, midStart: 9, mid: 29, midEnd: 10, end: 19, min: 15, pellets: 8 } // [Fandom-verified] 34→29→15
+    },
+    'SG-CQB': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 4.6, reloadEmpty: 4.6,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，单发伤害高' },
+        falloff: null // Fandom只有两段数据(53/26)，中间值无可靠来源
+    },
+    'SASG-12': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '半自动，AK平台，弹匣供弹可快速换弹' },
+        falloff: null // Fandom只有两段数据(50/14)，中间值无可靠来源
+    },
+    'SUPER 90': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 4.6, reloadEmpty: 4.6,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，惯性闭锁系统后坐力适中' },
+        falloff: null // 暂无可靠数据来源
+    },
+    'SPAS-12': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 4.6, reloadEmpty: 4.6,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '泵动/半自动双模式，后坐力中等' },
+        falloff: null // 曾获取到35/27/20但无法二次验证，暂不采用
+    },
+    'SPAS-15': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，弹匣供弹，后坐力平稳' },
+        falloff: null // 暂无可靠数据来源
+    },
+    'SuperNova': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 4.6, reloadEmpty: 4.6,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，ComforTech缓冲系统' },
+        falloff: null // 暂无可靠数据来源
+    },
+    'FO-12': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.34, reloadEmpty: 3.29,
+        recoil: { vertical: 'very_high', horizontal: 'high', pattern: '全自动霰弹枪，极高射速带来剧烈后坐力' },
+        falloff: { start: 6, midStart: 12, mid: 24, midEnd: 18, end: 21, min: 12, pellets: 8 } // [Fandom-verified] 35→24→12
+    },
+    'SIX12': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 4.0, reloadEmpty: 4.0,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '旋转弹仓供弹，后坐力中等' },
+        falloff: null // Fandom只有两段数据(35/24)，中间值无可靠来源
+    },
+    'SIX12 SD': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 4.0, reloadEmpty: 4.0,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '自带消音器的旋转弹仓霰弹枪' },
+        falloff: null // 同SIX12，暂无可靠数据来源
+    },
+
+    // === 独头霰弹枪 ===
+    // 独头弹和普通枪械一样是单段衰减（两段伤害）
+    // ⚠️ 独头霰弹枪数据同样遵循"无可靠来源则留null"原则
+    'BOSG.12.2': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 3.0, reloadEmpty: 3.0,
+        recoil: { vertical: 'very_high', horizontal: 'low', pattern: '双管独头弹，巨大的单发后坐力' },
+        falloff: null // 暂无可靠数据来源
+    },
+    'ACS12': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 3.0, reloadEmpty: 3.8,
+        recoil: { vertical: 'high', horizontal: 'medium', pattern: '半自动独头弹，30发弹匣持续输出' },
+        falloff: null // Fandom数据(69→52)与之前代码不符，暂清除待确认
+    },
+    'TCSG12': {
+        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.8, reloadEmpty: 3.5,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动独头弹，450RPM射速' },
+        falloff: null // 暂无可靠数据来源
+    },
+
+    // === 副武器 - 霰弹枪 ===
+    'ITA12S': {
+        sights: [],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 3.0, reloadEmpty: 3.0,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '副武器泵动霰弹枪，用于破墙' },
+        falloff: null // 暂无可靠数据来源
+    },
+    'Super Shorty': {
+        sights: [],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.5, reloadEmpty: 2.5,
+        recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '短管霰弹枪，散布极大，用于破墙' },
+        falloff: null // 暂无可靠数据来源
+    },
+    'ITA12S (Frost)': {
+        sights: [],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 3.0, reloadEmpty: 3.0,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '副武器泵动霰弹枪，用于破墙' },
+        falloff: null // 暂无可靠数据来源
+    },
+
+    // === 副武器 - 冲锋枪 ===
+    'C75 Auto': {
+        sights: [],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.2, reloadEmpty: 2.8,
+        recoil: { vertical: 'high', horizontal: 'high', pattern: '1000RPM射速，后坐力大且铁瞄遮挡严重' },
+        falloff: { start: 12, end: 22, min: 21 }
+    },
+    'SMG-11': {
+        sights: ['red_dot','holographic','reflex'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 1.8, reloadEmpty: 2.4,
+        recoil: { vertical: 'very_high', horizontal: 'very_high', pattern: '极高后坐力，16发弹匣不到1秒清空' },
+        falloff: { start: 12, end: 22, min: 19 }
+    },
+    'SMG-12': {
+        sights: ['red_dot','holographic','reflex'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.0, reloadEmpty: 2.6,
+        recoil: { vertical: 'very_high', horizontal: 'very_high', pattern: '极高后坐力，全游戏最难控制武器之一' },
+        falloff: { start: 12, end: 22, min: 17 }
+    },
+    'Bearing 9': {
+        sights: ['red_dot','holographic','reflex'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 1.9, reloadEmpty: 2.5,
+        recoil: { vertical: 'high', horizontal: 'high', pattern: '1100RPM高射速，后坐力大' },
+        falloff: { start: 12, end: 22, min: 20 }
+    },
+    'SPSMG9': {
+        sights: ['red_dot','holographic','reflex'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 1.9, reloadEmpty: 2.5,
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，副武器中较可控' },
+        falloff: { start: 12, end: 22, min: 20 }
+    },
+    'Reaper MK2': {
+        sights: ['red_dot','holographic','reflex'],
+        underbarrel: false, mobility: 50,
+        reloadTactical: 2.0, reloadEmpty: 2.6,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，通用副武器SMG' },
+        falloff: { start: 12, end: 22, min: 18 }
+    },
+
+    // === 副武器 - 手枪 (精选代表性) ===
+    '5.7 USG': {
+        sights: [], underbarrel: true, mobility: 50,
+        reloadTactical: 1.6, reloadEmpty: 2.2,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '半自动手枪，后坐力小' },
+        falloff: { start: 12, end: 22, min: 25 }
+    },
+    'P12': {
+        sights: [], underbarrel: true, mobility: 50,
+        reloadTactical: 1.6, reloadEmpty: 2.2,
+        recoil: { vertical: 'low', horizontal: 'low', pattern: '半自动手枪，标准后坐力' },
+        falloff: { start: 12, end: 22, min: 26 }
+    },
+    'PMM': {
+        sights: [], underbarrel: true, mobility: 50,
+        reloadTactical: 1.5, reloadEmpty: 2.1,
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '高伤害手枪，后坐力稍大' },
+        falloff: { start: 12, end: 22, min: 37 }
+    },
+    'D-50': {
+        sights: [], underbarrel: true, mobility: 50,
+        reloadTactical: 1.8, reloadEmpty: 2.4,
+        recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '沙漠之鹰，极大后坐力' },
+        falloff: { start: 12, end: 22, min: 42 }
+    },
+    'LFP586': {
+        sights: [], underbarrel: false, mobility: 50,
+        reloadTactical: 2.5, reloadEmpty: 2.5,
+        recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '左轮，单发后坐力极大' },
+        falloff: { start: 12, end: 22, min: 47 }
+    },
+    'Keratos .357': {
+        sights: [], underbarrel: false, mobility: 50,
+        reloadTactical: 2.5, reloadEmpty: 2.5,
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '底部枪管设计降低上跳' },
+        falloff: { start: 12, end: 22, min: 47 }
+    }
+};
 
 // ---- 武器详细档案 ----
 // 数据来源: Fandom Wiki / R6灰机Wiki / Ubisoft官方
@@ -1506,6 +2260,136 @@ const WEAPON_DETAILS = {
         ]
     }
 };
+
+// ---- 武器图片资源映射 ----
+// 来源: Fandom Wiki CDN (static.wikia.nocookie.net/rainbowsix)
+// 缩略图格式: R6S_[FileName].png  后坐力图格式: [Key]_Recoil.png
+// 手动映射 — Fandom文件名不完全统一，需逐武器确认
+
+const FANDOM_CDN = 'https://static.wikia.nocookie.net/rainbowsix/images';
+const HUIJI_CDN = 'https://huiji-public.huijistatic.com/r6s/uploads';
+
+// 武器图片映射表 — hash路径通过 Fandom MediaWiki API 逐一验证 (2026-03-30)
+// 格式: { thumb: 'X/XX/文件名', recoil: 'X/XX/文件名' | null }
+const WEAPON_IMAGES = {
+    // === 突击步枪 ===
+    'R4-C':            { thumb: '2/27/R6S_R4-C.png', recoil: '3/30/R4C_Recoil.png' },
+    'L85A2':           { thumb: '9/94/R6S_L85A2.png', recoil: null },
+    'G36C':            { thumb: '4/49/R6S_G36C.png', recoil: null },
+    'AK-12':           { thumb: 'b/bc/R6S_AK-12.png', recoil: 'f/fa/AK12_Recoil.png' },
+    'F2':              { thumb: '9/94/R6S_F2.png', recoil: null },
+    '556XI':           { thumb: '8/81/R6S_556xi.png', recoil: null },
+    'M4':              { thumb: 'c/cf/R6S_M4.png', recoil: null, huijiRecoil: '2/23/Backlash_m4_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'AR33':            { thumb: '4/40/R6S_AR33.png', recoil: null },
+    'Commando 9':      { thumb: '9/9d/R6S_Commando_9.png', recoil: null },
+    'AUG A2':          { thumb: '5/5e/R6S_AUG_A2.png', recoil: null },
+    '552 Commando':    { thumb: '0/0d/R6S_552_Commando.png', recoil: null },
+    '416-C CARBINE':   { thumb: 'a/a8/R6S_416-C_Carbine.png', recoil: null },
+    'C8-SFW':          { thumb: '6/65/R6S_C8-SFW.png', recoil: null },
+    'Mk17 CQB':        { thumb: '3/31/R6S_Mk17_CQB.png', recoil: null },
+    'PARA-308':        { thumb: '2/29/R6S_PARA-308.png', recoil: null },
+    'Type-89':         { thumb: 'f/f0/R6S_Type-89.png', recoil: null },
+    'C7E':             { thumb: 'b/b1/R6S_C7E.png', recoil: null },
+    'M762':            { thumb: 'b/be/R6S_M762.png', recoil: null },
+    'V308':            { thumb: 'e/e7/R6S_V308.png', recoil: null },
+    'Spear .308':      { thumb: '5/58/R6S_Spear_.308.png', recoil: null },
+    'AR-15.50':        { thumb: '1/18/R6S_AR-15.50.png', recoil: null },
+    'AK-74M':          { thumb: 'a/a6/R6S_AK-74M.png', recoil: null },
+    'ARX200':          { thumb: '7/7f/R6S_ARX200.png', recoil: null },
+    'F90':             { thumb: '3/3a/R6S_F90.png', recoil: null },
+    'SC3000K':         { thumb: '2/2b/R6S_SC3000K.png', recoil: null },
+    'POF-9':           { thumb: null, recoil: null },
+    'PCX-33':          { thumb: null, recoil: null },
+
+    // === 冲锋枪 ===
+    'FMG-9':           { thumb: 'f/f2/R6S_FMG-9.png', recoil: null },
+    'MP5K':            { thumb: '8/8f/R6S_MP5K.png', recoil: null },
+    'UMP45':           { thumb: '0/02/R6S_UMP45.png', recoil: null },
+    'MP5':             { thumb: '6/6c/R6S_MP5_.png', recoil: null },
+    'P90':             { thumb: 'e/ec/R6S_P90.png', recoil: null },
+    'MP5SD':           { thumb: 'e/e7/R6S_MP5SD.png', recoil: null },
+    '9x19VSN':         { thumb: 'f/f8/R6S_9x19VSN.png', recoil: null },
+    'MP7':             { thumb: '7/7d/R6S_MP7.png', recoil: null },
+    '9mm C1':          { thumb: 'b/b4/R6S_9mmC1.jpg', recoil: null },
+    'MPX':             { thumb: '0/0b/R6S_MPX.png', recoil: null },
+    'M12':             { thumb: 'a/ad/R6S_M12.png', recoil: null },
+    'PDW9':            { thumb: '8/88/R6S_PDW9.png', recoil: null },
+    'Vector .45':      { thumb: '2/29/R6S_Vector_.45_ACP.png', recoil: null },
+    'T-5 SMG':         { thumb: '9/90/R6S_T-5_SMG.png', recoil: null },
+    'Scorpion EVO':    { thumb: '5/57/R6S_Scorpion_EVO_3_A1.png', recoil: null },
+    'K1A':             { thumb: 'e/e4/R6S_K1A.png', recoil: null },
+    'Mx4 Storm':       { thumb: '4/48/R6S_Mx4_Storm.png', recoil: null },
+    'AUG A3':          { thumb: '6/62/R6S_AUG_A3.png', recoil: null },
+    'P10 RONI':        { thumb: 'b/b4/R6S_P10_RONI.png', recoil: null },
+    'UZK50GI':         { thumb: null, recoil: null },
+
+    // === 轻机枪 ===
+    'M249':            { thumb: 'e/ea/R6S_M249.png', recoil: null },
+    '6P41':            { thumb: '4/4a/R6S_6P41.png', recoil: null },
+    'G8A1':            { thumb: '6/6d/R6S_G8A1.png', recoil: null },
+    'T-95 LSW':        { thumb: 'c/cf/R6S_T-95_LSW.png', recoil: null },
+    'LMG-E':           { thumb: '5/5a/R6S_LMG-E.png', recoil: null },
+    'ALDA 5.56':       { thumb: '9/91/R6S_ALDA_5.56.png', recoil: null },
+    'M249 SAW':        { thumb: '8/8f/R6S_M249_SAW.png', recoil: null },
+    'DP27':            { thumb: '4/4a/R6S_DP27.png', recoil: null },
+
+    // === 狙击/射手 ===
+    'CSRX 300':        { thumb: '9/99/R6S_CSRX_300.png', recoil: null },
+    '417':             { thumb: '1/18/R6S_417.png', recoil: null },
+    'OTs-03':          { thumb: '9/9d/R6S_OTs-03.png', recoil: null },
+    'CAMRS':           { thumb: '6/6d/R6S_CAMRS.png', recoil: null },
+    'SR-25':           { thumb: '0/0f/R6S_SR-25.png', recoil: null },
+    'Mk 14 EBR':       { thumb: 'd/d3/R6S_Mk_14_EBR.png', recoil: null },
+
+    // === 霰弹枪 ===
+    'M870':            { thumb: '7/78/R6S_M870.png', recoil: null, huijiRecoil: 'd/db/Backlash_m870_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'M590A1':          { thumb: 'c/c0/R6S_M590A1.png', recoil: null, huijiRecoil: '8/8a/Backlash_m590a1_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'M1014':           { thumb: '8/8b/R6S_M1014.png', recoil: null, huijiRecoil: '0/02/Backlash_m1014_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'SG-CQB':          { thumb: '3/36/R6S_SG-CQB.png', recoil: null, huijiRecoil: '5/50/Backlash_sgcqb_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'SASG-12':         { thumb: '3/38/R6S_SASG-12.png', recoil: null, huijiRecoil: '0/07/Backlash_sasg12_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'SUPER 90':        { thumb: '7/7c/R6S_Super_90.png', recoil: null, huijiRecoil: 'f/ff/Backlash_super90_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'SPAS-12':         { thumb: '8/8d/R6S_SPAS-12.png', recoil: null, huijiRecoil: 'a/a2/Backlash_spas12_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'SPAS-15':         { thumb: '0/06/R6S_SPAS-15.png', recoil: null, huijiRecoil: 'a/aa/Backlash_spas15_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'SuperNova':       { thumb: 'b/b0/R6S_SuperNova.png', recoil: null, huijiRecoil: '9/95/Backlash_supernova_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'FO-12':           { thumb: '6/64/R6S_FO-12.png', recoil: null, huijiRecoil: 'f/f9/Backlash_fo12_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'SIX12':           { thumb: null, recoil: null, huijiRecoil: '0/06/Backlash_six12_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'SIX12 SD':        { thumb: null, recoil: null, huijiRecoil: 'c/c4/Backlash_six12sd_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    'BOSG.12.2':       { thumb: 'd/d7/R6S_BOSG.12.2.png', recoil: null },
+    'ACS12':           { thumb: 'a/ac/R6S_ACS12.png', recoil: null },
+    'TCSG12':          { thumb: 'b/bf/R6S_TCSG12.png', recoil: null },
+
+    // === 副武器 ===
+    'SMG-11':          { thumb: '3/3b/R6S_SMG-11.png', recoil: null },
+    'SMG-12':          { thumb: '4/4b/R6S_SMG-12.png', recoil: null },
+    'Bearing 9':       { thumb: '9/94/R6S_Bearing_9.png', recoil: null },
+    'C75 Auto':        { thumb: '8/8b/R6S_C75_Auto.png', recoil: null },
+    'SPSMG9':          { thumb: 'a/aa/R6S_SPSMG9.png', recoil: null },
+    '5.7 USG':         { thumb: 'e/e1/R6S_5.7_USG.png', recoil: null },
+    'P226 MK 25':      { thumb: '5/5b/R6S_P226_Mk_25.png', recoil: null },
+    'P9':              { thumb: '3/39/R6S_P9.png', recoil: null },
+    'PMM':             { thumb: '7/73/R6S_PMM.png', recoil: null },
+    'P12':             { thumb: '9/95/R6S_P12.png', recoil: null },
+    'D-50':            { thumb: '1/1a/R6S_D-50.png', recoil: null },
+    'LFP586':          { thumb: '1/1f/R6S_LFP586.png', recoil: null },
+    'Keratos .357':    { thumb: '6/61/R6S_Keratos_.357.png', recoil: null },
+};
+
+// 生成完整CDN URL的工具函数
+function getWeaponThumbURL(weaponName) {
+    const img = WEAPON_IMAGES[weaponName];
+    if (!img || !img.thumb) return null;
+    return FANDOM_CDN + '/' + img.thumb + '/revision/latest?cb=20220525145532';
+}
+
+function getWeaponRecoilURL(weaponName) {
+    const img = WEAPON_IMAGES[weaponName];
+    if (!img) return null;
+    // 优先使用灰机wiki后坐力图（游戏内截图，更直观）
+    if (img.huijiRecoil) return HUIJI_CDN + '/' + img.huijiRecoil;
+    // 回退到Fandom散布图
+    if (img.recoil) return FANDOM_CDN + '/' + img.recoil + '/revision/latest?cb=20210414053705';
+    return null;
+}
 
 // ---- 官方更新信息 ----
 const UPDATES = [

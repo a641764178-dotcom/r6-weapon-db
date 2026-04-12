@@ -555,10 +555,41 @@ body {
     font-size: 12px;
     color: var(--text-secondary);
     margin-bottom: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
 }
 
-.weapon-operators span {
+.weapon-operators > span:first-child {
     color: var(--text-muted);
+    margin-right: 2px;
+}
+
+.op-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 7px 2px 3px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    transition: background 0.15s;
+}
+
+.op-chip:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.op-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    padding: 2px;
+    flex-shrink: 0;
 }
 
 .weapon-attachments-preview {
@@ -1176,12 +1207,37 @@ body {
 }
 
 .modal-op-tag {
-    padding: 6px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px 6px 6px;
     background: rgba(255,255,255,0.05);
     border: 1px solid var(--border);
     border-radius: 20px;
     font-size: 12px;
     font-weight: 500;
+    transition: background 0.15s;
+}
+
+.modal-op-tag:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.modal-op-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    padding: 3px;
+    flex-shrink: 0;
+}
+
+.modal-op-tag.atk .modal-op-icon {
+    background: rgba(232,166,52,0.15);
+}
+
+.modal-op-tag.def .modal-op-icon {
+    background: rgba(74,158,255,0.15);
 }
 
 .modal-op-tag.atk {

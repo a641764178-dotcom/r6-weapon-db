@@ -156,7 +156,12 @@
                     </div>
                     ${detail && detail.caliber ? `<div class="weapon-caliber"><span>⊕</span> ${detail.caliber}</div>` : ''}
                     <div class="weapon-operators">
-                        <span>干员：</span>${w.operators.join(', ')}
+                        <span>干员：</span>${w.operators.map(op => {
+                            const iconUrl = getOperatorIconURL(op);
+                            return iconUrl
+                                ? `<span class="op-chip"><img class="op-icon" src="${iconUrl}" alt="${op}" loading="lazy">${op}</span>`
+                                : `<span class="op-chip">${op}</span>`;
+                        }).join('')}
                     </div>
                     <div class="weapon-attachments-preview">${attTags.join('')}</div>
                     ${w.rpm > 0 ? `
@@ -607,7 +612,9 @@
                 <div class="modal-operators">
                     ${w.operators.map(op => {
                         const side = w.side === 'atk' ? 'atk' : w.side === 'def' ? 'def' : 'atk';
-                        return `<span class="modal-op-tag ${side}">${op}</span>`;
+                        const iconUrl = getOperatorIconURL(op);
+                        const iconHTML = iconUrl ? `<img class="modal-op-icon" src="${iconUrl}" alt="${op}" loading="lazy">` : '';
+                        return `<span class="modal-op-tag ${side}">${iconHTML}${op}</span>`;
                     }).join('')}
                 </div>
             </div>
@@ -869,7 +876,12 @@
             { label: '击杀子弹数 (1甲)', key: 'stk1', compute: w => Math.ceil(100/w.damage), higher: false },
             { label: '击杀子弹数 (2甲)', key: 'stk2', compute: w => Math.ceil(100/(w.damage*0.9)), higher: false },
             { label: '击杀子弹数 (3甲)', key: 'stk3', compute: w => Math.ceil(100/(w.damage*0.8)), higher: false },
-            { label: '干员', key: 'operators', format: w => w.operators.join(', ') },
+            { label: '干员', key: 'operators', format: w => w.operators.map(op => {
+                const iconUrl = getOperatorIconURL(op);
+                return iconUrl
+                    ? `<span class="op-chip"><img class="op-icon" src="${iconUrl}" alt="${op}" loading="lazy">${op}</span>`
+                    : `<span class="op-chip">${op}</span>`;
+            }).join(' ') },
             { label: '枪管配件', key: 'barrels', format: w => w.barrels.length > 0 ? w.barrels.map(b => BARREL_NAMES[b]).join(', ') : '无' },
             { label: '握把配件', key: 'grips', format: w => w.grips.length > 0 ? w.grips.map(g => GRIP_NAMES[g]).join(', ') : '无' }
         ];

@@ -1,6 +1,6 @@
 // ============================================
 // R6S 武器配件数据库 - 数据层
-// 版本基准: Y11S1.1 (2026-03-24)
+// 版本基准: Y11S1.2 (2026-04-14)
 // 分类体系: 主武器7类 + 副武器4类
 // ============================================
 
@@ -324,7 +324,7 @@ const WEAPONS = [
       grips: [],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] },
       notes: 'Skeleton Key占用握把槽' },
-    { name: 'Mk17 CQB', type: 'ar', damage: 44, rpm: 585, mag: 25, operators: ['Blackbeard'], side: 'atk',
+    { name: 'Mk17 CQB', type: 'ar', damage: 44, rpm: 585, mag: 20, operators: ['Blackbeard'], side: 'atk',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
@@ -374,7 +374,7 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
-    { name: 'POF-9', type: 'ar', damage: 35, rpm: 740, mag: 50, operators: ['Sens'], side: 'atk',
+    { name: 'POF-9', type: 'ar', damage: 37, rpm: 740, mag: 50, operators: ['Sens'], side: 'atk',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
@@ -392,7 +392,7 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: [],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
-    { name: 'UMP45', type: 'smg', damage: 38, rpm: 600, mag: 25, operators: ['Castle','Pulse'], side: 'def',
+    { name: 'UMP45', type: 'smg', damage: 42, rpm: 600, mag: 25, operators: ['Castle','Pulse'], side: 'def',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: [] } },
@@ -425,7 +425,7 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
-    { name: 'M12', type: 'smg', damage: 40, rpm: 550, mag: 30, operators: ['Caveira'], side: 'def',
+    { name: 'M12', type: 'smg', damage: 42, rpm: 550, mag: 30, operators: ['Caveira'], side: 'def',
       barrels: ['compensator','flash_hider','suppressor','extended_barrel'],
       grips: [],
       y7s3_new: { barrels: ['compensator'], grips: [] } },
@@ -874,7 +874,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.2,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '9mm口径，后坐力非常小' },
-        falloff: { start: 25, end: 35, min: 21 }
+        falloff: { start: 25, end: 35, min: 22 }
     },
     'PCX-33': {
         sights: ['red_dot','holographic','reflex','scope_1_5x'],
@@ -904,7 +904,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'very_low', horizontal: 'very_low', pattern: '几乎无后坐力，激光般稳定' },
-        falloff: { start: 18, end: 28, min: 22 }
+        falloff: { start: 18, end: 28, min: 25 }
     },
     'MP5': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
@@ -960,7 +960,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来稳定后坐力' },
-        falloff: { start: 18, end: 28, min: 24 }
+        falloff: { start: 18, end: 28, min: 25 }
     },
     'PDW9': {
         sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
@@ -2474,6 +2474,20 @@ function getWeaponRecoilURL(weaponName) {
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'patch',
+        date: '2026-04-14',
+        title: 'Y11S1.2 中期补丁',
+        content: '<ul><li>🔧 <strong>Rauora 重做级增强</strong>：D.O.M. 面板发射器射程 15m→25m，触发开启时间 1s→0.5s，敌方开关面板 3s→6s，回合开始即拥有全部4发弹药</li><li>🔧 <strong>Jackal 增强</strong>：Eyenox 可穿破损天花板从下方扫描脚印，新增<strong>破片手雷</strong></li><li>🔧 <strong>Smoke</strong>：新增<strong>可部署护盾</strong></li><li>🔧 Clash 电击持续时间 10s→15s</li><li>🔧 Frost 夹子跛行时间 60s→70s</li><li>🔧 Glaz 翻转瞄准镜畸变时间 12s→15s</li><li>🔧 Grim 蜂群罐投放延迟 0.4s→0.6s</li><li>🔧 Thunderbird 治疗速率 2HP/s→3HP/s</li><li>⚠️ 本次补丁<strong>无武器伤害/配件变更</strong></li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/ivbm7sXcU7iG89d7wQtlx/y11s12-patch-notes'
+    },
+    {
+        type: 'designer',
+        date: '2026-04-13',
+        title: 'Y11S1.2 设计师笔记',
+        content: '<ul><li><strong>Rauora</strong>：全面重做——射程/充能/面板交互时间大幅优化，定位转为即时区域控制</li><li><strong>Jackal</strong>：追踪能力垂直扩展（天花板扫描）+破片手雷提升爆破能力</li><li><strong>Smoke</strong>：可部署护盾回归，强化据点拒止能力</li><li><strong>Clash/Frost/Thunderbird</strong>：小幅增强各自核心功能</li><li><strong>Grim</strong>：蜂群罐投放略微削弱，给对手更多反应时间</li><li>⚠️ 本次设计师笔记<strong>不涉及武器数值或配件调整</strong></li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/1BeSepQg8hbZDRVfQ9KqDQ/y11s12-designers-notes'
+    },
     {
         type: 'patch',
         date: '2026-03-24',

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R6S 瞄具图鉴预览 · v2 细分版</title>
+<title>R6S 瞄具图鉴预览 · v3 游戏内截图版</title>
 <style>
   :root {
     --bg: #0f1419;
@@ -13,8 +13,6 @@
     --text: #e8eaed;
     --text-dim: #8b95a5;
     --accent: #ff9800;
-    --ok: #4caf50;
-    --warn: #f44336;
     --family-red: #ef5350;
     --family-green: #66bb6a;
     --family-blue: #42a5f5;
@@ -63,9 +61,31 @@
     font-size: 13px;
   }
 
-  .family-section {
-    margin-bottom: 40px;
+  /* 总览图片 */
+  .overview-section {
+    margin: 30px 0;
+    padding: 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
   }
+  .overview-section h3 {
+    font-size: 16px; margin-bottom: 12px;
+    color: var(--accent);
+  }
+  .overview-section img {
+    width: 100%;
+    border-radius: 6px;
+    display: block;
+  }
+  .overview-section .cap {
+    margin-top: 8px;
+    color: var(--text-dim);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .family-section { margin-bottom: 40px; }
   .family-header {
     display: flex;
     align-items: center;
@@ -85,7 +105,7 @@
 
   .variant-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 16px;
   }
   .variant-card {
@@ -102,29 +122,16 @@
   }
   .variant-image {
     width: 100%;
-    height: 180px;
     background: #0a0e12;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    position: relative;
   }
   .variant-image img {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
-  }
-  .variant-image .loading {
-    color: var(--text-dim);
-    font-size: 13px;
-  }
-  .variant-image .error {
-    color: var(--warn);
-    font-size: 12px;
-    padding: 12px;
-    text-align: center;
+    width: 100%;
+    height: auto;
+    display: block;
   }
   .variant-info {
     padding: 14px 16px;
@@ -133,9 +140,6 @@
     font-size: 15px;
     font-weight: 600;
     margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
   }
   .variant-cn {
     color: var(--text-dim);
@@ -160,6 +164,7 @@
     font-weight: 500;
     background: #2a3441;
     color: var(--text-dim);
+    margin-left: 6px;
   }
   .badge.new { background: #4caf50; color: white; }
 
@@ -188,27 +193,6 @@
   .special-weapon { color: var(--accent); font-size: 13px; margin-bottom: 10px; }
   .special-desc { color: var(--text-dim); font-size: 13px; }
 
-  .comparison-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-    background: var(--card);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .comparison-table th, .comparison-table td {
-    padding: 10px 14px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-  }
-  .comparison-table th {
-    background: #2a3441;
-    color: var(--text);
-    font-weight: 600;
-  }
-  .comparison-table td { color: var(--text-dim); }
-
   footer {
     margin-top: 50px;
     padding-top: 20px;
@@ -223,17 +207,28 @@
 <body>
 
 <div class="banner">
-  <h1>🎯 瞄具图鉴预览 · v2 细分版</h1>
-  <div class="subtitle">R6围攻 所有 1.0x / 倍镜 / 专属瞄具的细分型号一览</div>
+  <h1>🎯 瞄具图鉴预览 · v3 游戏内截图版</h1>
+  <div class="subtitle">R6 围攻 所有瞄具细分型号 — 图片直接来自游戏内军械库截图</div>
   <a href="index.html" class="back-link">← 返回武器数据库</a>
 </div>
 
 <div class="intro">
-  <p>现状：<strong>data.js 里 1.0x 瞄具只有 3 条记录</strong>（red_dot / holographic / reflex），实际游戏里<strong>每个类别下有多个外观不同的子款式</strong>，数值相同但视觉差异明显。</p>
-  <p>本页按 <code>数值家族 → 外观变体</code> 两层结构展示：<strong>10 款 1.0x</strong> + <strong>4 款倍镜（2.5x × 2 + 3.5x × 2）</strong> +
-    <strong>4 款专属/内置瞄具</strong>。所有图片从 Fandom Wiki CDN 加载（<code>referrerpolicy="no-referrer"</code>）。</p>
-  <p>⚠️ <strong>Y9S1（Operation Deadly Omen）重大改动</strong>：删除了 <code>Scope 1.5x / 2.0x / 3.0x</code>，倍镜体系简化为 <strong>2.5x（Magnified）</strong> 和 <strong>3.5x（Telescopic）</strong> 两大家族。</p>
-  <p>如果看下来效果不错，就把这套结构正式合进主站（见报告 v2 的第 4 节）。</p>
+  <p><strong>v3 改动</strong>：图片全部换成 Bruce 的游戏内实拍截图（本地托管，告别 Fandom 命名坑）；2.5x 补回第 3 款；以游戏内实际布局为准。</p>
+  <p><strong>本版本覆盖</strong>：10 款 1.0x（Red Dot × 3 + Holographic × 4 + Reflex × 3）+ 5 款倍镜（2.5x × 3 + 3.5x × 2）+ 4 款专属内置瞄具。</p>
+  <p>⚠️ <strong>Y9S1 Operation Deadly Omen 倍镜重构</strong>：删除了 Scope 1.5x / 2.0x / 3.0x，当前版本倍镜只保留 <strong>2.5x Magnified 系列</strong> 和 <strong>3.5x Telescopic 系列</strong>。</p>
+</div>
+
+<!-- 游戏内总览图（用于对比） -->
+<div class="overview-section">
+  <h3>📸 游戏内军械库总览（来自 Bruce 实拍截图）</h3>
+  <img src="images/sights/all_1x_overview.png" alt="10 款 1.0x 总览">
+  <div class="cap">1.0x 瞄具总览：Red Dot × 3 / Holographic × 4 / Reflex × 3（上下三行）</div>
+  <div style="height:12px"></div>
+  <img src="images/sights/all_2_5x_overview.png" alt="3 款 2.5x 总览">
+  <div class="cap">2.5x Magnified 家族总览：3 款</div>
+  <div style="height:12px"></div>
+  <img src="images/sights/all_3_5x_overview.png" alt="2 款 3.5x 总览">
+  <div class="cap">3.5x Telescopic 家族总览：2 款（A / B）</div>
 </div>
 
 <!-- 1.0x 三大家族 -->
@@ -264,8 +259,8 @@
 <!-- 倍镜 -->
 <div class="family-section">
   <div class="family-header gold">
-    <span class="family-title">🔭 倍镜 · Magnified Scopes（Y9S1 重构后）</span>
-    <span class="family-meta">2.5x 家族 2 款 + 3.5x 家族 2 款 = 4 款</span>
+    <span class="family-title">🔭 倍镜 · Magnified & Telescopic（Y9S1 重构后）</span>
+    <span class="family-meta">2.5x × 3（Magnified）+ 3.5x × 2（Telescopic） = 5 款</span>
   </div>
   <div class="variant-grid" id="grid-scopes"></div>
 </div>
@@ -277,100 +272,68 @@
   <div class="special-grid" id="grid-special"></div>
 </div>
 
-<!-- 对照表 -->
-<div class="family-section" style="margin-top: 50px;">
-  <div class="family-header" style="--family-color: var(--accent); border-left-color: var(--accent);">
-    <span class="family-title">📊 完整对照表</span>
-    <span class="family-meta">18 款瞄具（10 款 1.0x + 4 款倍镜 + 4 款专属）</span>
-  </div>
-  <table class="comparison-table">
-    <thead>
-      <tr>
-        <th>家族/类别</th>
-        <th>变体</th>
-        <th>倍率</th>
-        <th>ADS 乘数</th>
-        <th>引入版本</th>
-      </tr>
-    </thead>
-    <tbody id="comparison-body"></tbody>
-  </table>
-</div>
-
 <footer>
-  数据源：<a href="https://liquipedia.net/rainbowsix/Portal:Attachments/Sights" target="_blank">Liquipedia</a>
-  · <a href="https://rainbowsix.fandom.com/wiki/Red_Dot_Sight" target="_blank">Fandom Wiki</a>
-  · Ubisoft Y5S3 Dev Blog<br>
-  图片来自 Fandom CDN · 本页为研究预览，未集成到主站
+  图片来源：Bruce 游戏内军械库截图 · 数据源：Liquipedia / Ubisoft Y9S1 Designer's Notes<br>
+  本页为研究预览，未集成到主站
 </footer>
 
 <script>
-// ===== 数据定义（v2 两层结构） =====
-const SIGHT_VARIANTS = [
-  // Red Dot 3款
-  { key:'red_dot_nato', family:'red_dot', label:'Red Dot (NATO)', labelCn:'北约红点',
-    style:'方形黑色外壳，开放式窗口', reticle:'居中圆点', introducedIn:'基础',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/4/46/NATO_Red_Dot_Regular.png/revision/latest?cb=20210202231606' },
-  { key:'red_dot_russian', family:'red_dot', label:'Red Dot (Russian)', labelCn:'俄式红点（Kobra）',
-    style:'宽镜体+金属支架，俄制风格', reticle:'T 字形 / 十字+点', introducedIn:'基础',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/c/cb/Red_Dot_Sight_Russian.PNG/revision/latest?cb=20200821085640' },
-  { key:'red_dot_m4s', family:'red_dot', label:'Red Dot (M4S)', labelCn:'M4S 抬高型红点',
-    style:'抬高镜座，几乎不遮挡导轨视野', reticle:'居中圆点', introducedIn:'Y5S3',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/3/35/NATO_Red_Dot_Raised.png/revision/latest?cb=20210202231627' },
+// 10款 1.0x
+const ONE_X_VARIANTS = [
+  { key:'red_dot_a', family:'red_dot', label:'Red Dot (款 A)', labelCn:'红点 · 款 A',
+    style:'游戏军械库 1.0x 红点第 1 款', reticle:'见截图', img:'images/sights/red_dot_a.png' },
+  { key:'red_dot_b', family:'red_dot', label:'Red Dot (款 B)', labelCn:'红点 · 款 B',
+    style:'游戏军械库 1.0x 红点第 2 款', reticle:'见截图', img:'images/sights/red_dot_b.png' },
+  { key:'red_dot_c', family:'red_dot', label:'Red Dot (款 C)', labelCn:'红点 · 款 C',
+    style:'游戏军械库 1.0x 红点第 3 款', reticle:'见截图', img:'images/sights/red_dot_c.png' },
+  { key:'holo_a', family:'holographic', label:'Holographic (款 A)', labelCn:'全息 · 款 A',
+    style:'游戏军械库 1.0x 全息第 1 款', reticle:'见截图', img:'images/sights/holo_a.png' },
+  { key:'holo_b', family:'holographic', label:'Holographic (款 B)', labelCn:'全息 · 款 B',
+    style:'游戏军械库 1.0x 全息第 2 款', reticle:'见截图', img:'images/sights/holo_b.png' },
+  { key:'holo_c', family:'holographic', label:'Holographic (款 C)', labelCn:'全息 · 款 C',
+    style:'游戏军械库 1.0x 全息第 3 款', reticle:'见截图', img:'images/sights/holo_c.png' },
+  { key:'holo_d', family:'holographic', label:'Holographic (款 D)', labelCn:'全息 · 款 D',
+    style:'游戏军械库 1.0x 全息第 4 款', reticle:'见截图', img:'images/sights/holo_d.png' },
+  { key:'reflex_a', family:'reflex', label:'Reflex (款 A)', labelCn:'反射 · 款 A',
+    style:'游戏军械库 1.0x 反射第 1 款', reticle:'见截图', img:'images/sights/reflex_a.png' },
+  { key:'reflex_b', family:'reflex', label:'Reflex (款 B)', labelCn:'反射 · 款 B',
+    style:'游戏军械库 1.0x 反射第 2 款', reticle:'见截图', img:'images/sights/reflex_b.png' },
+  { key:'reflex_c', family:'reflex', label:'Reflex (款 C)', labelCn:'反射 · 款 C',
+    style:'游戏军械库 1.0x 反射第 3 款', reticle:'见截图', img:'images/sights/reflex_c.png' },
+];
 
-  // Holo 4款
-  { key:'holo_nato', family:'holographic', label:'Holographic (NATO)', labelCn:'北约全息',
-    style:'EOTech 风格，方形外壳+后置观察窗', reticle:'圆环+中心点', introducedIn:'基础',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/5/53/NATO_Holographic.png/revision/latest?cb=20210202225911' },
-  { key:'holo_russian', family:'holographic', label:'Holographic (Russian)', labelCn:'俄式全息',
-    style:'圆形筒状镜体，俄制 PK 风格', reticle:'圆环+十字', introducedIn:'基础',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/9/98/Holographic_Sight_Russian.PNG/revision/latest?cb=20200821090814' },
-  { key:'holo_razor', family:'holographic', label:'Holographic (Razor)', labelCn:'Razor 全息',
-    style:'紧凑低矮的现代化镜体', reticle:'简化圆环', introducedIn:'基础',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/b/bc/Razor_Holographic.png/revision/latest?cb=20210202225956' },
-  { key:'holo_mh1', family:'holographic', label:'Holographic (MH1)', labelCn:'MH1 全息',
-    style:'简约窄框，外观最简洁', reticle:'极简圆点', introducedIn:'Y5S3',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/0/01/MH1_Holographic.png/revision/latest?cb=20210202230013' },
-
-  // Reflex 3款
-  { key:'reflex_nato', family:'reflex', label:'Reflex (NATO)', labelCn:'北约反射',
-    style:'塑料开放式框架', reticle:'三角形', introducedIn:'基础',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/c/c7/NATO_Reflex.png/revision/latest?cb=20210202231743' },
-  { key:'reflex_russian', family:'reflex', label:'Reflex (Russian)', labelCn:'俄式反射',
-    style:'金属开放式框架，体积小', reticle:'三角形', introducedIn:'基础',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/b/b9/Reflex_Sight_Russian_1.png/revision/latest?cb=20210110024456' },
-  { key:'reflex_vintage', family:'reflex', label:'Reflex (Vintage)', labelCn:'复古反射',
-    style:'低矮复古造型', reticle:'三角形', introducedIn:'Y5S3',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/1/18/Vintage_Reflex.png/revision/latest?cb=20210219051957' },
-
-  // 倍镜（Y9S1 重构后：只剩 2.5x 和 3.5x 两个家族）
-  // 图片映射来自 Bruce 现场比对截图——Fandom 老版图片命名和实际游戏内不一致，已做修正
-  { key:'scope_2_5x_nato', family:'scope', label:'Scope 2.5x (NATO)', labelCn:'2.5 倍镜（北约 ACOG 风）',
-    style:'经典梯形外壳，镜体较大', reticle:'中线+倒三角（chevron）', introducedIn:'Y9S1 重构', mag:'2.5x', adsMult:'0.7x',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/0/03/Scope_1.5x.PNG/revision/latest?cb=20200821083608' },
-  { key:'scope_2_5x_russian', family:'scope', label:'Scope 2.5x (Russian)', labelCn:'2.5 倍镜（俄式 POSP 风）',
-    style:'金属圆柱+侧向调整轮', reticle:'箭头+测距线（BDC）', introducedIn:'Y9S1 重构', mag:'2.5x', adsMult:'0.7x',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/0/06/Scope_2.0x.PNG/revision/latest?cb=20200821075812' },
-  { key:'scope_3_5x_a', family:'scope', label:'Scope 3.5x (A)', labelCn:'3.5 倍镜·A 款（Telescopic A）',
-    style:'紧凑窄框，现代战术镜造型，基于 Vortex Viper PST 1-4x24', reticle:'中心点+测距线', introducedIn:'Y9S1 新增', mag:'3.5x', adsMult:'≈0.5x',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/0/0c/Scope_2.5x_NATO_Icon.png/revision/latest?cb=20200821083835' },
-  { key:'scope_3_5x_b', family:'scope', label:'Scope 3.5x (B)', labelCn:'3.5 倍镜·B 款（Telescopic B）',
-    style:'镜体更粗壮，准星样式偏传统战术', reticle:'十字+BDC', introducedIn:'Y9S1 新增', mag:'3.5x', adsMult:'≈0.5x',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/8/8b/Scope_2.5x_Russian_Icon.png/revision/latest?cb=20200821083857' }
+// 倍镜 5款
+const SCOPE_VARIANTS = [
+  { key:'scope_2_5x_a', family:'scope', label:'Scope 2.5x (A)', labelCn:'2.5 倍镜 · A 款（Magnified A）',
+    style:'游戏军械库 2.5x 第 1 款', reticle:'见截图', mag:'2.5x', adsMult:'≈0.7x',
+    introducedIn:'Y9S1 重构', img:'images/sights/scope_2_5x_a.png' },
+  { key:'scope_2_5x_b', family:'scope', label:'Scope 2.5x (B)', labelCn:'2.5 倍镜 · B 款（Magnified B）',
+    style:'游戏军械库 2.5x 第 2 款', reticle:'见截图', mag:'2.5x', adsMult:'≈0.7x',
+    introducedIn:'Y9S1 重构', img:'images/sights/scope_2_5x_b.png' },
+  { key:'scope_2_5x_c', family:'scope', label:'Scope 2.5x (C)', labelCn:'2.5 倍镜 · C 款（Magnified C）',
+    style:'游戏军械库 2.5x 第 3 款', reticle:'见截图', mag:'2.5x', adsMult:'≈0.7x',
+    introducedIn:'Y9S1 重构', img:'images/sights/scope_2_5x_c.png' },
+  { key:'scope_3_5x_a', family:'scope', label:'Scope 3.5x (A) · 望远式 A', labelCn:'3.5 倍镜 · A 款（Telescopic A）',
+    style:'紧凑窄框，现代战术镜；基于 Vortex Viper PST 1-4x24', reticle:'准星小十字+圆点',
+    mag:'3.5x', adsMult:'≈0.5x', introducedIn:'Y9S1 新增',
+    img:'images/sights/scope_3_5x_a.png' },
+  { key:'scope_3_5x_b', family:'scope', label:'Scope 3.5x (B) · 望远式 B', labelCn:'3.5 倍镜 · B 款（Telescopic B）',
+    style:'镜体更粗壮，准星较传统战术风', reticle:'准星带圆环',
+    mag:'3.5x', adsMult:'≈0.5x', introducedIn:'Y9S1 新增',
+    img:'images/sights/scope_3_5x_b.png' },
 ];
 
 const SPECIAL_SIGHTS = [
   { name:'CSRX Variable Scope (5x/12x)', weapon:'CSRX 300 · Kali',
-    desc:'武器内置可变倍镜，默认 5x 瞄准，开火瞬间放大到 12x 进行精准射击。ADS 乘数 [0.4, 0.17]。不可卸，不可换。' },
+    desc:'武器内置可变倍镜，默认 5x，开火/按键瞬切 12x。ADS 乘数 [0.4, 0.17]。不可卸换。' },
   { name:'Flip Sight (6x 热成像)', weapon:'OTs-03 · Glaz',
-    desc:'Glaz 干员专属技能。按键翻起后变为 6x 热成像瞄具，敌人在视野内高亮黄色，能穿透烟雾识别目标。属于干员技能而非配件。' },
+    desc:'Glaz 干员专属技能。翻起后 6x 热成像，敌人在视野中高亮黄色，能穿透烟雾识别目标。属干员技能而非配件。' },
   { name:'Integrated Micro Dot', weapon:'RG-15 · Ela / Zofia / Melusi',
-    desc:'武器内置微型红点，不占配件槽，不可卸载。数值上等同于 1.0x 红点。' },
+    desc:'武器内置微型红点，不占配件槽，不可卸。数值等同于 1.0x 红点。' },
   { name:'Integrated Reflex + Suppressor', weapon:'TACIT .45 · Solid Snake',
-    desc:'Y11S1 新增手枪，内置反射瞄具和消音器。瞄具和消音器均不可卸。' }
+    desc:'Y11S1 新增手枪，内置反射瞄具和消音器。两者均不可卸。' },
 ];
 
-// ===== 渲染 =====
 function makeCard(v) {
   let badge = '';
   if (v.introducedIn && v.introducedIn !== '基础') {
@@ -379,11 +342,11 @@ function makeCard(v) {
   return `
     <div class="variant-card">
       <div class="variant-image">
-        <img src="${v.image}" alt="${v.label}" referrerpolicy="no-referrer"
-             onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=\\'error\\'>图片加载失败 · CDN 可能拦截</div>'">
+        <img src="${v.img}" alt="${v.label}"
+             onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=padding:24px;color:#f44336>图片未找到</div>'">
       </div>
       <div class="variant-info">
-        <div class="variant-name">${v.label} ${badge}</div>
+        <div class="variant-name">${v.label}${badge}</div>
         <div class="variant-cn">${v.labelCn}</div>
         <div class="variant-detail">
           <div><span class="label">外观</span>${v.style}</div>
@@ -399,14 +362,14 @@ function render() {
     red_dot:    document.getElementById('grid-reddot'),
     holographic:document.getElementById('grid-holo'),
     reflex:     document.getElementById('grid-reflex'),
-    scope:      document.getElementById('grid-scopes')
+    scope:      document.getElementById('grid-scopes'),
   };
-  SIGHT_VARIANTS.forEach(v => {
+  ONE_X_VARIANTS.forEach(v => {
     const g = byFamily[v.family];
     if (g) g.insertAdjacentHTML('beforeend', makeCard(v));
   });
+  SCOPE_VARIANTS.forEach(v => byFamily.scope.insertAdjacentHTML('beforeend', makeCard(v)));
 
-  // 专属
   const spGrid = document.getElementById('grid-special');
   SPECIAL_SIGHTS.forEach(s => {
     spGrid.insertAdjacentHTML('beforeend', `
@@ -415,31 +378,6 @@ function render() {
         <div class="special-weapon">🔒 ${s.weapon}</div>
         <div class="special-desc">${s.desc}</div>
       </div>`);
-  });
-
-  // 对照表
-  const familyLabel = { red_dot:'🔴 Red Dot 红点', holographic:'🟢 Holographic 全息', reflex:'🔺 Reflex 反射', scope:'🔭 倍镜' };
-  const body = document.getElementById('comparison-body');
-  SIGHT_VARIANTS.forEach(v => {
-    body.insertAdjacentHTML('beforeend', `
-      <tr>
-        <td>${familyLabel[v.family] || v.family}</td>
-        <td><strong>${v.label}</strong> · ${v.labelCn}</td>
-        <td>${v.mag || '1.0x'}</td>
-        <td>${v.adsMult || '1.0x'}</td>
-        <td>${v.introducedIn && v.introducedIn !== '基础' ? `<span class="badge new">${v.introducedIn}</span>` : '基础'}</td>
-      </tr>`);
-  });
-  // 专属瞄具也塞进表尾
-  SPECIAL_SIGHTS.forEach(s => {
-    body.insertAdjacentHTML('beforeend', `
-      <tr>
-        <td>🎯 专属</td>
-        <td><strong>${s.name.split(' (')[0]}</strong></td>
-        <td>—</td>
-        <td>—</td>
-        <td>绑定 ${s.weapon.split(' · ')[0]}</td>
-      </tr>`);
   });
 }
 render();

@@ -230,8 +230,9 @@
 
 <div class="intro">
   <p>现状：<strong>data.js 里 1.0x 瞄具只有 3 条记录</strong>（red_dot / holographic / reflex），实际游戏里<strong>每个类别下有多个外观不同的子款式</strong>，数值相同但视觉差异明显。</p>
-  <p>本页按 <code>数值家族 → 外观变体</code> 两层结构展示 <strong>12 款</strong>瞄具 +
-    <strong>4 把武器</strong>的专属瞄具。所有图片从 Fandom Wiki CDN 加载（<code>referrerpolicy="no-referrer"</code>）。</p>
+  <p>本页按 <code>数值家族 → 外观变体</code> 两层结构展示：<strong>10 款 1.0x</strong> + <strong>4 款倍镜（2.5x × 2 + 3.5x × 2）</strong> +
+    <strong>4 款专属/内置瞄具</strong>。所有图片从 Fandom Wiki CDN 加载（<code>referrerpolicy="no-referrer"</code>）。</p>
+  <p>⚠️ <strong>Y9S1（Operation Deadly Omen）重大改动</strong>：删除了 <code>Scope 1.5x / 2.0x / 3.0x</code>，倍镜体系简化为 <strong>2.5x（Magnified）</strong> 和 <strong>3.5x（Telescopic）</strong> 两大家族。</p>
   <p>如果看下来效果不错，就把这套结构正式合进主站（见报告 v2 的第 4 节）。</p>
 </div>
 
@@ -263,8 +264,8 @@
 <!-- 倍镜 -->
 <div class="family-section">
   <div class="family-header gold">
-    <span class="family-title">🔭 倍镜 · Magnified Scopes</span>
-    <span class="family-meta">7 款 · 各倍率 ADS 灵敏度递减</span>
+    <span class="family-title">🔭 倍镜 · Magnified Scopes（Y9S1 重构后）</span>
+    <span class="family-meta">2.5x 家族 2 款 + 3.5x 家族 2 款 = 4 款</span>
   </div>
   <div class="variant-grid" id="grid-scopes"></div>
 </div>
@@ -280,7 +281,7 @@
 <div class="family-section" style="margin-top: 50px;">
   <div class="family-header" style="--family-color: var(--accent); border-left-color: var(--accent);">
     <span class="family-title">📊 完整对照表</span>
-    <span class="family-meta">19 款瞄具（12 通用 + 7 倍镜/专属）</span>
+    <span class="family-meta">18 款瞄具（10 款 1.0x + 4 款倍镜 + 4 款专属）</span>
   </div>
   <table class="comparison-table">
     <thead>
@@ -342,22 +343,20 @@ const SIGHT_VARIANTS = [
     style:'低矮复古造型', reticle:'三角形', introducedIn:'Y5S3',
     image:'https://static.wikia.nocookie.net/rainbowsix/images/1/18/Vintage_Reflex.png/revision/latest?cb=20210219051957' },
 
-  // 倍镜
-  { key:'scope_1_5x', family:'scope', label:'Scope 1.5x', labelCn:'1.5 倍镜',
-    style:'低倍率放大镜，视野损失最小', reticle:'简单十字', introducedIn:'Y5S3', mag:'1.5x', adsMult:'0.9x',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/7/7c/Scope_1.5x_HUD_Icon_R6S.png/revision/latest?cb=20200823024509' },
-  { key:'scope_2_0x', family:'scope', label:'Scope 2.0x', labelCn:'2.0 倍镜',
-    style:'窄框但左上角有盲区，主要配给 LMG/AR', reticle:'十字+BDC', introducedIn:'Y5S3', mag:'2.0x', adsMult:'0.8x',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/d/d4/Scope_2.0x_HUD_Icon_R6S.png/revision/latest?cb=20200823030429' },
-  { key:'scope_2_5x_nato', family:'scope', label:'Scope 2.5x (NATO)', labelCn:'2.5 倍镜（北约 ACOG）',
-    style:'经典 ACOG 梯形外壳', reticle:'中线+倒三角（chevron）', introducedIn:'基础', mag:'2.5x', adsMult:'0.7x',
+  // 倍镜（Y9S1 重构后：只剩 2.5x 和 3.5x 两个家族）
+  // 图片映射来自 Bruce 现场比对截图——Fandom 老版图片命名和实际游戏内不一致，已做修正
+  { key:'scope_2_5x_nato', family:'scope', label:'Scope 2.5x (NATO)', labelCn:'2.5 倍镜（北约 ACOG 风）',
+    style:'经典梯形外壳，镜体较大', reticle:'中线+倒三角（chevron）', introducedIn:'Y9S1 重构', mag:'2.5x', adsMult:'0.7x',
+    image:'https://static.wikia.nocookie.net/rainbowsix/images/0/03/Scope_1.5x.PNG/revision/latest?cb=20200821083608' },
+  { key:'scope_2_5x_russian', family:'scope', label:'Scope 2.5x (Russian)', labelCn:'2.5 倍镜（俄式 POSP 风）',
+    style:'金属圆柱+侧向调整轮', reticle:'箭头+测距线（BDC）', introducedIn:'Y9S1 重构', mag:'2.5x', adsMult:'0.7x',
+    image:'https://static.wikia.nocookie.net/rainbowsix/images/0/06/Scope_2.0x.PNG/revision/latest?cb=20200821075812' },
+  { key:'scope_3_5x_a', family:'scope', label:'Scope 3.5x (A)', labelCn:'3.5 倍镜·A 款（Telescopic A）',
+    style:'紧凑窄框，现代战术镜造型，基于 Vortex Viper PST 1-4x24', reticle:'中心点+测距线', introducedIn:'Y9S1 新增', mag:'3.5x', adsMult:'≈0.5x',
     image:'https://static.wikia.nocookie.net/rainbowsix/images/0/0c/Scope_2.5x_NATO_Icon.png/revision/latest?cb=20200821083835' },
-  { key:'scope_2_5x_russian', family:'scope', label:'Scope 2.5x (Russian)', labelCn:'2.5 倍镜（俄式 POSP）',
-    style:'金属圆柱+侧向调整轮', reticle:'箭头+测距线（BDC）', introducedIn:'基础', mag:'2.5x', adsMult:'0.7x',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/8/8b/Scope_2.5x_Russian_Icon.png/revision/latest?cb=20200821083857' },
-  { key:'scope_3_0x', family:'scope', label:'Scope 3.0x', labelCn:'3.0 倍镜',
-    style:'高倍率，DMR 远距离首选', reticle:'十字+测距线', introducedIn:'基础', mag:'3.0x', adsMult:'0.6x',
-    image:'https://static.wikia.nocookie.net/rainbowsix/images/b/bf/Scope_3.0x_Icon.jpeg/revision/latest?cb=20200821064044' }
+  { key:'scope_3_5x_b', family:'scope', label:'Scope 3.5x (B)', labelCn:'3.5 倍镜·B 款（Telescopic B）',
+    style:'镜体更粗壮，准星样式偏传统战术', reticle:'十字+BDC', introducedIn:'Y9S1 新增', mag:'3.5x', adsMult:'≈0.5x',
+    image:'https://static.wikia.nocookie.net/rainbowsix/images/8/8b/Scope_2.5x_Russian_Icon.png/revision/latest?cb=20200821083857' }
 ];
 
 const SPECIAL_SIGHTS = [
@@ -373,7 +372,10 @@ const SPECIAL_SIGHTS = [
 
 // ===== 渲染 =====
 function makeCard(v) {
-  const badge = v.introducedIn === 'Y5S3' ? `<span class="badge new">Y5S3 新增</span>` : '';
+  let badge = '';
+  if (v.introducedIn && v.introducedIn !== '基础') {
+    badge = `<span class="badge new">${v.introducedIn}</span>`;
+  }
   return `
     <div class="variant-card">
       <div class="variant-image">
@@ -425,7 +427,7 @@ function render() {
         <td><strong>${v.label}</strong> · ${v.labelCn}</td>
         <td>${v.mag || '1.0x'}</td>
         <td>${v.adsMult || '1.0x'}</td>
-        <td>${v.introducedIn === 'Y5S3' ? '<span class="badge new">Y5S3</span>' : '基础'}</td>
+        <td>${v.introducedIn && v.introducedIn !== '基础' ? `<span class="badge new">${v.introducedIn}</span>` : '基础'}</td>
       </tr>`);
   });
   // 专属瞄具也塞进表尾

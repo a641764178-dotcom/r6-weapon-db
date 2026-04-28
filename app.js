@@ -43,12 +43,14 @@
     // ---- Tab 切换 ----
     $$('.nav-link').forEach(link => {
         link.addEventListener('click', e => {
-            e.preventDefault();
             const tab = link.dataset.tab;
+            if (!tab) return; // 没有 data-tab 的链接走默认行为（允许跳外部页面）
+            e.preventDefault();
             $$('.nav-link').forEach(l => l.classList.remove('active'));
             link.classList.add('active');
             $$('.tab-content').forEach(t => t.classList.remove('active'));
-            $(`#tab-${tab}`).classList.add('active');
+            const target = $(`#tab-${tab}`);
+            if (target) target.classList.add('active');
         });
     });
 

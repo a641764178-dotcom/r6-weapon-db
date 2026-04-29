@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R6S 瞄具图鉴预览 · v6 总览直出</title>
+<title>R6S 瞄具图鉴预览 · v7 Fandom 单品配图</title>
 <style>
   :root {
     --bg: #0f1419;
@@ -95,6 +95,15 @@
     border-radius: 8px;
     padding: 12px 16px;
   }
+  .variant-item .thumb {
+    width: 100%;
+    aspect-ratio: 16/7;
+    object-fit: contain;
+    background: #000;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+  }
   .variant-item .name {
     font-size: 14px;
     font-weight: 600;
@@ -174,15 +183,15 @@
 <body>
 
 <div class="banner">
-  <h1>🎯 瞄具图鉴预览 · v6 原图直出</h1>
-  <div class="subtitle">R6 围攻 所有瞄具细分型号 — 直接用游戏内原始截图 + 简明文字说明</div>
+  <h1>🎯 瞄具图鉴预览 · v7 Fandom 单品配图</h1>
+  <div class="subtitle">R6 围攻 所有瞄具细分型号 — 游戏内总览 + Fandom 单品渲染图对照</div>
   <a href="index.html" class="back-link">← 返回武器数据库</a>
 </div>
 
 <div class="intro">
-  <p><strong>v6 改动</strong>：放弃了反复失败的切图方案。游戏内总览截图本身就足够清晰，不需要再切成小卡片让你看不清。现在每个家族直接展示你的原始整图，旁边列文字说明每款的外观差异。<strong>所见即所得，不失真不错位。</strong></p>
+  <p><strong>v7 改动</strong>：在 v6「游戏内整图总览 + 文字说明」基础上，为每款 1.0x 瞄具补上从 Fandom Wiki 抓取的单品渲染图作为交叉对照。原图依然是主视觉，单品图只是辅助确认「长这样没错」。<strong>所见即所得，双图对照。</strong></p>
   <p><strong>本版本覆盖</strong>：10 款 1.0x（Red Dot × 3 + Holographic × 4 + Reflex × 3）+ 5 款倍镜（2.5x × 3 + 3.5x × 2）+ 4 款专属内置瞄具。</p>
-  <p>⚠️ <strong>Y9S1 Operation Deadly Omen 倍镜重构</strong>：删除了 Scope 1.5x / 2.0x / 3.0x，当前版本倍镜只保留 <strong>2.5x Magnified 系列</strong> 和 <strong>3.5x Telescopic 系列</strong>。</p>
+  <p>⚠️ <strong>Y9S1 Operation Deadly Omen 倍镜重构</strong>：删除了 Scope 1.5x / 2.0x / 3.0x，当前版本倍镜只保留 <strong>2.5x Magnified 系列</strong> 和 <strong>3.5x Telescopic 系列</strong>。Fandom 尚未为 Y9S1 新倍镜建页，2.5x/3.5x 暂只有游戏内整图。</p>
 </div>
 
 <!-- 1.0x 瞄具总览 -->
@@ -197,42 +206,52 @@
     <div class="cap"><strong>布局说明：</strong>上中下三行排列。<strong>第 1 行 Red Dot 红点</strong>（方壳圆点/圆筒T字/抬高型）；<strong>第 2 行 Holographic 全息</strong>（EOTech 风/圆筒环/紧凑 Razor/极简 MH1）；<strong>第 3 行 Reflex 反射</strong>（塑料框三角/金属框三角/复古低矮）。点击图片可看大图。</div>
     <div class="variant-list">
       <div class="variant-item">
+        <img class="thumb" src="images/sights/fandom_red_dot_a_nato.png" alt="Red Dot A NATO" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="name">Red Dot A · 红点 NATO</div>
         <div class="desc">方形外壳 + 圆点准星。北约系干员的默认红点，最常见外观。</div>
       </div>
       <div class="variant-item">
+        <img class="thumb" src="images/sights/fandom_red_dot_b_russian.png" alt="Red Dot B Russian" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="name">Red Dot B · 红点 Russian</div>
         <div class="desc">宽镜体 + T 字准星。俄系/斯派兹纳兹风格。</div>
       </div>
       <div class="variant-item">
+        <img class="thumb" src="images/sights/fandom_red_dot_c_m4s.png" alt="Red Dot C M4S" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="name">Red Dot C · 红点 M4S <span class="badge">Y5S3</span></div>
         <div class="desc">抬高型 + 圆点准星。Y5S3 引入，镜身更高。</div>
       </div>
       <div class="variant-item">
+        <img class="thumb" src="images/sights/fandom_holo_a_nato.png" alt="Holographic A NATO" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="name">Holographic A · 全息 NATO</div>
         <div class="desc">EOTech 风格方框 + 圆环内带点准星。</div>
       </div>
       <div class="variant-item">
+        <img class="thumb" src="images/sights/fandom_holo_b_russian.png" alt="Holographic B Russian" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="name">Holographic B · 全息 Russian</div>
         <div class="desc">圆筒形外壳 + 圆环十字准星。俄系风格。</div>
       </div>
       <div class="variant-item">
+        <img class="thumb" src="images/sights/fandom_holo_c_razor.png" alt="Holographic C Razor" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="name">Holographic C · 全息 Razor</div>
         <div class="desc">紧凑低矮款，镜身比 NATO/Russian 明显更小。</div>
       </div>
       <div class="variant-item">
+        <img class="thumb" src="images/sights/fandom_holo_d_mh1.png" alt="Holographic D MH1" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="name">Holographic D · 全息 MH1 <span class="badge">Y5S3</span></div>
         <div class="desc">极简窄框，准星收束得非常小。Y5S3 引入。</div>
       </div>
       <div class="variant-item">
+        <img class="thumb" src="images/sights/fandom_reflex_a_nato.png" alt="Reflex A NATO" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="name">Reflex A · 反射 NATO</div>
         <div class="desc">塑料外壳 + 倒三角准星。常见反射镜。</div>
       </div>
       <div class="variant-item">
+        <img class="thumb" src="images/sights/fandom_reflex_b_russian.png" alt="Reflex B Russian" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="name">Reflex B · 反射 Russian</div>
         <div class="desc">金属外壳 + 倒三角准星，镜身更厚重。</div>
       </div>
       <div class="variant-item">
+        <img class="thumb" src="images/sights/fandom_reflex_c_vintage.png" alt="Reflex C Vintage" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         <div class="name">Reflex C · 反射 Vintage</div>
         <div class="desc">复古低矮款 + 倒三角准星。镜身最扁平。</div>
       </div>

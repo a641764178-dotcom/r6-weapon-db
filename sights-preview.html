@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R6S 瞄具图鉴预览 · v3 游戏内截图版</title>
+<title>R6S 瞄具图鉴预览 · v6 总览直出</title>
 <style>
   :root {
     --bg: #0f1419;
@@ -53,36 +53,68 @@
   }
   .intro p { margin-bottom: 10px; color: var(--text-dim); }
   .intro strong { color: var(--text); }
-  .intro code {
-    background: #0a0e12;
-    color: var(--accent);
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 13px;
-  }
 
-  /* 总览图片 */
-  .overview-section {
+  /* 大图总览 */
+  .big-overview {
     margin: 30px 0;
-    padding: 18px;
+    padding: 24px;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 10px;
   }
-  .overview-section h3 {
-    font-size: 16px; margin-bottom: 12px;
+  .big-overview h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
     color: var(--accent);
   }
-  .overview-section img {
+  .big-overview img {
     width: 100%;
-    border-radius: 6px;
+    border-radius: 8px;
     display: block;
+    cursor: zoom-in;
+    border: 2px solid var(--border);
   }
-  .overview-section .cap {
-    margin-top: 8px;
+  .big-overview img:hover { border-color: var(--accent); }
+  .big-overview .cap {
+    margin-top: 10px;
     color: var(--text-dim);
+    font-size: 13px;
+  }
+  .big-overview .cap strong { color: var(--text); }
+
+  /* 说明列表 */
+  .variant-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+  }
+  .variant-item {
+    background: #0a0e12;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+  .variant-item .name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .variant-item .desc {
     font-size: 12px;
-    text-align: center;
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+  .variant-item .badge {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 3px;
+    font-size: 10px;
+    background: #4caf50;
+    color: white;
+    margin-left: 6px;
+    vertical-align: middle;
   }
 
   .family-section { margin-bottom: 40px; }
@@ -102,71 +134,6 @@
   .family-header.gold   { --family-color: var(--family-gold); }
   .family-title { font-size: 20px; font-weight: 600; }
   .family-meta  { color: var(--text-dim); font-size: 13px; margin-left: auto; }
-
-  .variant-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-  }
-  .variant-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.15s, border-color 0.15s;
-  }
-  .variant-card:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent);
-    background: var(--card-hover);
-  }
-  .variant-image {
-    width: 100%;
-    background: #0a0e12;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .variant-image img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  .variant-info {
-    padding: 14px 16px;
-  }
-  .variant-name {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-  .variant-cn {
-    color: var(--text-dim);
-    font-size: 13px;
-    margin-bottom: 10px;
-  }
-  .variant-detail {
-    font-size: 12px;
-    color: var(--text-dim);
-    line-height: 1.7;
-  }
-  .variant-detail .label {
-    color: var(--text);
-    display: inline-block;
-    min-width: 56px;
-  }
-  .badge {
-    display: inline-block;
-    padding: 2px 7px;
-    border-radius: 3px;
-    font-size: 10px;
-    font-weight: 500;
-    background: #2a3441;
-    color: var(--text-dim);
-    margin-left: 6px;
-  }
-  .badge.new { background: #4caf50; color: white; }
 
   .special-section {
     margin-top: 50px;
@@ -207,62 +174,120 @@
 <body>
 
 <div class="banner">
-  <h1>🎯 瞄具图鉴预览 · v3 游戏内截图版</h1>
-  <div class="subtitle">R6 围攻 所有瞄具细分型号 — 图片直接来自游戏内军械库截图</div>
+  <h1>🎯 瞄具图鉴预览 · v6 原图直出</h1>
+  <div class="subtitle">R6 围攻 所有瞄具细分型号 — 直接用游戏内原始截图 + 简明文字说明</div>
   <a href="index.html" class="back-link">← 返回武器数据库</a>
 </div>
 
 <div class="intro">
-  <p><strong>v3 改动</strong>：图片全部换成 Bruce 的游戏内实拍截图（本地托管，告别 Fandom 命名坑）；2.5x 补回第 3 款；以游戏内实际布局为准。</p>
+  <p><strong>v6 改动</strong>：放弃了反复失败的切图方案。游戏内总览截图本身就足够清晰，不需要再切成小卡片让你看不清。现在每个家族直接展示你的原始整图，旁边列文字说明每款的外观差异。<strong>所见即所得，不失真不错位。</strong></p>
   <p><strong>本版本覆盖</strong>：10 款 1.0x（Red Dot × 3 + Holographic × 4 + Reflex × 3）+ 5 款倍镜（2.5x × 3 + 3.5x × 2）+ 4 款专属内置瞄具。</p>
   <p>⚠️ <strong>Y9S1 Operation Deadly Omen 倍镜重构</strong>：删除了 Scope 1.5x / 2.0x / 3.0x，当前版本倍镜只保留 <strong>2.5x Magnified 系列</strong> 和 <strong>3.5x Telescopic 系列</strong>。</p>
 </div>
 
-<!-- 游戏内总览图（用于对比） -->
-<div class="overview-section">
-  <h3>📸 游戏内军械库总览（来自 Bruce 实拍截图）</h3>
-  <img src="images/sights/all_1x_overview.png" alt="10 款 1.0x 总览">
-  <div class="cap">1.0x 瞄具总览：Red Dot × 3 / Holographic × 4 / Reflex × 3（上下三行）</div>
-  <div style="height:12px"></div>
-  <img src="images/sights/all_2_5x_overview.png" alt="3 款 2.5x 总览">
-  <div class="cap">2.5x Magnified 家族总览：3 款</div>
-  <div style="height:12px"></div>
-  <img src="images/sights/all_3_5x_overview.png" alt="2 款 3.5x 总览">
-  <div class="cap">3.5x Telescopic 家族总览：2 款（A / B）</div>
-</div>
-
-<!-- 1.0x 三大家族 -->
+<!-- 1.0x 瞄具总览 -->
 <div class="family-section">
   <div class="family-header red">
-    <span class="family-title">🔴 Red Dot 红点 · 1.0x 家族</span>
-    <span class="family-meta">3 款外观 · 数值完全一致（ADS 乘数 1.0x）</span>
+    <span class="family-title">🔴🟢🔺 1.0x 瞄具全家福（10 款）</span>
+    <span class="family-meta">Red Dot × 3 + Holographic × 4 + Reflex × 3 · 所有同类数值完全一致</span>
   </div>
-  <div class="variant-grid" id="grid-reddot"></div>
+  <div class="big-overview">
+    <h2>📸 游戏内军械库 1.0x 瞄具总览</h2>
+    <img src="images/sights/all_1x_overview.png" alt="10 款 1.0x 总览" onclick="window.open(this.src)">
+    <div class="cap"><strong>布局说明：</strong>上中下三行排列。<strong>第 1 行 Red Dot 红点</strong>（方壳圆点/圆筒T字/抬高型）；<strong>第 2 行 Holographic 全息</strong>（EOTech 风/圆筒环/紧凑 Razor/极简 MH1）；<strong>第 3 行 Reflex 反射</strong>（塑料框三角/金属框三角/复古低矮）。点击图片可看大图。</div>
+    <div class="variant-list">
+      <div class="variant-item">
+        <div class="name">Red Dot A · 红点 NATO</div>
+        <div class="desc">方形外壳 + 圆点准星。北约系干员的默认红点，最常见外观。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Red Dot B · 红点 Russian</div>
+        <div class="desc">宽镜体 + T 字准星。俄系/斯派兹纳兹风格。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Red Dot C · 红点 M4S <span class="badge">Y5S3</span></div>
+        <div class="desc">抬高型 + 圆点准星。Y5S3 引入，镜身更高。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Holographic A · 全息 NATO</div>
+        <div class="desc">EOTech 风格方框 + 圆环内带点准星。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Holographic B · 全息 Russian</div>
+        <div class="desc">圆筒形外壳 + 圆环十字准星。俄系风格。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Holographic C · 全息 Razor</div>
+        <div class="desc">紧凑低矮款，镜身比 NATO/Russian 明显更小。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Holographic D · 全息 MH1 <span class="badge">Y5S3</span></div>
+        <div class="desc">极简窄框，准星收束得非常小。Y5S3 引入。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Reflex A · 反射 NATO</div>
+        <div class="desc">塑料外壳 + 倒三角准星。常见反射镜。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Reflex B · 反射 Russian</div>
+        <div class="desc">金属外壳 + 倒三角准星，镜身更厚重。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Reflex C · 反射 Vintage</div>
+        <div class="desc">复古低矮款 + 倒三角准星。镜身最扁平。</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="family-section">
-  <div class="family-header green">
-    <span class="family-title">🟢 Holographic 全息 · 1.0x 家族</span>
-    <span class="family-meta">4 款外观 · 数值完全一致</span>
-  </div>
-  <div class="variant-grid" id="grid-holo"></div>
-</div>
-
-<div class="family-section">
-  <div class="family-header blue">
-    <span class="family-title">🔺 Reflex 反射 · 1.0x 家族</span>
-    <span class="family-meta">3 款外观 · 数值完全一致</span>
-  </div>
-  <div class="variant-grid" id="grid-reflex"></div>
-</div>
-
-<!-- 倍镜 -->
+<!-- 2.5x 倍镜总览 -->
 <div class="family-section">
   <div class="family-header gold">
-    <span class="family-title">🔭 倍镜 · Magnified & Telescopic（Y9S1 重构后）</span>
-    <span class="family-meta">2.5x × 3（Magnified）+ 3.5x × 2（Telescopic） = 5 款</span>
+    <span class="family-title">🔭 2.5x Magnified 家族（3 款）</span>
+    <span class="family-meta">数值完全一致 · ADS 乘数 ≈ 0.7x · Y9S1 重构保留</span>
   </div>
-  <div class="variant-grid" id="grid-scopes"></div>
+  <div class="big-overview">
+    <h2>📸 2.5x 倍镜总览</h2>
+    <img src="images/sights/all_2_5x_overview.png" alt="3 款 2.5x 总览" onclick="window.open(this.src)">
+    <div class="cap"><strong>布局说明：</strong>3 款 Magnified 并排。每款的外壳造型和准星分划不同（典型 ACOG 风 / 长筒战术 / 紧凑现代），但瞄具面板数值完全相同。点击图片可看大图。</div>
+    <div class="variant-list">
+      <div class="variant-item">
+        <div class="name">Magnified A</div>
+        <div class="desc">经典 ACOG 梯形镜体 + 倒三角准星（类似 TA33）。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Magnified B</div>
+        <div class="desc">较长筒形镜体，现代战术风格，准星为小十字。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Magnified C</div>
+        <div class="desc">紧凑型镜体，准星分划最简洁。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3.5x 倍镜总览 -->
+<div class="family-section">
+  <div class="family-header gold">
+    <span class="family-title">🔭 3.5x Telescopic 家族（2 款）</span>
+    <span class="family-meta">数值完全一致 · ADS 乘数 ≈ 0.5x · Y9S1 新增最高倍率</span>
+  </div>
+  <div class="big-overview">
+    <h2>📸 3.5x 倍镜总览</h2>
+    <img src="images/sights/all_3_5x_overview.png" alt="2 款 3.5x 总览" onclick="window.open(this.src)">
+    <div class="cap"><strong>布局说明：</strong>A 款 / B 款并排。基于 Vortex Viper PST 1-4×24 外形设计。点击图片可看大图。</div>
+    <div class="variant-list">
+      <div class="variant-item">
+        <div class="name">Telescopic A <span class="badge">Y9S1 新增</span></div>
+        <div class="desc">紧凑窄框，现代战术风格。准星为小十字 + 中心点。</div>
+      </div>
+      <div class="variant-item">
+        <div class="name">Telescopic B <span class="badge">Y9S1 新增</span></div>
+        <div class="desc">镜体更粗壮，偏传统战术镜。准星带圆环辅助瞄准圈。</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- 专属瞄具 -->
@@ -278,51 +303,6 @@
 </footer>
 
 <script>
-// 10款 1.0x
-const ONE_X_VARIANTS = [
-  { key:'red_dot_a', family:'red_dot', label:'Red Dot (款 A)', labelCn:'红点 · 款 A',
-    style:'游戏军械库 1.0x 红点第 1 款', reticle:'见截图', img:'images/sights/red_dot_a.png' },
-  { key:'red_dot_b', family:'red_dot', label:'Red Dot (款 B)', labelCn:'红点 · 款 B',
-    style:'游戏军械库 1.0x 红点第 2 款', reticle:'见截图', img:'images/sights/red_dot_b.png' },
-  { key:'red_dot_c', family:'red_dot', label:'Red Dot (款 C)', labelCn:'红点 · 款 C',
-    style:'游戏军械库 1.0x 红点第 3 款', reticle:'见截图', img:'images/sights/red_dot_c.png' },
-  { key:'holo_a', family:'holographic', label:'Holographic (款 A)', labelCn:'全息 · 款 A',
-    style:'游戏军械库 1.0x 全息第 1 款', reticle:'见截图', img:'images/sights/holo_a.png' },
-  { key:'holo_b', family:'holographic', label:'Holographic (款 B)', labelCn:'全息 · 款 B',
-    style:'游戏军械库 1.0x 全息第 2 款', reticle:'见截图', img:'images/sights/holo_b.png' },
-  { key:'holo_c', family:'holographic', label:'Holographic (款 C)', labelCn:'全息 · 款 C',
-    style:'游戏军械库 1.0x 全息第 3 款', reticle:'见截图', img:'images/sights/holo_c.png' },
-  { key:'holo_d', family:'holographic', label:'Holographic (款 D)', labelCn:'全息 · 款 D',
-    style:'游戏军械库 1.0x 全息第 4 款', reticle:'见截图', img:'images/sights/holo_d.png' },
-  { key:'reflex_a', family:'reflex', label:'Reflex (款 A)', labelCn:'反射 · 款 A',
-    style:'游戏军械库 1.0x 反射第 1 款', reticle:'见截图', img:'images/sights/reflex_a.png' },
-  { key:'reflex_b', family:'reflex', label:'Reflex (款 B)', labelCn:'反射 · 款 B',
-    style:'游戏军械库 1.0x 反射第 2 款', reticle:'见截图', img:'images/sights/reflex_b.png' },
-  { key:'reflex_c', family:'reflex', label:'Reflex (款 C)', labelCn:'反射 · 款 C',
-    style:'游戏军械库 1.0x 反射第 3 款', reticle:'见截图', img:'images/sights/reflex_c.png' },
-];
-
-// 倍镜 5款
-const SCOPE_VARIANTS = [
-  { key:'scope_2_5x_a', family:'scope', label:'Scope 2.5x (A)', labelCn:'2.5 倍镜 · A 款（Magnified A）',
-    style:'游戏军械库 2.5x 第 1 款', reticle:'见截图', mag:'2.5x', adsMult:'≈0.7x',
-    introducedIn:'Y9S1 重构', img:'images/sights/scope_2_5x_a.png' },
-  { key:'scope_2_5x_b', family:'scope', label:'Scope 2.5x (B)', labelCn:'2.5 倍镜 · B 款（Magnified B）',
-    style:'游戏军械库 2.5x 第 2 款', reticle:'见截图', mag:'2.5x', adsMult:'≈0.7x',
-    introducedIn:'Y9S1 重构', img:'images/sights/scope_2_5x_b.png' },
-  { key:'scope_2_5x_c', family:'scope', label:'Scope 2.5x (C)', labelCn:'2.5 倍镜 · C 款（Magnified C）',
-    style:'游戏军械库 2.5x 第 3 款', reticle:'见截图', mag:'2.5x', adsMult:'≈0.7x',
-    introducedIn:'Y9S1 重构', img:'images/sights/scope_2_5x_c.png' },
-  { key:'scope_3_5x_a', family:'scope', label:'Scope 3.5x (A) · 望远式 A', labelCn:'3.5 倍镜 · A 款（Telescopic A）',
-    style:'紧凑窄框，现代战术镜；基于 Vortex Viper PST 1-4x24', reticle:'准星小十字+圆点',
-    mag:'3.5x', adsMult:'≈0.5x', introducedIn:'Y9S1 新增',
-    img:'images/sights/scope_3_5x_a.png' },
-  { key:'scope_3_5x_b', family:'scope', label:'Scope 3.5x (B) · 望远式 B', labelCn:'3.5 倍镜 · B 款（Telescopic B）',
-    style:'镜体更粗壮，准星较传统战术风', reticle:'准星带圆环',
-    mag:'3.5x', adsMult:'≈0.5x', introducedIn:'Y9S1 新增',
-    img:'images/sights/scope_3_5x_b.png' },
-];
-
 const SPECIAL_SIGHTS = [
   { name:'CSRX Variable Scope (5x/12x)', weapon:'CSRX 300 · Kali',
     desc:'武器内置可变倍镜，默认 5x，开火/按键瞬切 12x。ADS 乘数 [0.4, 0.17]。不可卸换。' },
@@ -334,53 +314,15 @@ const SPECIAL_SIGHTS = [
     desc:'Y11S1 新增手枪，内置反射瞄具和消音器。两者均不可卸。' },
 ];
 
-function makeCard(v) {
-  let badge = '';
-  if (v.introducedIn && v.introducedIn !== '基础') {
-    badge = `<span class="badge new">${v.introducedIn}</span>`;
-  }
-  return `
-    <div class="variant-card">
-      <div class="variant-image">
-        <img src="${v.img}" alt="${v.label}"
-             onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=padding:24px;color:#f44336>图片未找到</div>'">
-      </div>
-      <div class="variant-info">
-        <div class="variant-name">${v.label}${badge}</div>
-        <div class="variant-cn">${v.labelCn}</div>
-        <div class="variant-detail">
-          <div><span class="label">外观</span>${v.style}</div>
-          <div><span class="label">准星</span>${v.reticle}</div>
-          ${v.mag ? `<div><span class="label">倍率</span>${v.mag} / ADS ${v.adsMult}</div>` : ''}
-        </div>
-      </div>
-    </div>`;
-}
-
-function render() {
-  const byFamily = {
-    red_dot:    document.getElementById('grid-reddot'),
-    holographic:document.getElementById('grid-holo'),
-    reflex:     document.getElementById('grid-reflex'),
-    scope:      document.getElementById('grid-scopes'),
-  };
-  ONE_X_VARIANTS.forEach(v => {
-    const g = byFamily[v.family];
-    if (g) g.insertAdjacentHTML('beforeend', makeCard(v));
-  });
-  SCOPE_VARIANTS.forEach(v => byFamily.scope.insertAdjacentHTML('beforeend', makeCard(v)));
-
-  const spGrid = document.getElementById('grid-special');
-  SPECIAL_SIGHTS.forEach(s => {
-    spGrid.insertAdjacentHTML('beforeend', `
-      <div class="special-card">
-        <div class="special-name">${s.name}</div>
-        <div class="special-weapon">🔒 ${s.weapon}</div>
-        <div class="special-desc">${s.desc}</div>
-      </div>`);
-  });
-}
-render();
+const spGrid = document.getElementById('grid-special');
+SPECIAL_SIGHTS.forEach(s => {
+  spGrid.insertAdjacentHTML('beforeend', `
+    <div class="special-card">
+      <div class="special-name">${s.name}</div>
+      <div class="special-weapon">🔒 ${s.weapon}</div>
+      <div class="special-desc">${s.desc}</div>
+    </div>`);
+});
 </script>
 </body>
 </html>

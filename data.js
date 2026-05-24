@@ -1,6 +1,6 @@
 // ============================================
 // R6S 武器配件数据库 - 数据层
-// 版本基准: Y11S1.2 (2026-04-14)
+// 版本基准: Y11S2 Designer's Notes (2026-05-18)
 // 分类体系: 主武器7类 + 副武器4类
 // ============================================
 
@@ -80,6 +80,16 @@ const ATTACHMENT_DATA = {
             ],
             description: '减少32%的ADS时间意味着更快完成瞄准。在围攻"谁先瞄到谁先赢"的节奏中，ADS速度差距可能决定生死。前提是控枪水平足够。',
             bestFor: '后坐力低的武器、高水平玩家'
+        },
+        horizontal_grip: {
+            name: '水平握把', nameEn: 'Horizontal Grip', slot: 'grip', icon: '🤲',
+            effects: [
+                { type: 'positive', label: '水平后坐力减少', value: '~25%' },
+                { type: 'neutral', label: '垂直后坐力', value: '不变' },
+                { type: 'neutral', label: 'ADS速度', value: '不变' }
+            ],
+            description: '减少射击时枪口的水平随机晃动，使弹道更集中在垂直线上。与补偿器的效果方向一致但可以叠加。',
+            bestFor: '水平后坐力大的武器、全自动长扫射'
         }
     },
     underbarrel: {
@@ -359,9 +369,9 @@ const WEAPONS = [
       notes: '半自动' },
     { name: 'AK-74M', type: 'ar', damage: 44, rpm: 650, mag: 40, operators: ['Nomad','Deimos'], side: 'atk',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
-      grips: [],
-      y7s3_new: { barrels: [], grips: [] },
-      notes: '无握把槽' },
+      grips: ['vertical_grip','angled_grip','horizontal_grip'],
+      y7s3_new: { barrels: [], grips: ['vertical_grip','angled_grip','horizontal_grip'] },
+      notes: 'Y11S2新增全部握把选项' },
     { name: 'ARX200', type: 'ar', damage: 47, rpm: 700, mag: 20, operators: ['Iana','Nomad'], side: 'atk',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
       grips: ['vertical_grip','angled_grip'],
@@ -382,6 +392,11 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: [] } },
+    { name: 'XK23', type: 'ar', damage: 49, rpm: 675, mag: 35, operators: ['Dokkaebi','Rauora','Sens'], side: 'atk',
+      barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
+      grips: ['vertical_grip','angled_grip','horizontal_grip'],
+      y7s3_new: { barrels: ['extended_barrel'], grips: ['horizontal_grip'] },
+      notes: 'Y11S2新武器，加长枪管可提升伤害至54' },
 
     // ===== 冲锋枪 (SMG) =====
     { name: 'FMG-9', type: 'smg', damage: 34, rpm: 800, mag: 30, operators: ['Smoke','Nøkk','Denari'], side: 'mixed',
@@ -619,7 +634,7 @@ const WEAPONS = [
     { name: 'RG15', type: 'pistol', damage: 38, rpm: 0, mag: 15, operators: ['Ela','Zofia','Melusi'], side: 'mixed',
       barrels: ['muzzle_brake','suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] },
       notes: '内置微型红点瞄具' },
-    { name: '1911 TACOPS', type: 'pistol', damage: 55, rpm: 0, mag: 8, operators: ['Dokkaebi','Maverick','Thorn'], side: 'atk',
+    { name: '1911 TACOPS', type: 'pistol', damage: 55, rpm: 0, mag: 8, operators: ['Maverick','Thorn'], side: 'atk',
       barrels: ['muzzle_brake','suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] } },
     { name: 'USP40', type: 'pistol', damage: 48, rpm: 0, mag: 12, operators: ['Jackal','Mira','Oryx','Brava'], side: 'mixed',
       barrels: ['muzzle_brake','suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] } },
@@ -664,7 +679,7 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: [],
       y7s3_new: { barrels: ['muzzle_brake','compensator','extended_barrel'], grips: [] } },
-    { name: 'Reaper MK2', type: 'smg_sec', damage: 31, rpm: 765, mag: 33, operators: ['Fenrir','Oryx','Pulse','Rook','Sledge','Ying','Maverick','Rauora'], side: 'mixed',
+    { name: 'Reaper MK2', type: 'smg_sec', damage: 31, rpm: 765, mag: 33, operators: ['Oryx','Pulse','Rook','Sledge','Ying','Maverick','Rauora'], side: 'mixed',
       barrels: ['compensator','flash_hider','suppressor'],
       grips: [],
       y7s3_new: { barrels: [], grips: [] },
@@ -845,7 +860,7 @@ const WEAPON_EXTENDED = {
         sights: ['red_dot','holographic','reflex','scope_2_5x'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
-        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '典型AK后坐力模式，无握把加剧控枪难度' },
+        recoil: { vertical: 'medium', horizontal: 'medium', pattern: '典型AK后坐力模式，Y11S2新增全部握把可改善控枪' },
         falloff: { start: 25, end: 35, min: 26 }
     },
     'ARX200': {
@@ -882,6 +897,13 @@ const WEAPON_EXTENDED = {
         reloadTactical: 2.5, reloadEmpty: 3.2,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，防守方可用' },
         falloff: { start: 25, end: 35, min: 21 }
+    },
+    'XK23': {
+        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        underbarrel: true, mobility: 50,
+        reloadTactical: 3.5, reloadEmpty: null,
+        recoil: { vertical: 'low-medium', horizontal: 'low', pattern: '易控制、稳定一致的后坐力模式' },
+        falloff: { start: 25, end: 35, min: 29 }
     },
 
     // === 冲锋枪 ===
@@ -1609,7 +1631,7 @@ const WEAPON_DETAILS = {
         manufacturer: 'Kalashnikov Concern',
         trivia: [
             'AK-74M 是 AK-74 的现代化版本，"M"代表 Modernized。采用聚合物折叠枪托和导轨系统。',
-            '无握把槽是平衡考虑——该武器拥有 40 发大弹匣。'
+            'Y11S2 新增全部握把选项（垂直/转角/水平），此前曾无握把槽作为平衡手段（对应40发大弹匣）。'
         ]
     },
     'ARX200': {
@@ -1662,6 +1684,17 @@ const WEAPON_DETAILS = {
         trivia: [
             'PCX-33 没有明确的现实原型，外观融合了多种现代冲锋枪/卡宾枪的设计元素。',
             '作为 Solis 的武器引入，Solis 来自哥伦比亚。'
+        ]
+    },
+    'XK23': {
+        realName: '虚构武器 (无托式突击步枪)',
+        caliber: null,
+        country: null,
+        manufacturer: '虚构',
+        trivia: [
+            'XK23 是 Y11S2 Operation System Override 新增的突击步枪，采用无托布局。',
+            '该武器是少数可装备加长枪管的突击步枪，装备后伤害从 49 提升至 54。',
+            '分配给 Dokkaebi、Rauora、Sens 三名进攻方干员。'
         ]
     },
 
@@ -2377,6 +2410,7 @@ const WEAPON_IMAGES = {
     'SC3000K':         { thumb: '2/2b/R6S_SC3000K.png', recoil: null, huijiRecoil: 'a/ae/Backlash_sc3000k_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
     'POF-9':           { thumb: null, recoil: null, huijiRecoil: 'a/af/Backlash_pof9_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
     'PCX-33':          { thumb: null, recoil: null }, // 灰机wiki暂无此武器后坐力图
+    'XK23':            { thumb: null, recoil: null }, // Y11S2新武器，暂无图片资源
 
     // === 冲锋枪 ===
     'FMG-9':           { thumb: 'f/f2/R6S_FMG-9.png', recoil: null, huijiRecoil: 'c/ca/Backlash_fmg9_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
@@ -2474,6 +2508,27 @@ function getWeaponRecoilURL(weaponName) {
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'designer',
+        date: '2026-05-18',
+        title: 'Y11S2 设计师笔记 — 武器/配件/干员平衡详情',
+        content: '<ul><li>🔫 <strong>新武器 XK23</strong>（突击步枪/无托）：49伤害 / 675射速 / 35弹匣，可装<strong>加长枪管</strong>（伤害提升至54），分配给 Dokkaebi、Rauora、Sens</li><li>🔧 <strong>AK-74M 新增握把</strong>：垂直握把、转角握把、水平握把（影响 Nomad、Deimos）</li><li>🆕 <strong>Dokkaebi 重制</strong>：Jegeo Payload 新技能，手机未重置将爆炸（40HP+火焰），摄像头入侵改为限时20s</li><li>⚔️ <strong>Zofia</strong>：回归 2速2血</li><li>⚔️ <strong>Gridlock</strong>：TRAX 踩踏造成10s跛行，尖刺血量 1→35HP，数量 4→3</li><li>⚔️ <strong>Nomad</strong>：Airjab 检测范围 3m→3.25m</li><li>⚔️ 精调：Deimos 追踪延迟 5s→4s / Mozzie 捕获范围 1.5m→1.75m / Pulse 扫描 9m→10.5m / Solis SPEC-IO 15s→17s</li><li>📅 随 Operation System Override 于 <strong>2026年6月2日</strong> 上线</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/2MNhboDBmsQKkWb5p8zqsg/y11s2-designers-notes'
+    },
+    {
+        type: 'season',
+        date: '2026-06-02',
+        title: 'Y11S2 Operation System Override — 新赛季预告',
+        content: '<ul><li>🆕 <strong>Dokkaebi 重制</strong>：新技能 Jegeo Payload 替代 Logic Bomb，可对单个目标手机植入恶意软件，未挂断将造成 40HP 爆炸伤害+火焰效果</li><li>🔫 <strong>新武器 XK23</strong>（突击步枪/无托）：49伤害/675射速/35发弹匣，可用于 Dokkaebi、Rauora、Sens</li><li>🔧 <strong>AK-74M 新增握把</strong>：水平握把、垂直握把、转角握把（影响 Nomad、Deimos）</li><li>⚔️ <strong>Zofia</strong>：改为 2血2速（原 3血1速）</li><li>⚔️ <strong>Gridlock</strong>：Trax 踩中后造成 10s 跛行，尖刺血量 1→35HP，数量 4→3 个</li><li>⚔️ <strong>Mozzie</strong>：捕获距离 1.5m→1.75m | <strong>Pulse</strong>：扫描距离 9m→10.5m</li><li>⚔️ <strong>Solis</strong>：SPEC-IO 持续时间 15s→17s | <strong>Deimos</strong>：DeathMARK 等待时间 5s→4s</li><li>🗺️ <strong>Calypso Casino 新地图</strong>（致敬 Rainbow Six: Vegas）+ Emerald Plains/Kanal/Outback 视觉升级</li><li>🏆 <strong>Ranked 3.0</strong>：移除隐藏 MMR，新增 Champion I-V，5场定级赛</li><li>📅 预计 <strong>2026年6月2日</strong> 正式上线</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/seasons/systemoverride'
+    },
+    {
+        type: 'patch',
+        date: '2026-05-05',
+        title: 'Y11S1.3 中期补丁',
+        content: '<ul><li>🔫 <strong>AUG A2 后坐力降低</strong>：降低垂直后坐力（PC &amp; 主机），影响 IQ、Wamai</li><li>🔫 <strong>M762 后坐力降低</strong>：降低水平后坐力（仅PC），影响 Zofia</li><li>🔫 <strong>SPEAR .308 后坐力降低</strong>：降低首发上跳+垂直后坐力（PC &amp; 主机），影响 Finka、Thunderbird</li><li>🔧 <strong>Caveira</strong>：静步持续时间 12s→15s</li><li>🔧 <strong>Vigil</strong>：ERC-7 持续时间 12s→15s</li><li>🔧 <strong>Warden</strong>：智能眼镜持续时间 20s→22s</li><li>🔧 <strong>Kaid</strong>：电爪激活时间 4s→3.5s</li><li>🔧 <strong>Zero</strong>：Argus 激光恢复时间 15s→12s</li><li>⚠️ 本次补丁<strong>无武器伤害/配件变更</strong>，仅后坐力微调</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/4QxsAbVufpV8j2TCybpb5Z/y11s13-patch-notes'
+    },
     {
         type: 'patch',
         date: '2026-04-14',

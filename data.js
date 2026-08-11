@@ -1,6 +1,6 @@
 // ============================================
 // R6S 武器配件数据库 - 数据层
-// 版本基准: Y11S2 Designer's Notes (2026-05-18)
+// 版本基准: Y11S2.3 (2026-08-04)
 // 分类体系: 主武器7类 + 副武器4类
 // ============================================
 
@@ -790,7 +790,7 @@ const WEAPON_EXTENDED = {
         sights: ['red_dot','holographic','reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.6,
-        recoil: { vertical: 'medium', horizontal: 'low', pattern: '垂直上跳明显但水平稳定' },
+        recoil: { vertical: 'low_medium', horizontal: 'low', pattern: 'Y11S2.2降低垂直后坐力+平滑水平，最难控段从第8发推迟到第10发，整体更易控' },
         falloff: { start: 25, end: 35, min: 22 }
     },
     'C8-SFW': {
@@ -1351,7 +1351,7 @@ const WEAPON_EXTENDED = {
         sights: ['red_dot','holographic','reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.0, reloadEmpty: 2.6,
-        recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，通用副武器SMG' },
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: 'Y11S2.3优化：后坐力阶段延后至第0/3/10/25发（原0/3/7/13），连续射击更平稳，通用副武器SMG' },
         falloff: { start: 18, end: 28, min: 18 }
     },
 
@@ -2509,6 +2509,62 @@ function getWeaponRecoilURL(weaponName) {
 // ---- 官方更新信息 ----
 const UPDATES = [
     {
+        type: 'patch',
+        date: '2026-08-04',
+        title: 'Y11S2.3 补丁 (Update 3.45)',
+        content: '<ul><li>🔫 <strong>Reaper MK2 后坐力优化</strong>：后坐力阶段启动延后至第0/3/10/25发（原 0/3/7/13），连续射击更易控制（键鼠+手柄）</li><li>⚔️ <strong>Oryx</strong>：冲锋充能 8s→5s</li><li>⚔️ <strong>Hibana</strong>：X-Kairos 引爆计时 4s→3.8s</li><li>⚔️ <strong>Maverick</strong>：突破火焰燃料144→160（总量 288→320）</li><li>⚔️ <strong>Fuze</strong>：加固面板突破时间 2s→1.75s</li><li>⚔️ <strong>Tubarão</strong>：液氮罐范围 3m→3.2m</li><li>⚔️ <strong>Mute</strong>：信号干扰范围 2.475m→2.6m</li><li>🔧 <strong>电磁脉冲手雷</strong>：范围 1.8m→2m</li><li>🔧 修复：Chalet阳台攀爬异常、Villa 室外检测错误、Roc Shield 判定偏大等</li><li>⚠️ <strong>无武器伤害/射速/弹匣/配件兼容性变更</strong>，仅 Reaper MK2 后坐力形态优化 + 干员技能微调</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/2EIn06EmkAIG7su2fpITue/y11s23-patch-notes'
+    },
+    {
+        type: 'patch',
+        date: '2026-07-23',
+        title: 'Y11S2.2 热修复 (Update 1.000.149)',
+        content: '<ul><li>🔧 <strong>Rook 重新启用</strong>：修复拾取护甲导致玩家卡住的恶意利用问题</li><li>🔧 修复 Villa 地图 EXT Garage 区域防守方未被正确检测为室外的问题</li><li>🔧 修复 PC & Console 匹配池分配错误，部分玩家被错误放入跨平台对战池</li><li>⚠️ <strong>无武器/配件数值变更</strong>，纯稳定性与 Bug 修复热修补</li></ul>',
+        link: 'https://updatecrazy.com/rainbow-six-siege-r6-update-1-000-149-patch-notes-for-ps5-xsx'
+    },
+    {
+        type: 'designer',
+        date: '2026-07-14',
+        title: 'Y11S2.2 设计师笔记 — 中期更新平衡详解',
+        content: '<ul><li>⚔️ <strong>Wamai 大幅加强</strong>：MAG-NET 充能 40s→20s、最大数量 6→7、激活时间 1.5s→0.5s + 新增可部署护盾 + C4 替换冲击手雷</li><li>⚔️ <strong>Dokkaebi</strong>：Jegeo Payload 冷却改为<strong>按目标计算</strong>，冷却 7s→14s</li><li>⚔️ <strong>Jäger 回归 3速1血</strong>：强调机动性，与 Wamai 差异化定位</li><li>⚔️ <strong>Zofia</strong>：KS79 眩晕弹/破片弹各 2→3 发</li><li>🔫 <strong>416-C 后坐力大改</strong>：降低全阶段垂直 + 平滑水平 + 最难控段从第 8 发推迟到第 10 发并整体柔化</li><li>🔧 <strong>Rauora</strong>：D.O.M. 面板射击间隔 3s→1s</li><li>🔧 <strong>Melusi</strong>：Banshee 范围 4m→4.3m</li><li>🔧 <strong>Twitch</strong>：电击无人机充能 30s→28s</li><li>🔧 <strong>Lesion</strong>：蛊针地雷充能 30s→25s</li><li>⚠️ 本次补丁<strong>无武器伤害/射速/弹匣变更</strong>，仅后坐力+干员技能调整</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/77rztlEyeqhZVqROCW0ZV7/designers-notes-y11s22-midseason-update'
+    },
+    {
+        type: 'patch',
+        date: '2026-07-14',
+        title: 'Y11S2.2 中期补丁',
+        content: '<ul><li>🖱️ <strong>主机键鼠支持</strong>：主机端原生支持键鼠输入，仅限 PC 跨平台对战池</li><li>⚔️ <strong>Wamai 大幅加强</strong>：MAG-NET 充能频率 40s→20s、最大数量 7、激活 0.5s + 可部署护盾 + C4</li><li>⚔️ <strong>Dokkaebi</strong>：Jegeo Payload 冷却改为按目标计算，14s（原全局 7s）</li><li>⚔️ <strong>Jäger</strong>：回归 3速1血</li><li>⚔️ <strong>Zofia</strong>：KS79 眩晕/破片弹各增至 3 发</li><li>🔫 <strong>416-C 后坐力改善</strong>：降低垂直 + 平滑水平 + 最难控段推迟到第 10 发</li><li>🔧 Rauora D.O.M. 面板间隔 3s→1s | Melusi Banshee 范围 4→4.3m</li><li>🔧 Twitch 电击充能 30s→28s | Lesion 蛊针充能 30s→25s</li><li>🎮 <strong>1v1 炸弹回归</strong>：新增海岸线/领事馆/荒野前哨，移除别墅，干员消耗制</li><li>🔧 修复：Mute 干扰器影响 XK23 瞄具、XK23 换弹动画异常</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/3IoMKS8f3AHlOwBQXfiytt/y11s22-midseason-patch-notes'
+    },
+    {
+        type: 'patch',
+        date: '2026-07-02',
+        title: 'Y11S2.1 热修复 (Update 3.42)',
+        content: '<ul><li>🔧 修复多个影响 Siege Cup 的问题</li><li>🔧 游戏性能优化与 minor gameplay tweaks</li><li>🔊 修复多个语音聊天问题</li><li>🔧 稳定性修复</li><li>⚠️ <strong>无武器/配件数值变更</strong>，纯稳定性与 Bug 修复补丁</li></ul>',
+        link: 'https://updatecrazy.com/rainbow-six-siege-update-3-42-patch-notes-r6-y11s2-1-hotfix/'
+    },
+    {
+        type: 'info',
+        date: '2026-06-30',
+        title: 'Marketplace 经济改革公告 & 社区沟通会回顾',
+        content: '<ul><li>💰 <strong>Marketplace 持续关闭</strong>：因安全与经济问题需重建基础架构，短期内不会重开</li><li>💰 <strong>S3 经济变化</strong>：新活动包转为 R6 Credits 专用，大师级物品可直接购买</li><li>📢 <strong>社区沟通会 (6/29)</strong>：Ranked 3.0 调整进展、定位赛权重提升计划</li><li>⚔️ <strong>Dokkaebi 平衡路线图</strong>：Y11S2.2 将引入"单目标冷却"系统（per-target cooldown）；Y11S3 改为信号系统（Mute/Tubarao 可反制）</li><li>🗺️ <strong>1v1 Playlist 回归</strong>：扩展至5张地图，新增消耗系统取代干员 Ban</li><li>⚠️ <strong>无武器/配件数值变更</strong></li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/2zwh7ZaIjBDbw9j8rBBfZM/marketplace-economy-a-new-direction'
+    },
+    {
+        type: 'patch',
+        date: '2026-06-23',
+        title: 'Y11S2.1 中期补丁',
+        content: '<ul><li>⚔️ <strong>Dokkaebi</strong>：Jegeo Payload 新增 7 秒冷却时间</li><li>🔧 <strong>Sens</strong>：R.O.U. 投影系统电池时长 13s→15s</li><li>🔧 <strong>IQ</strong>：电子设备侦测器范围 20m→22m</li><li>🔧 <strong>Ash</strong>：爆破弹伤害范围 2m→2.2m</li><li>🔧 <strong>Finka</strong>：肾上腺素冷却 20s→18s</li><li>🔧 <strong>Thatcher</strong>：EMP 效果范围 1.75m→1.85m</li><li>🔧 <strong>Thorn</strong>：剃刀花瓣命中跛行 15s→10s</li><li>🔫 <strong>SC3000K 后坐力平滑</strong>：水平后坐力在全 burst 阶段更平滑（键鼠+手柄）</li><li>🔧 <strong>防弹摄像头</strong>：EMP 飞镖爆炸范围 0.55m→0.75m</li><li>⚠️ 本次补丁<strong>无武器伤害/射速/弹匣变更</strong>，仅干员技能微调+后坐力平滑</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/7tAny5W9p4yrHmIiH51noI/y11s21-patch-notes'
+    },
+    {
+        type: 'patch',
+        date: '2026-06-02',
+        title: 'Y11S2 补丁说明附录 — 测试服修复内容',
+        content: '<ul><li>📋 本附录涵盖 Y11S2 测试服期间修复的<strong>Bug</strong>，无武器/配件数值变更</li><li>🔧 修复：掉落手机异常闪光、非 Solid Snake 进攻方可拾取 OSP 包、要塞浴缸拆弹器无法交互等游戏机制问题</li><li>🔊 修复：多组干员间缺少语音对话、破坏音效缺失、双侧身键音频失真</li><li>🖥️ 修复：AI 队友标记触发反刷屏警告、阔剑挑战无法解锁、多个精英皮肤过亮等 UX 问题</li><li>⚠️ <strong>武器数值确认</strong>：XK23（49伤/675射速/35弹匣）、AK-74M 三握把等设计师笔记内容均按原设计上线，无修改</li></ul>',
+        link: 'https://www.ubisoft.com/en-gb/game/rainbow-six/siege/news-updates/5wSBB6xoqdH6slG1Pr3mbA/y11s2-patch-notes-addendum'
+    },
+    {
         type: 'designer',
         date: '2026-05-18',
         title: 'Y11S2 设计师笔记 — 武器/配件/干员平衡详情',
@@ -2518,8 +2574,8 @@ const UPDATES = [
     {
         type: 'season',
         date: '2026-06-02',
-        title: 'Y11S2 Operation System Override — 新赛季预告',
-        content: '<ul><li>🆕 <strong>Dokkaebi 重制</strong>：新技能 Jegeo Payload 替代 Logic Bomb，可对单个目标手机植入恶意软件，未挂断将造成 40HP 爆炸伤害+火焰效果</li><li>🔫 <strong>新武器 XK23</strong>（突击步枪/无托）：49伤害/675射速/35发弹匣，可用于 Dokkaebi、Rauora、Sens</li><li>🔧 <strong>AK-74M 新增握把</strong>：水平握把、垂直握把、转角握把（影响 Nomad、Deimos）</li><li>⚔️ <strong>Zofia</strong>：改为 2血2速（原 3血1速）</li><li>⚔️ <strong>Gridlock</strong>：Trax 踩中后造成 10s 跛行，尖刺血量 1→35HP，数量 4→3 个</li><li>⚔️ <strong>Mozzie</strong>：捕获距离 1.5m→1.75m | <strong>Pulse</strong>：扫描距离 9m→10.5m</li><li>⚔️ <strong>Solis</strong>：SPEC-IO 持续时间 15s→17s | <strong>Deimos</strong>：DeathMARK 等待时间 5s→4s</li><li>🗺️ <strong>Calypso Casino 新地图</strong>（致敬 Rainbow Six: Vegas）+ Emerald Plains/Kanal/Outback 视觉升级</li><li>🏆 <strong>Ranked 3.0</strong>：移除隐藏 MMR，新增 Champion I-V，5场定级赛</li><li>📅 预计 <strong>2026年6月2日</strong> 正式上线</li></ul>',
+        title: 'Y11S2 Operation System Override — 正式上线',
+        content: '<ul><li>🆕 <strong>Dokkaebi 重制</strong>：新技能 Jegeo Payload 替代 Logic Bomb，可对单个目标手机植入恶意软件，未挂断将造成 40HP 爆炸伤害+火焰效果</li><li>🔫 <strong>新武器 XK23</strong>（突击步枪/无托）：49伤害/675射速/35发弹匣，可用于 Dokkaebi、Rauora、Sens</li><li>🔧 <strong>AK-74M 新增握把</strong>：水平握把、垂直握把、转角握把（影响 Nomad、Deimos）</li><li>⚔️ <strong>Zofia</strong>：改为 2血2速（原 3血1速）</li><li>⚔️ <strong>Gridlock</strong>：Trax 踩中后造成 10s 跛行，尖刺血量 1→35HP，数量 4→3 个</li><li>⚔️ <strong>Mozzie</strong>：捕获距离 1.5m→1.75m | <strong>Pulse</strong>：扫描距离 9m→10.5m</li><li>⚔️ <strong>Solis</strong>：SPEC-IO 持续时间 15s→17s | <strong>Deimos</strong>：DeathMARK 等待时间 5s→4s</li><li>🗺️ <strong>Calypso Casino 新地图</strong>（致敬 Rainbow Six: Vegas）+ Emerald Plains/Kanal/Outback 视觉升级</li><li>🏆 <strong>Ranked 3.0</strong>：移除隐藏 MMR，新增 Champion I-V，5场定级赛</li><li>📅 <strong>2026年6月2日</strong> 已正式上线</li></ul>',
         link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/seasons/systemoverride'
     },
     {

@@ -5,6 +5,21 @@
 // 分类体系: 主武器7类 + 副武器4类
 // ============================================
 
+// ================================================================
+// 配件槽位分类（按游戏内军械库的分类与顺序）
+//   sight 瞄准镜 / barrel 枪管 / grip 握把 / underbarrel 下挂
+// ================================================================
+const ATTACHMENT_SLOTS = [
+    { key: 'sight',       name: '瞄准镜', nameEn: 'Sight',       icon: '🔭',
+      desc: 'Y9S1 重构后按倍率分 1.0x / 2.5x / 3.5x 三档，每款型号单独列出。' },
+    { key: 'barrel',      name: '枪管',   nameEn: 'Barrel',      icon: '🔧',
+      desc: '主要调节后坐力形态，Y7S3 后消音器不再降低伤害。' },
+    { key: 'grip',        name: '握把',   nameEn: 'Grip',        icon: '✊',
+      desc: 'Y9S1 重做：新增水平握把，垂直握把下调至 20%，转角握把改提供装填速度。各武器可装的握把种类由武器决定，请以武器详情页「可用配件」为准。' },
+    { key: 'underbarrel', name: '下挂',   nameEn: 'Under Barrel', icon: '🔴',
+      desc: 'Y9S1 重做：激光不再改善腰射，改为 +10% ADS 速度。' }
+];
+
 const ATTACHMENT_DATA = {
     barrels: {
         muzzle_brake: {
@@ -65,43 +80,48 @@ const ATTACHMENT_DATA = {
     grips: {
         vertical_grip: {
             name: '垂直握把', nameEn: 'Vertical Grip', slot: 'grip', icon: '✊',
+            changedIn: 'Y9S1',
             effects: [
-                { type: 'positive', label: '垂直后坐力减少', value: '~15-20%' },
-                { type: 'neutral', label: '腰射精度', value: '略微提升' },
-                { type: 'neutral', label: 'ADS速度', value: '不变' }
+                { type: 'positive', label: '后坐力控制', value: '20%（Y9S1 前为 25%）' },
+                { type: 'neutral', label: 'ADS 速度', value: '不变' }
             ],
-            description: '直接减少射击时枪口上跳幅度。效果叠加在枪管配件之上。对后坐力大的武器几乎是刚需。精确百分比从未被官方公布。',
+            description: '直接减少射击时枪口上跳幅度，效果可叠加在枪管配件之上。⚠️ Y9S1 将加成由 25% 下调至 20%，这是官方首次给出明确数值。',
             bestFor: '后坐力大的武器、新手玩家'
         },
         angled_grip: {
             name: '转角握把', nameEn: 'Angled Grip', slot: 'grip', icon: '📐',
+            changedIn: 'Y9S1',
             effects: [
-                { type: 'positive', label: 'ADS速度加快', value: '-32%' },
+                { type: 'positive', label: '装填速度', value: '+20%' },
+                { type: 'negative', label: 'ADS 速度加成', value: '已移除（Y9S1 前为 -32%）' },
                 { type: 'neutral', label: '后坐力', value: '不变' }
             ],
-            description: '减少32%的ADS时间意味着更快完成瞄准。在围攻"谁先瞄到谁先赢"的节奏中，ADS速度差距可能决定生死。前提是控枪水平足够。',
-            bestFor: '后坐力低的武器、高水平玩家'
+            description: '⚠️ Y9S1 重做：不再提供 ADS 速度加成，改为 +20% 装填速度。原「-32% ADS 时间」的描述已过期，适用于更看重补弹节奏而非开镜速度的打法。',
+            bestFor: '弹匣消耗快、频繁补弹的武器'
         },
         horizontal_grip: {
             name: '水平握把', nameEn: 'Horizontal Grip', slot: 'grip', icon: '🤲',
+            newIn: 'Y9S1',
             effects: [
-                { type: 'positive', label: '水平后坐力减少', value: '~25%' },
-                { type: 'neutral', label: '垂直后坐力', value: '不变' },
-                { type: 'neutral', label: 'ADS速度', value: '不变' }
+                { type: 'positive', label: '干员移动速度', value: '提升' },
+                { type: 'negative', label: '后坐力控制', value: '下降' },
+                { type: 'neutral', label: 'ADS 速度', value: '不变' }
             ],
-            description: '减少射击时枪口的水平随机晃动，使弹道更集中在垂直线上。与补偿器的效果方向一致但可以叠加。',
-            bestFor: '水平后坐力大的武器、全自动长扫射'
+            description: '🆕 Y9S1 新增握把。提升干员移动速度，代价是后坐力控制下降。官方未公布具体百分比，故此处仅标注方向。适合需要频繁转点、游走的打法。',
+            bestFor: '需要高机动性的转点/游走打法'
         }
     },
     underbarrel: {
         laser_sight: {
             name: '激光瞄准器', nameEn: 'Laser Sight', slot: 'underbarrel', icon: '🔴',
+            changedIn: 'Y9S1',
             effects: [
-                { type: 'positive', label: '腰射扩散减少', value: '~25%' },
-                { type: 'negative', label: '副作用', value: '发射可见红色激光点' }
+                { type: 'positive', label: 'ADS 速度', value: '+10%' },
+                { type: 'negative', label: '副作用', value: '发射可见红色激光点' },
+                { type: 'neutral', label: '腰射精度', value: '不再提升（Y9S1 前为 ~25%）' }
             ],
-            description: '只影响不开镜时的射击精度。红色激光点会暴露位置和瞄准方向，但远距离几乎看不到。霰弹枪几乎必装。',
-            bestFor: '霰弹枪、冲锋手枪、盾牌干员'
+            description: '⚠️ Y9S1 重做：不再改善腰射精度，改为 +10% ADS 速度。红色激光点依然会暴露位置和瞄准方向，但远距离几乎看不到。',
+            bestFor: '需要更快开镜的打法；霰弹枪仍常见'
         }
     },
     // ================================================================
@@ -221,7 +241,7 @@ const ATTACHMENT_DATA = {
 const SIGHT_GROUPS = [
     {
         key: 'mag_1x', label: '1.0x 无放大', icon: '⚪',
-        desc: '不改变视野倍率。Y9S1 起机瞄 +10% ADS 速度，红点/全息/反射 +5%。',
+        desc: '不改变视野倍率，共 10 款可选型号；机瞄为不占配件槽的默认状态。Y9S1 起机瞄 +10% ADS 速度，红点/全息/反射 +5%。',
         families: ['iron', 'red_dot', 'holographic', 'reflex']
     },
     {
@@ -2604,6 +2624,13 @@ const UPDATES = [
         title: 'Y11S3「Operation Split Fire」正式上线 — 主表数值已落地',
         content: '<ul><li>✅ <strong>本站主表已按正式版数值更新</strong>（GitHub hanslhansl 实测 + 官方设计师笔记双源核对）</li><li>🔫 <strong>SMG-12</strong>：伤害 28→<strong>16</strong> / 弹匣 32→<strong>22</strong> / 射速 1270→1273 / 衰减重做 17-28m（28m 起 9）/ 备弹 96→78</li><li>🔫 <strong>AR-15.50</strong>：伤害 67→<strong>59</strong> / 射速 439→<strong>444</strong> / 衰减 29-40m（40m 41）/ <strong>Tubarão 不可装制退器</strong>（Maverick 保留）</li><li>🔫 <strong>Mk 14 EBR</strong>：伤害 60→<strong>56</strong> / 射速 457→<strong>444</strong> / 衰减 29-40m（40m 39）/ <strong>Aruni 不可装制退器</strong>（Dokkaebi 保留）</li><li>🔫 <strong>SPSMG9</strong>：伤害 33→<strong>35</strong> / 衰减 17-27m（27m 起 21）</li><li>🔭 <strong>CSRX 300</strong>：射速 55→<strong>63</strong> / 内置镜 5x/12x→<strong>3.5x/8x</strong> / pump 1s→0.8s / 总弹药 36→51 / 40m 109→108 / V-Lance 不再打断 ADS</li><li>🆕 <strong>新干员 Noor</strong>（防守方 2速2血，埃及）已挂载至 Commando 9 / ALDA 5.56 / 1911 TACOPS / Bailiff 410</li><li>⚠️ 新版 CSRX 倍率对应的 ADS 灵敏度乘数官方未公布，本站标注为「暂缺」而非估算</li></ul>',
         link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates'
+    },
+    {
+        type: 'info',
+        date: '2026-09-04',
+        title: '配件图鉴改版 — 卡片化 + 按军械库分类 + 逐款瞄具独立成卡',
+        content: '<ul><li>🗂️ <strong>按游戏内军械库分类</strong>：瞄准镜 / 枪管 / 握把 / 下挂 四大类分区展示</li><li>🃏 <strong>卡片化</strong>：25 张卡片（16 瞄具 + 5 枪管 + 3 握把 + 1 下挂），点击任意卡片弹出详情，含完整属性、说明与适用武器清单</li><li>🔭 <strong>瞄具逐款独立成卡</strong>：15 款型号各占一卡，仅按倍率（1.0x / 2.5x / 3.5x）做分组标题，不再按类型合并</li><li>🖼️ <strong>15 款瞄具 ICON 已配图</strong>（游戏内军械库原生截图切出）；枪管/握把/下挂共 10 项暂无官方图标素材，暂以文字符号占位并标注说明</li><li>🔧 <strong>修正 3 条 Y9S1 过期配件数据</strong>：垂直握把 25%→20% / 转角握把由 -32% ADS 改为 +20% 装填 / 激光由改善腰射改为 +10% ADS</li><li>⚠️ 水平握把的移动速度增益与后坐力代价官方未公布具体数值，仅标注方向</li></ul>',
+        link: 'https://www.liquipedia.net/rainbowsix/9.1.0_Patch'
     },
     {
         type: 'info',

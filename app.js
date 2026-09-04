@@ -736,64 +736,190 @@
         return map[level] || '50%';
     }
 
-    // 关闭弹窗
-    $('.modal-close').addEventListener('click', () => $('#weapon-modal').classList.remove('active'));
-    $('.modal-overlay').addEventListener('click', () => $('#weapon-modal').classList.remove('active'));
+    // 关闭弹窗（武器详情 + 配件详情，遍历绑定避免只取到第一个）
+    $$('.modal-close').forEach(btn => {
+        btn.addEventListener('click', () => btn.closest('.modal').classList.remove('active'));
+    });
+    $$('.modal-overlay').forEach(ov => {
+        ov.addEventListener('click', () => ov.closest('.modal').classList.remove('active'));
+    });
     document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') $('#weapon-modal').classList.remove('active');
+        if (e.key === 'Escape') $$('.modal').forEach(m => m.classList.remove('active'));
     });
 
     // ---- 配件图鉴 ----
+    // 结构：槽位大类（按游戏内军械库分类）→ 瞄具再按倍率分组 → 每款配件/每个瞄具型号一张卡片
+    const ATTACHMENT_INDEX = {};   // key -> { ...att, kind, slot, variants? }  供详情弹窗查询
+
+    function buildAttachmentIndex() {
+        const S = ATTACHMENT_DATA.sights || {};
+        // 瞄具：每个型号单独一条（倍率分组在渲染时处理）
+        for (const fk in S) {
+            const fam = S[fk];
+            if (!fam.variants || !fam.variants.length) {
+                ATTACHMENT_INDEX[fk] = { ...fam, _key: fk, _kind: 'sight', _famKey: fk, _famName: fam.name };
+                continue;
+            }
+            fam.variants.forEach(v => {
+                ATTACHMENT_INDEX[v.key] = {
+                    ...fam, _key: v.key, _kind: 'sight', _famKey: fk, _famName: fam.name,
+                    _variant: v, name: v.name, nameEn: v.nameEn, icon: v.icon, image: v.icon
+                };
+            });
+        }
+        for (const k in ATTACHMENT_DATA.barrels)
+            ATTACHMENT_INDEX[k] = { ...ATTACHMENT_DATA.barrels[k], _key: k, _kind: 'barrel' };
+        for (const k in ATTACHMENT_DATA.grips)
+            ATTACHMENT_INDEX[k] = { ...ATTACHMENT_DATA.grips[k], _key: k, _kind: 'grip' };
+        for (const k in ATTACHMENT_DATA.underbarrel)
+            ATTACHMENT_INDEX[k] = { ...ATTACHMENT_DATA.underbarrel[k], _key: k, _kind: 'underbarrel' };
+    }
+
+    // 统计可用某配件的武器数
+    function countWeaponsWith(key, kind) {
+        if (!WEAPON_EXTENDED) return 0;
+        if (kind === 'sight') {
+            const fam = ATTACHMENT_INDEX[key]._famKey;
+            if (fam === 'iron') {
+                return Object.values(WEAPON_EXTENDED).filter(e => e.sights && e.sights.length).length;
+            }
+            return Object.values(WEAPON_EXTENDED).filter(e => e.sights && e.sights.includes(fam)).length;
+        }
+        if (kind === 'barrel') return WEAPONS.filter(w => w.barrels.includes(key)).length;
+        if (kind === 'grip') return WEAPONS.filter(w => w.grips.includes(key)).length;
+        return Object.values(WEAPON_EXTENDED).filter(e => e.underbarrel).length;
+    }
+
+    function attCardHTML(a) {
+        const changeBadge = a.newIn ? `<b class="att-flag new">${a.newIn} 新增</b>`
+            : a.changedIn ? `<b class="att-flag chg">${a.changedIn} 改</b>` : '';
+        const visual = a.image
+            ? `<img class="att-card-img" src="${a.image}" alt="${a.name}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'att-card-fallback',textContent:'${a._famName ? a._famName[0] : a.icon}'}))">`
+            : `<div class="att-card-fallback" title="暂无官方图标素材">${a.icon}</div>`;
+        const sub = a._variant ? `<span class="att-card-mag">${a.magGroup}</span>`
+            : `<span class="att-card-count">${countWeaponsWith(a._key, a._kind)} 把武器可用</span>`;
+        return `
+            <div class="att-card" data-att-key="${a._key}" tabindex="0" role="button">
+                <div class="att-card-visual">${visual}</div>
+                <div class="att-card-name">${a.name}${changeBadge}</div>
+                <div class="att-card-name-en">${a.nameEn}${a._famName ? ' · ' + a._famName : ''}</div>
+                <div class="att-card-foot">${sub}</div>
+            </div>`;
+    }
+
     function renderAttachmentCards() {
         const container = $('#attachment-cards');
-        const allAttachments = [
-            ...Object.values(ATTACHMENT_DATA.barrels),
-            ...Object.values(ATTACHMENT_DATA.grips),
-            ...Object.values(ATTACHMENT_DATA.underbarrel),
-            ...(ATTACHMENT_DATA.sights ? Object.values(ATTACHMENT_DATA.sights) : [])
-        ];
+        buildAttachmentIndex();
+        const S = ATTACHMENT_DATA.sights || {};
 
-        container.innerHTML = allAttachments.map(att => {
-            const slotLabel = att.slot === 'barrel' ? '枪管' : att.slot === 'grip' ? '握把' : att.slot === 'sight' ? '瞄具' : '下挂';
-            // 瞄具额外展示：倍率大类徽章 + 具体型号 ICON 条
-            const magBadge = att.magGroup
-                ? `<span class="att-mag-badge">${att.magGroup}</span>` : '';
-            const variantStrip = (att.variants && att.variants.length)
-                ? `<div class="att-variants">
-                       <div class="att-variants-title">军械库可选型号 · ${att.variants.length} 款</div>
-                       <div class="att-variants-row">
-                           ${att.variants.map(v => `
-                               <div class="att-variant" title="${v.desc}">
-                                   <img src="${v.icon}" alt="${v.name}" loading="lazy" onerror="this.style.visibility='hidden'">
-                                   <span>${v.name}</span>
-                               </div>`).join('')}
-                       </div>
-                   </div>`
-                : (att.noSlot ? `<div class="att-variants"><div class="att-variants-title">默认状态，无可选型号</div></div>` : '');
-            return `
-                <div class="att-card">
-                    <div class="att-card-header">
-                        <div class="att-icon" style="background:rgba(255,255,255,0.05)">${att.icon}</div>
-                        <div>
-                            <div class="att-card-name">${att.name}${magBadge}</div>
-                            <div class="att-card-name-en">${att.nameEn}</div>
-                        </div>
-                        <div class="att-card-slot">${slotLabel}配件</div>
-                    </div>
-                    ${variantStrip}
-                    <div class="att-effects">
-                        ${att.effects.map(e => `
-                            <div class="att-effect ${e.type}">
-                                <span class="att-effect-value">${e.value}</span>
-                                <span>${e.label}</span>
+        container.innerHTML = ATTACHMENT_SLOTS.map(slot => {
+            let inner = '';
+            if (slot.key === 'sight') {
+                inner = SIGHT_GROUPS.map(g => {
+                    const fams = g.families.filter(f => S[f]);
+                    if (!fams.length) return '';
+                    const cards = fams.map(f => {
+                        const fam = S[f];
+                        if (!fam.variants || !fam.variants.length) {
+                            return attCardHTML({ ...fam, _key: f, _kind: 'sight', _famKey: f });
+                        }
+                        return fam.variants.map(v => attCardHTML(ATTACHMENT_INDEX[v.key])).join('');
+                    }).join('');
+                    return `
+                        <div class="att-mag-group">
+                            <div class="att-mag-group-head">
+                                <span class="att-mag-group-title">${g.icon} ${g.label}</span>
+                                <span class="att-mag-group-desc">${g.desc}</span>
                             </div>
-                        `).join('')}
+                            <div class="att-card-grid">${cards}</div>
+                        </div>`;
+                }).join('');
+            } else {
+                const src = slot.key === 'barrel' ? ATTACHMENT_DATA.barrels
+                    : slot.key === 'grip' ? ATTACHMENT_DATA.grips
+                        : ATTACHMENT_DATA.underbarrel;
+                inner = `<div class="att-card-grid">${
+                    Object.keys(src).map(k => attCardHTML(ATTACHMENT_INDEX[k])).join('')
+                }</div>`;
+            }
+            return `
+                <div class="att-slot-section">
+                    <div class="att-slot-head">
+                        <span class="att-slot-icon">${slot.icon}</span>
+                        <span class="att-slot-name">${slot.name}</span>
+                        <span class="att-slot-en">${slot.nameEn}</span>
                     </div>
-                    <div style="margin-top:12px;font-size:12px;color:var(--text-muted);line-height:1.6">${att.description}</div>
-                    <div style="margin-top:8px;font-size:11px;color:var(--accent)">适用：${att.bestFor}</div>
-                </div>
-            `;
+                    <div class="att-slot-desc">${slot.desc}</div>
+                    ${inner}
+                </div>`;
         }).join('');
+
+        container.querySelectorAll('.att-card').forEach(card => {
+            const open = () => openAttachmentModal(card.dataset.attKey);
+            card.addEventListener('click', open);
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+            });
+        });
+    }
+
+    // ---- 配件详情弹窗 ----
+    function openAttachmentModal(key) {
+        const a = ATTACHMENT_INDEX[key];
+        const modal = $('#attachment-modal');
+        if (!a || !modal) return;
+
+        const slot = ATTACHMENT_SLOTS.find(s => s.key === a._kind) || {};
+        const weapons = (() => {
+            if (a._kind === 'sight') {
+                if (a._famKey === 'iron') {
+                    return Object.keys(WEAPON_EXTENDED).filter(n => WEAPON_EXTENDED[n].sights?.length);
+                }
+                return Object.keys(WEAPON_EXTENDED).filter(n => WEAPON_EXTENDED[n].sights?.includes(a._famKey));
+            }
+            if (a._kind === 'barrel') return WEAPONS.filter(w => w.barrels.includes(key)).map(w => w.name);
+            if (a._kind === 'grip') return WEAPONS.filter(w => w.grips.includes(key)).map(w => w.name);
+            return Object.keys(WEAPON_EXTENDED).filter(n => WEAPON_EXTENDED[n].underbarrel);
+        })();
+
+        const visual = a.image
+            ? `<img class="att-detail-img" src="${a.image}" alt="${a.name}">`
+            : `<div class="att-detail-fallback">${a.icon}</div>`;
+
+        $('#attachment-modal-body').innerHTML = `
+            <div class="att-detail-head">
+                <div class="att-detail-visual">${visual}</div>
+                <div class="att-detail-meta">
+                    <div class="att-detail-name">${a.name}</div>
+                    <div class="att-detail-en">${a.nameEn}</div>
+                    <div class="att-detail-tags">
+                        <span class="att-detail-slot">${slot.icon} ${slot.name}</span>
+                        ${a.magGroup ? `<span class="att-detail-mag">${a.magGroup}</span>` : ''}
+                        ${a._famName ? `<span class="att-detail-fam">${a._famName}</span>` : ''}
+                        ${a.newIn ? `<span class="att-flag new">${a.newIn} 新增</span>` : ''}
+                        ${a.changedIn ? `<span class="att-flag chg">${a.changedIn} 改动</span>` : ''}
+                    </div>
+                </div>
+            </div>
+            ${a._variant ? `<div class="att-detail-desc"><strong>外观：</strong>${a._variant.desc}</div>` : ''}
+            <div class="att-detail-section-title">属性效果</div>
+            <div class="att-effects">
+                ${a.effects.map(e => `
+                    <div class="att-effect ${e.type}">
+                        <span class="att-effect-value">${e.value}</span>
+                        <span>${e.label}</span>
+                    </div>`).join('')}
+            </div>
+            ${a.description ? `<div class="att-detail-desc">${a.description}</div>` : ''}
+            ${a.bestFor ? `<div class="att-detail-best">适用：${a.bestFor}</div>` : ''}
+            ${a.noSlot ? `<div class="att-detail-note">▫️ 不占用配件槽，为武器默认状态</div>` : ''}
+            ${a._famKey === 'magnified' ? `<div class="att-detail-note">📋 防守方可用的武器与干员：${Object.entries(DEF_MAGNIFIED_WHITELIST).map(([w, ops]) => `${w}(${ops.join('/')})`).join('、')}</div>` : ''}
+            ${a._famKey === 'telescopic' ? `<div class="att-detail-note">📋 仅进攻方射手步枪（DMR）可装备</div>` : ''}
+            <div class="att-detail-section-title">适用武器 · ${weapons.length} 把</div>
+            <div class="att-detail-weapons">${weapons.map(w => `<span class="att-weapon-chip">${w}</span>`).join('')}</div>
+            ${!a.image ? `<div class="att-detail-note muted">⚠️ 该配件暂无官方图标素材，当前以文字符号占位（瞄具的 15 款 ICON 已取自游戏内军械库原生截图）</div>` : ''}
+        `;
+        modal.classList.add('active');
     }
 
     // 配件兼容性查询

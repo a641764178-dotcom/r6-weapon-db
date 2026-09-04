@@ -1725,3 +1725,218 @@ body {
 @media (max-width: 640px) {
     .sight-variant, .att-variant { width: calc(33.333% - 6px); }
 }
+
+/* ============================================
+   配件图鉴 v2 — 分类卡片化（点击看详情）
+   ============================================ */
+
+.att-slot-section {
+    margin-bottom: 30px;
+    padding: 16px 18px 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+.att-slot-section:last-child { margin-bottom: 0; }
+.att-slot-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+.att-slot-icon { font-size: 18px; }
+.att-slot-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.att-slot-en { font-size: 11px; color: var(--text-muted); letter-spacing: .5px; }
+.att-slot-desc {
+    margin: 10px 0 14px;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+/* 倍率分组（仅瞄具） */
+.att-mag-group { margin-bottom: 18px; }
+.att-mag-group:last-child { margin-bottom: 0; }
+.att-mag-group-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-left: 8px;
+    border-left: 3px solid var(--accent);
+}
+.att-mag-group-title { font-size: 13px; font-weight: 700; color: var(--accent); }
+.att-mag-group-desc { font-size: 11px; color: var(--text-muted); }
+
+/* 卡片网格 */
+.att-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    gap: 10px;
+}
+.att-card {
+    padding: 12px 10px 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+    cursor: pointer;
+    transition: transform .15s, border-color .15s, background .15s;
+}
+.att-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    background: var(--bg-card-hover);
+}
+.att-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.att-card-visual {
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    background: linear-gradient(160deg, #141b24 0%, #1d2632 100%);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+.att-card-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.6));
+}
+.att-card-fallback {
+    font-size: 26px;
+    line-height: 1;
+    color: var(--text-secondary);
+    user-select: none;
+}
+.att-card-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.35;
+}
+.att-card-name-en {
+    margin-top: 2px;
+    font-size: 9px;
+    color: var(--text-muted);
+    line-height: 1.3;
+    word-break: break-word;
+}
+.att-card-foot {
+    margin-top: 7px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border);
+}
+.att-card-mag {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+}
+.att-card-count { font-size: 9px; color: var(--text-muted); }
+.att-flag {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 0 4px;
+    font-size: 8px;
+    font-weight: 700;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+.att-flag.new { background: rgba(102,187,106,.18); color: var(--success); }
+.att-flag.chg { background: rgba(255,167,38,.18); color: var(--warning); }
+
+/* ---- 配件详情弹窗 ---- */
+.att-detail-head {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+}
+.att-detail-visual {
+    flex: 0 0 150px;
+    height: 118px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #141b24 0%, #1d2632 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.att-detail-img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
+.att-detail-fallback { font-size: 44px; color: var(--text-secondary); }
+.att-detail-meta { flex: 1; min-width: 0; }
+.att-detail-name { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+.att-detail-en { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.att-detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.att-detail-slot, .att-detail-mag, .att-detail-fam {
+    padding: 2px 8px;
+    font-size: 10px;
+    border-radius: 3px;
+    background: var(--bg-card-hover);
+    border: 1px solid var(--border-light);
+    color: var(--text-secondary);
+}
+.att-detail-mag { border-color: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.att-detail-section-title {
+    margin: 16px 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: .5px;
+}
+.att-detail-desc {
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-top: 10px;
+}
+.att-detail-best { margin-top: 8px; font-size: 11px; color: var(--accent); }
+.att-detail-note {
+    margin-top: 10px;
+    padding: 8px 10px;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--warning);
+    background: rgba(255, 167, 38, 0.08);
+    border: 1px solid rgba(255, 167, 38, 0.25);
+    border-radius: var(--radius);
+}
+.att-detail-note.muted {
+    color: var(--text-muted);
+    background: rgba(255,255,255,.03);
+    border-color: var(--border);
+}
+.att-detail-weapons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-height: 190px;
+    overflow-y: auto;
+}
+.att-weapon-chip {
+    padding: 3px 9px;
+    font-size: 10px;
+    border-radius: 3px;
+    background: var(--bg-card-hover);
+    border: 1px solid var(--border-light);
+    color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+    .att-card-grid { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+    .att-detail-head { flex-direction: column; }
+    .att-detail-visual { flex: none; width: 100%; }
+}

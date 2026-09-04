@@ -24,7 +24,7 @@
                 <a href="#" class="nav-link" data-tab="updates">官方更新</a>
                 <a href="sights-preview.html" class="sights-preview-link" style="color:#ff9800;border:1px solid #ff9800;padding:4px 10px;border-radius:4px;margin-left:8px;text-decoration:none;font-size:13px;" title="瞄具图鉴：15 款军械库瞄具原生 ICON + 4 款专属内置瞄具">🎯 瞄具图鉴</a>
             </nav>
-            <div class="version-badge">Y10S4 / Y11S1</div>
+            <div class="version-badge">Y11S3</div>
         </div>
     </header>
 
@@ -73,7 +73,8 @@
         <section id="tab-attachments" class="tab-content">
             <div class="attachment-overview">
                 <h2 class="section-title">配件属性总览</h2>
-                <p class="section-desc">每个配件的精确属性修改数值（来源：Fandom Wiki 数据挖掘 + 官方设计师笔记）</p>
+                <p class="section-desc">按游戏内军械库分类：瞄准镜 / 枪管 / 握把 / 下挂。点击任意卡片查看完整属性与适用武器。<br>
+                    瞄具依 Y9S1「Deadly Omen」重构，按倍率分 1.0x / 2.5x / 3.5x，15 款型号各占一卡（图标取自游戏内军械库原生截图）；其余配件暂无官方图标素材，以文字符号占位。</p>
                 <div id="attachment-cards" class="attachment-cards"></div>
             </div>
             <div class="attachment-compat">
@@ -127,6 +128,15 @@
         <div class="modal-content">
             <button class="modal-close">&times;</button>
             <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- 配件详情弹窗 -->
+    <div id="attachment-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div id="attachment-modal-body"></div>
         </div>
     </div>
 

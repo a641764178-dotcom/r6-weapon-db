@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R6S 瞄具图鉴预览 · v7 Fandom 单品配图</title>
+<title>R6S 瞄具图鉴预览 · v8 游戏内 ICON 一一对应</title>
 <style>
   :root {
     --bg: #0f1419;
@@ -95,20 +95,52 @@
     border-radius: 8px;
     padding: 12px 16px;
   }
+  /* 游戏内 ICON（军械库原图切出，透明底） */
+  .variant-item .icon-wrap {
+    background: linear-gradient(160deg, #141b24 0%, #1d2632 100%);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4/3;
+  }
+  .variant-item .icon {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.6));
+  }
   .variant-item .thumb {
     width: 100%;
     aspect-ratio: 16/7;
     object-fit: contain;
     background: #000;
     border-radius: 4px;
-    margin-bottom: 8px;
+    margin-top: 8px;
     border: 1px solid var(--border);
+  }
+  .variant-item .ref-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    letter-spacing: .3px;
   }
   .variant-item .name {
     font-size: 14px;
     font-weight: 600;
     color: var(--text);
     margin-bottom: 4px;
+  }
+  .variant-item .ingame {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--accent);
+    margin-top: 2px;
   }
   .variant-item .desc {
     font-size: 12px;
@@ -183,14 +215,15 @@
 <body>
 
 <div class="banner">
-  <h1>🎯 瞄具图鉴预览 · v7 Fandom 单品配图</h1>
-  <div class="subtitle">R6 围攻 所有瞄具细分型号 — 游戏内总览 + Fandom 单品渲染图对照</div>
+  <h1>🎯 瞄具图鉴预览 · v8 游戏内 ICON 一一对应</h1>
+  <div class="subtitle">R6 围攻 所有瞄具细分型号 — 军械库原生 ICON + 游戏内中文名逐款对应</div>
   <a href="index.html" class="back-link">← 返回武器数据库</a>
 </div>
 
 <div class="intro">
-  <p><strong>v7 改动</strong>：在 v6「游戏内整图总览 + 文字说明」基础上，为每款 1.0x 瞄具补上从 Fandom Wiki 抓取的单品渲染图作为交叉对照。原图依然是主视觉，单品图只是辅助确认「长这样没错」。<strong>所见即所得，双图对照。</strong></p>
-  <p><strong>本版本覆盖</strong>：10 款 1.0x（Red Dot × 3 + Holographic × 4 + Reflex × 3）+ 5 款倍镜（2.5x × 3 + 3.5x × 2）+ 4 款专属内置瞄具。</p>
+  <p><strong>v8 改动</strong>：从游戏内军械库总览截图中，用内容检测（逐行背景差分 + 连通域生长）切出全部 <strong>15 款瞄具的原生 ICON</strong>，做成透明底 PNG，逐款挂进物品介绍，并标注游戏内中文名，实现<strong>图标 ↔ 名称 ↔ 描述一一对应</strong>。倍镜组（2.5x / 3.5x）此前完全没有单品配图，本版补齐。</p>
+  <p><strong>本版本覆盖</strong>：10 款 1.0x（Red Dot × 3 + Holographic × 4 + Reflex × 3）+ 5 款倍镜（2.5x × 3 + 3.5x × 2）+ 4 款专属内置瞄具，共 19 款；其中军械库可选 15 款均已配 ICON。</p>
+  <p>🔧 <strong>ICON 说明</strong>：切图坐标由程序检测得出，非人工估算；选中态（橙色）与悬停态（浅灰蓝）卡片的底色已通过背景反解统一抠除，故 15 张 ICON 底色一致、可直接置于任意背景。</p>
   <p>⚠️ <strong>Y9S1 Operation Deadly Omen 倍镜重构</strong>：删除了 Scope 1.5x / 2.0x / 3.0x，当前版本倍镜只保留 <strong>2.5x Magnified 系列</strong> 和 <strong>3.5x Telescopic 系列</strong>。Fandom 尚未为 Y9S1 新倍镜建页，2.5x/3.5x 暂只有游戏内整图。</p>
 </div>
 
@@ -203,57 +236,77 @@
   <div class="big-overview">
     <h2>📸 游戏内军械库 1.0x 瞄具总览</h2>
     <img src="images/sights/all_1x_overview.png" alt="10 款 1.0x 总览" onclick="window.open(this.src)">
-    <div class="cap"><strong>布局说明：</strong>上中下三行排列。<strong>第 1 行 Red Dot 红点</strong>（方壳圆点/圆筒T字/抬高型）；<strong>第 2 行 Holographic 全息</strong>（EOTech 风/圆筒环/紧凑 Razor/极简 MH1）；<strong>第 3 行 Reflex 反射</strong>（塑料框三角/金属框三角/复古低矮）。点击图片可看大图。</div>
+    <div class="cap"><strong>布局说明：</strong>3 列 × 4 行卡片网格，10 款按顺序混排（<em>并非每行一个家族</em>）。<strong>第 1 行</strong>：红点 A / B / C；<strong>第 2 行</strong>：全息 A / B / C；<strong>第 3 行</strong>：全息 D / 反射 A / 反射 B（截图时处于选中态，故为橙色高亮）；<strong>第 4 行</strong>：反射 C。点击图片可看大图。</div>
     <div class="variant-list">
       <div class="variant-item">
-        <img class="thumb" src="images/sights/fandom_red_dot_a_nato.png" alt="Red Dot A NATO" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-        <div class="name">Red Dot A · 红点 NATO</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/red_dot_a.png" alt="红点瞄准器 A"></div>
+        <div class="name">Red Dot A · 红点 NATO<span class="ingame">游戏内：红点瞄准器 A</span></div>
         <div class="desc">方形外壳 + 圆点准星。北约系干员的默认红点，最常见外观。</div>
+        <img class="thumb" src="images/sights/fandom_red_dot_a_nato.png" alt="Red Dot A NATO" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <div class="ref-label">↑ Fandom 渲染图（辅证）</div>
       </div>
       <div class="variant-item">
-        <img class="thumb" src="images/sights/fandom_red_dot_b_russian.png" alt="Red Dot B Russian" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-        <div class="name">Red Dot B · 红点 Russian</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/red_dot_b.png" alt="红点瞄准器 B"></div>
+        <div class="name">Red Dot B · 红点 Russian<span class="ingame">游戏内：红点瞄准器 B</span></div>
         <div class="desc">宽镜体 + T 字准星。俄系/斯派兹纳兹风格。</div>
+        <img class="thumb" src="images/sights/fandom_red_dot_b_russian.png" alt="Red Dot B Russian" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <div class="ref-label">↑ Fandom 渲染图（辅证）</div>
       </div>
       <div class="variant-item">
-        <img class="thumb" src="images/sights/fandom_red_dot_c_m4s.png" alt="Red Dot C M4S" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-        <div class="name">Red Dot C · 红点 M4S <span class="badge">Y5S3</span></div>
-        <div class="desc">抬高型 + 圆点准星。Y5S3 引入，镜身更高。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/red_dot_c.png" alt="红点瞄准器 C"></div>
+        <div class="name">Red Dot C · 红点 M4S <span class="badge">Y5S3</span><span class="ingame">游戏内：红点瞄准器 C</span></div>
+        <div class="desc">抬高型 + 圆点准星，镜身右下带调节旋钮。Y5S3 引入，镜身更高。</div>
+        <img class="thumb" src="images/sights/fandom_red_dot_c_m4s.png" alt="Red Dot C M4S" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <div class="ref-label">↑ Fandom 渲染图（辅证）</div>
       </div>
       <div class="variant-item">
-        <img class="thumb" src="images/sights/fandom_holo_a_nato.png" alt="Holographic A NATO" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-        <div class="name">Holographic A · 全息 NATO</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/holo_a.png" alt="全息瞄准器 A"></div>
+        <div class="name">Holographic A · 全息 NATO<span class="ingame">游戏内：全息瞄准器 A</span></div>
         <div class="desc">EOTech 风格方框 + 圆环内带点准星。</div>
+        <img class="thumb" src="images/sights/fandom_holo_a_nato.png" alt="Holographic A NATO" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <div class="ref-label">↑ Fandom 渲染图（辅证）</div>
       </div>
       <div class="variant-item">
-        <img class="thumb" src="images/sights/fandom_holo_b_russian.png" alt="Holographic B Russian" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-        <div class="name">Holographic B · 全息 Russian</div>
-        <div class="desc">圆筒形外壳 + 圆环十字准星。俄系风格。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/holo_b.png" alt="全息瞄准器 B"></div>
+        <div class="name">Holographic B · 全息 Russian<span class="ingame">游戏内：全息瞄准器 B</span></div>
+        <div class="desc">机身带 +/− 调节键 + 圆环十字准星。俄系风格。</div>
+        <img class="thumb" src="images/sights/fandom_holo_b_russian.png" alt="Holographic B Russian" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <div class="ref-label">↑ Fandom 渲染图（辅证）</div>
       </div>
       <div class="variant-item">
-        <img class="thumb" src="images/sights/fandom_holo_c_razor.png" alt="Holographic C Razor" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-        <div class="name">Holographic C · 全息 Razor</div>
-        <div class="desc">紧凑低矮款，镜身比 NATO/Russian 明显更小。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/holo_c.png" alt="全息瞄准器 C"></div>
+        <div class="name">Holographic C · 全息 Razor<span class="ingame">游戏内：全息瞄准器 C</span></div>
+        <div class="desc">紧凑低矮宽体，准星为横向短划。镜身比 NATO/Russian 明显更扁。</div>
+        <img class="thumb" src="images/sights/fandom_holo_c_razor.png" alt="Holographic C Razor" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <div class="ref-label">↑ Fandom 渲染图（辅证）</div>
       </div>
       <div class="variant-item">
-        <img class="thumb" src="images/sights/fandom_holo_d_mh1.png" alt="Holographic D MH1" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-        <div class="name">Holographic D · 全息 MH1 <span class="badge">Y5S3</span></div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/holo_d.png" alt="全息瞄准器 D"></div>
+        <div class="name">Holographic D · 全息 MH1 <span class="badge">Y5S3</span><span class="ingame">游戏内：全息瞄准器 D</span></div>
         <div class="desc">极简窄框，准星收束得非常小。Y5S3 引入。</div>
+        <img class="thumb" src="images/sights/fandom_holo_d_mh1.png" alt="Holographic D MH1" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <div class="ref-label">↑ Fandom 渲染图（辅证）</div>
       </div>
       <div class="variant-item">
-        <img class="thumb" src="images/sights/fandom_reflex_a_nato.png" alt="Reflex A NATO" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-        <div class="name">Reflex A · 反射 NATO</div>
-        <div class="desc">塑料外壳 + 倒三角准星。常见反射镜。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/reflex_a.png" alt="反射式瞄准器 A"></div>
+        <div class="name">Reflex A · 反射 NATO<span class="ingame">游戏内：反射式瞄准器 A</span></div>
+        <div class="desc">塑料外壳 + 绿色倒三角准星。常见反射镜。</div>
+        <img class="thumb" src="images/sights/fandom_reflex_a_nato.png" alt="Reflex A NATO" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <div class="ref-label">↑ Fandom 渲染图（辅证）</div>
       </div>
       <div class="variant-item">
-        <img class="thumb" src="images/sights/fandom_reflex_b_russian.png" alt="Reflex B Russian" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-        <div class="name">Reflex B · 反射 Russian</div>
-        <div class="desc">金属外壳 + 倒三角准星，镜身更厚重。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/reflex_b.png" alt="反射式瞄准器 B"></div>
+        <div class="name">Reflex B · 反射 Russian<span class="ingame">游戏内：反射式瞄准器 B</span></div>
+        <div class="desc">圆形金属镜体，镜身最厚重，绿色准星带横向标线。</div>
+        <img class="thumb" src="images/sights/fandom_reflex_b_russian.png" alt="Reflex B Russian" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <div class="ref-label">↑ Fandom 渲染图（辅证）</div>
       </div>
       <div class="variant-item">
-        <img class="thumb" src="images/sights/fandom_reflex_c_vintage.png" alt="Reflex C Vintage" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-        <div class="name">Reflex C · 反射 Vintage</div>
-        <div class="desc">复古低矮款 + 倒三角准星。镜身最扁平。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/reflex_c.png" alt="反射式瞄准器 C"></div>
+        <div class="name">Reflex C · 反射 Vintage<span class="ingame">游戏内：反射式瞄准器 C</span></div>
+        <div class="desc">复古低矮款 + 绿色倒三角准星。镜身最扁平，右侧带线缆造型。</div>
+        <img class="thumb" src="images/sights/fandom_reflex_c_vintage.png" alt="Reflex C Vintage" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='none'">
+        <div class="ref-label">↑ Fandom 渲染图（辅证）</div>
       </div>
     </div>
   </div>
@@ -271,16 +324,19 @@
     <div class="cap"><strong>布局说明：</strong>3 款 Magnified 并排。每款的外壳造型和准星分划不同（典型 ACOG 风 / 长筒战术 / 紧凑现代），但瞄具面板数值完全相同。点击图片可看大图。</div>
     <div class="variant-list">
       <div class="variant-item">
-        <div class="name">Magnified A</div>
-        <div class="desc">经典 ACOG 梯形镜体 + 倒三角准星（类似 TA33）。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/scope_2_5x_a.png" alt="放大瞄准镜 A"></div>
+        <div class="name">Magnified A<span class="ingame">游戏内：放大瞄准镜 A</span></div>
+        <div class="desc">宽体镜身四角带螺栓细节，准星为竖直标线 + 中心点。</div>
       </div>
       <div class="variant-item">
-        <div class="name">Magnified B</div>
-        <div class="desc">较长筒形镜体，现代战术风格，准星为小十字。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/scope_2_5x_b.png" alt="放大瞄准镜 B"></div>
+        <div class="name">Magnified B<span class="ingame">游戏内：放大瞄准镜 B</span></div>
+        <div class="desc">横向较宽的方肩镜体，准星为向上箭头式标线。</div>
       </div>
       <div class="variant-item">
-        <div class="name">Magnified C</div>
-        <div class="desc">紧凑型镜体，准星分划最简洁。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/scope_2_5x_c.png" alt="放大瞄准镜 C"></div>
+        <div class="name">Magnified C<span class="ingame">游戏内：放大瞄准镜 C</span></div>
+        <div class="desc">高座紧凑镜体，底部为梯形宽底座，准星带半圆环分划。</div>
       </div>
     </div>
   </div>
@@ -298,12 +354,14 @@
     <div class="cap"><strong>布局说明：</strong>A 款 / B 款并排。基于 Vortex Viper PST 1-4×24 外形设计。点击图片可看大图。</div>
     <div class="variant-list">
       <div class="variant-item">
-        <div class="name">Telescopic A <span class="badge">Y9S1 新增</span></div>
-        <div class="desc">紧凑窄框，现代战术风格。准星为小十字 + 中心点。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/scope_3_5x_a.png" alt="望远式瞄准镜 A"></div>
+        <div class="name">Telescopic A <span class="badge">Y9S1 新增</span><span class="ingame">游戏内：望远式瞄准镜 A</span></div>
+        <div class="desc">左上带斜向遮光罩／导轨造型，准星为细十字 + 中心点。</div>
       </div>
       <div class="variant-item">
-        <div class="name">Telescopic B <span class="badge">Y9S1 新增</span></div>
-        <div class="desc">镜体更粗壮，偏传统战术镜。准星带圆环辅助瞄准圈。</div>
+        <div class="icon-wrap"><img class="icon" src="images/sights/icons/scope_3_5x_b.png" alt="望远式瞄准镜 B"></div>
+        <div class="name">Telescopic B <span class="badge">Y9S1 新增</span><span class="ingame">游戏内：望远式瞄准镜 B</span></div>
+        <div class="desc">十字对称镜体更粗壮，偏传统战术镜。准星带红色圆环辅助瞄准圈。</div>
       </div>
     </div>
   </div>
@@ -317,14 +375,15 @@
 </div>
 
 <footer>
-  图片来源：Bruce 游戏内军械库截图 · 数据源：Liquipedia / Ubisoft Y9S1 Designer's Notes<br>
+  ICON 来源：Bruce 游戏内军械库截图，程序内容检测切图（15/15 已核验）· 辅证图：Fandom Wiki<br>
+  数据源：Liquipedia / Ubisoft Y9S1 + Y11S3 Designer's Notes · 版本基准：Y11S3（2026-09-01）<br>
   本页为研究预览，未集成到主站
 </footer>
 
 <script>
 const SPECIAL_SIGHTS = [
-  { name:'CSRX Variable Scope (5x/12x)', weapon:'CSRX 300 · Kali',
-    desc:'武器内置可变倍镜，默认 5x，开火/按键瞬切 12x。ADS 乘数 [0.4, 0.17]。不可卸换。' },
+  { name:'CSRX Variable Scope (3.5x/8x)', weapon:'CSRX 300 · Kali',
+    desc:'武器内置可变倍镜，默认 3.5x，开火/按键瞬切 8x。不可卸换。⚠️ Y11S3（2026-09-01）下调倍率：5x/12x → 3.5x/8x，同时 pump 时间 1s → 0.8s、总弹药 36 → 51（GitHub extra_ammo 口径为 30 → 45，差值在于是否计入弹匣与膛内一发）。新倍率对应的 ADS 乘数官方未公布，暂缺（原 5x/12x 为 [0.4, 0.17]）。' },
   { name:'Flip Sight (6x 热成像)', weapon:'OTs-03 · Glaz',
     desc:'Glaz 干员专属技能。翻起后 6x 热成像，敌人在视野中高亮黄色，能穿透烟雾识别目标。属干员技能而非配件。' },
   { name:'Integrated Micro Dot', weapon:'RG-15 · Ela / Zofia / Melusi',

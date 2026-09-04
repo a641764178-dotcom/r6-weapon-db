@@ -1,6 +1,6 @@
 // ============================================
 // R6S 武器配件数据库 - 数据层
-// 版本基准: Y11S2.3 (2026-08-04)
+// 版本基准: Y11S2.3 (2026-08-04) | Y11S3 TTS 已公布 (2026-08-17), 正式上线 9/1
 // 分类体系: 主武器7类 + 副武器4类
 // ============================================
 
@@ -2508,6 +2508,27 @@ function getWeaponRecoilURL(weaponName) {
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'designer',
+        date: '2026-08-17',
+        title: 'Y11S3 设计师笔记 — 武器/配件/干员平衡完整详解',
+        content: '<ul><li>🔫 <strong>SMG-12 大幅削弱</strong>：damage 28→<strong>16</strong> / mag 32→<strong>22</strong> / 总弹药 129→111（影响 Dokkaebi/Vigil/Warden）</li><li>🔫 <strong>AR-15.50 削弱</strong>：damage 67→<strong>59</strong> / 首发后坐力↑ / <strong>Tubarão 移除制退器</strong>（影响 Maverick/Tubarão）</li><li>🔫 <strong>Mk 14 EBR 削弱</strong>：damage 60→<strong>56</strong> / 首发后坐力↑ / <strong>Aruni 移除制退器</strong>（影响 Aruni/Dokkaebi）</li><li>🔫 <strong>SPSMG9 加强</strong>：damage 33→<strong>35</strong>（影响 Clash/Kali）</li><li>🔫 <strong>CSRX 300 大改</strong>：瞄具 5x/12x→3.5x/8x / pump 1s→0.8s / 总弹药 36→51 / 后坐力↑ / 腰射散布↑ / V-Lance 不再取消 ADS</li><li>⚔️ <strong>Dokkaebi</strong>：Jegeo Payload 须持续连接+可被打断 / EMP→破门炸药 / 平板全程可探测</li><li>⚔️ <strong>Lion</strong>：EE-ONE-D 预警 1.5s→1.4s</li><li>⚔️ <strong>Echo</strong>：Sonic Burst 充能 16s→15s</li><li>⚔️ <strong>Kapkan</strong>：EDD 伤害 60→62</li><li>💣 <strong>Claymore</strong>：伤害 150→155</li><li>📊 基于 Y11S2.3 白金+段位数据：进攻端 Ace Ban 率最高（PC 48%/主机 63%）；防守端 Mira 89%</li><li>⚠️ 配件移除为<strong>干员特定</strong>：制退器移除仅限 Aruni(MK14) 和 Tubarão(AR-15.50)，其他使用者保留</li><li>⚠️ 以上为 TTS 阶段内容，<strong>9/1 正式上线后录入 WEAPONS 主表</strong></li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/PONCuRt8LaCr3O31NkBQb/y11s3-designers-notes'
+    },
+    {
+        type: 'designer',
+        date: '2026-08-15',
+        title: 'Y11S3 "Operation Split Fire" 赛季公布 — TTS 8/17 开放',
+        content: '<ul><li>🆕 <strong>新干员 Noor</strong>（防守方 2速2血，埃及）：Horus Lance Launcher 穿透火焰弹×5，反盾+区域封锁。主武器 Commando 9 / Alda 5.56，副武器 1911 TACOPS / Bailiff 410</li><li>🔫 <strong>SMG-12 大幅削弱</strong>：damage 28→<strong>16</strong> / mag 32→<strong>22</strong> / 总弹药 129→111</li><li>🔫 <strong>AR-15.50 削弱</strong>：damage 67→<strong>59</strong> / 增加后坐力 / <strong>移除制退器</strong></li><li>🔫 <strong>Mk 14 EBR 削弱</strong>：damage 60→<strong>56</strong> / <strong>移除制退器</strong></li><li>🔫 <strong>SPSMG9 加强</strong>：damage 33→<strong>35</strong></li><li>🔫 <strong>CSRX 300 (Kali) 大改</strong>：瞄具 5x/12x→<strong>3.5x/8x</strong> / pump time 1s→0.8s / 总弹药 36→51 / 弹道痕迹 2s→1s / V-Lance 不再打断 ADS</li><li>⚔️ <strong>Dokkaebi</strong>：EMP→破门炸药 / Jegeo Payload 可被打断（Mute/击杀/Tubarão）/ 平板须持续激活</li><li>⚔️ <strong>Lion</strong>：EE-ONE-D 预警 1.5s→1.4s</li><li>⚔️ <strong>Echo</strong>：Sonic Burst 充能 16s→15s</li><li>⚔️ <strong>Kapkan</strong>：EDD 伤害 60→62</li><li>⚔️ <strong>Claymore</strong>：伤害 150→155</li><li>🗺️ <strong>Villa 定向地图更新</strong>：客厅/图书馆炸弹点移至地下室 + 车库内化</li><li>🎮 <strong>3v3 Arcade</strong> (9/8-21) / <strong>Wasteland Circuit 无人机竞速</strong> (9/23-10/13) / <strong>传奇段位</strong>（赛季中）</li><li>⚠️ 上述武器数值为 TTS 确认值，<strong>9/1 正式上线后录入主表</strong></li></ul>',
+        link: 'https://news.ubisoft.com/en-us/article/4qqpGJZSWrrS3Ko2hYvviK/rainbow-six-siege-operation-split-fire-new-operator-noor-3v3-arcade-mode-wasteland-circuit-event-and-more'
+    },
+    {
+        type: 'info',
+        date: '2026-08-07',
+        title: 'Community Checkpoint #4 — 反作弊升级 & Y11S3 平衡预告',
+        content: '<ul><li>🛡️ <strong>R6 Shieldguard Secure Platform</strong>：Legend Division 起强制 Secure Boot + TPM 2.0 + VBS/HVCI</li><li>🛡️ <strong>内核级反作弊</strong>：育碧安全团队跨游戏共享内核级方案，Siege 为首批接入</li><li>🛡️ <strong>反后坐力宏检测</strong>：全新模型检测脚本/程序宏，PC 端本月上线</li><li>⚔️ <strong>Y11S3 平衡预告</strong>：SMG-12 伤害+弹匣↓ / Mk14 EBR & AR-15.50 伤害<60+移除制退器 / Dokkaebi Jegeo 可打断</li><li>📋 <strong>核心规则更新</strong>：明确作弊/小号/代练/代挂等违规行为制裁标准</li><li>⚠️ <strong>无当前版本武器/配件改动</strong>，以上为 Y11S3 预告</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/4ganHVRdfyH4WcxMwGpotZ/rainbow-six-siege-community-checkpoint-recap-core-rules-legend-division-balancing-updates-player-protection'
+    },
     {
         type: 'patch',
         date: '2026-08-04',

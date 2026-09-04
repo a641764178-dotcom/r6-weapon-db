@@ -24,9 +24,10 @@
     const GRIP_NAMES = {
         vertical_grip: '垂直握把', angled_grip: '转角握把'
     };
+    // Y9S1 重构后的瞄具键（1.5x / 2.0x / 3.0x 已从游戏移除）
     const SIGHT_NAMES = {
-        red_dot: '红点', holographic: '全息', reflex: '反射',
-        scope_1_5x: '1.5x', scope_2_0x: '2.0x', scope_2_5x: '2.5x', scope_3_0x: '3.0x'
+        iron: '机瞄', red_dot: '红点', holographic: '全息', reflex: '反射',
+        magnified: '2.5x 放大镜', telescopic: '3.5x 望远镜'
     };
     const RECOIL_LABELS = {
         'very_low': '极低', 'low': '低', 'medium': '中', 'high': '高', 'very_high': '极高', 'n/a': '—'
@@ -474,17 +475,42 @@
         }
 
         // === 四类配件 ===
-        // 1. 瞄准镜
+        // 1. 瞄准镜 —— 大类按放大倍率分组，小类按瞄具类型，再列具体型号 ICON
         let sightsHTML = '';
         if (ext && ext.sights && ext.sights.length > 0) {
-            sightsHTML = `
-                <div class="modal-att-group">
-                    <div class="modal-att-group-title">🔭 瞄准镜</div>
-                    <div class="modal-att-list">
-                        ${ext.sights.map(s => `<span class="modal-att-item sight-item" data-att-key="${s}" data-att-slot="sight">${SIGHT_NAMES[s] || s}</span>`).join('')}
-                    </div>
-                </div>
-            `;
+            const SD = ATTACHMENT_DATA.sights;
+            const groupsHTML = SIGHT_GROUPS.map(g => {
+                // iron（机瞄）对所有可装瞄具的武器都可用；其余家族看武器白名单
+                const fams = g.families.filter(f => f === 'iron' || ext.sights.includes(f));
+                if (!fams.length) return '';
+                return `
+                    <div class="sight-group">
+                        <div class="sight-group-head">
+                            <span class="sight-group-mag">${g.icon} ${g.label}</span>
+                            <span class="sight-group-desc">${g.desc}</span>
+                        </div>
+                        ${fams.map(f => {
+                            const fam = SD[f];
+                            if (!fam) return '';
+                            const head = `<span class="sight-family-name${fam.variants.length ? ' modal-att-item sight-item' : ''}"${fam.variants.length ? ` data-att-key="${f}" data-att-slot="sight"` : ''}>${fam.icon} ${fam.name}<em>${fam.nameEn}</em>${fam.noSlot ? '<b class="noslot">不占配件槽</b>' : ''}</span>`;
+                            if (!fam.variants.length) {
+                                return `<div class="sight-family">${head}</div>`;
+                            }
+                            return `<div class="sight-family">${head}
+                                <div class="sight-variants">
+                                    ${fam.variants.map(v => `
+                                        <div class="sight-variant" title="${v.desc}">
+                                            <img src="${v.icon}" alt="${v.name}" loading="lazy" onerror="this.style.visibility='hidden'">
+                                            <span>${v.name}</span>
+                                        </div>`).join('')}
+                                </div>
+                            </div>`;
+                        }).join('')}
+                    </div>`;
+            }).join('');
+            const noteHTML = ext.sightNote
+                ? `<div class="sight-note">⚠️ ${ext.sightNote}</div>` : '';
+            sightsHTML = `<div class="modal-att-group"><div class="modal-att-group-title">🔭 瞄准镜</div>${groupsHTML}${noteHTML}</div>`;
         } else if (ext && ext.specialNote) {
             sightsHTML = `<div class="modal-att-group"><div class="modal-att-group-title">🔭 瞄准镜</div><span class="modal-att-item unavailable">${ext.specialNote}</span></div>`;
         } else {
@@ -729,16 +755,32 @@
 
         container.innerHTML = allAttachments.map(att => {
             const slotLabel = att.slot === 'barrel' ? '枪管' : att.slot === 'grip' ? '握把' : att.slot === 'sight' ? '瞄具' : '下挂';
+            // 瞄具额外展示：倍率大类徽章 + 具体型号 ICON 条
+            const magBadge = att.magGroup
+                ? `<span class="att-mag-badge">${att.magGroup}</span>` : '';
+            const variantStrip = (att.variants && att.variants.length)
+                ? `<div class="att-variants">
+                       <div class="att-variants-title">军械库可选型号 · ${att.variants.length} 款</div>
+                       <div class="att-variants-row">
+                           ${att.variants.map(v => `
+                               <div class="att-variant" title="${v.desc}">
+                                   <img src="${v.icon}" alt="${v.name}" loading="lazy" onerror="this.style.visibility='hidden'">
+                                   <span>${v.name}</span>
+                               </div>`).join('')}
+                       </div>
+                   </div>`
+                : (att.noSlot ? `<div class="att-variants"><div class="att-variants-title">默认状态，无可选型号</div></div>` : '');
             return `
                 <div class="att-card">
                     <div class="att-card-header">
                         <div class="att-icon" style="background:rgba(255,255,255,0.05)">${att.icon}</div>
                         <div>
-                            <div class="att-card-name">${att.name}</div>
+                            <div class="att-card-name">${att.name}${magBadge}</div>
                             <div class="att-card-name-en">${att.nameEn}</div>
                         </div>
                         <div class="att-card-slot">${slotLabel}配件</div>
                     </div>
+                    ${variantStrip}
                     <div class="att-effects">
                         ${att.effects.map(e => `
                             <div class="att-effect ${e.type}">
@@ -786,7 +828,10 @@
             } else if (slot === 'sight') {
                 matched = WEAPONS.filter(w => {
                     const ext = (typeof WEAPON_EXTENDED !== 'undefined') ? WEAPON_EXTENDED[w.name] : null;
-                    return ext && ext.sights && ext.sights.includes(att);
+                    if (!ext || !ext.sights || !ext.sights.length) return false;
+                    // 机瞄是默认状态，不存于 sights 数组：凡能装瞄具的武器都可用机瞄
+                    if (att === 'iron') return true;
+                    return ext.sights.includes(att);
                 });
             } else {
                 // underbarrel

@@ -1569,3 +1569,159 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================
+   瞄具体系（Y9S1 重构）— 倍率大类 + 类型小类 + 型号 ICON
+   ============================================ */
+
+/* ---- 武器详情弹窗内的瞄具分组 ---- */
+.sight-group {
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+}
+.sight-group:last-child { margin-bottom: 0; }
+.sight-group-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.sight-group-mag {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .3px;
+}
+.sight-group-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+.sight-family { margin-bottom: 10px; }
+.sight-family:last-child { margin-bottom: 0; }
+.sight-family-name {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.sight-family-name em {
+    font-style: normal;
+    font-size: 10px;
+    color: var(--text-muted);
+}
+.sight-family-name .noslot {
+    font-size: 9px;
+    font-weight: 500;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--bg-card-hover);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-light);
+}
+.sight-variants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+.sight-variant {
+    width: 92px;
+    padding: 6px 4px;
+    background: linear-gradient(160deg, #141b24 0%, #1d2632 100%);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-align: center;
+    transition: border-color .15s, transform .15s;
+}
+.sight-variant:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+.sight-variant img {
+    width: 100%;
+    height: 46px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.6));
+}
+.sight-variant span {
+    display: block;
+    margin-top: 4px;
+    font-size: 9px;
+    line-height: 1.3;
+    color: var(--text-secondary);
+}
+.sight-note {
+    margin-top: 10px;
+    padding: 8px 10px;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--warning);
+    background: rgba(255, 167, 38, 0.08);
+    border: 1px solid rgba(255, 167, 38, 0.25);
+    border-radius: var(--radius);
+}
+
+/* ---- 配件图鉴卡片内的瞄具型号条 ---- */
+.att-mag-badge {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 1px 7px;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 3px;
+    background: var(--accent-glow);
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    vertical-align: middle;
+}
+.att-variants {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-light);
+}
+.att-variants-title {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    letter-spacing: .3px;
+}
+.att-variants-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.att-variant {
+    width: 86px;
+    padding: 6px 4px;
+    background: linear-gradient(160deg, #141b24 0%, #1d2632 100%);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-align: center;
+}
+.att-variant img {
+    width: 100%;
+    height: 44px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.6));
+}
+.att-variant span {
+    display: block;
+    margin-top: 4px;
+    font-size: 9px;
+    line-height: 1.3;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+    .sight-variant, .att-variant { width: calc(33.333% - 6px); }
+}

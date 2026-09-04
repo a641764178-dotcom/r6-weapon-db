@@ -1,6 +1,7 @@
 // ============================================
 // R6S 武器配件数据库 - 数据层
-// 版本基准: Y11S2.3 (2026-08-04) | Y11S3 TTS 已公布 (2026-08-17), 正式上线 9/1
+// 版本基准: Y11S3 "Operation Split Fire" (2026-09-01 上线) — 主表已落地
+// 瞄具体系已按 Y9S1 "Deadly Omen" 重构: 1.0x / 2.5x / 3.5x 三大类
 // 分类体系: 主武器7类 + 副武器4类
 // ============================================
 
@@ -103,87 +104,146 @@ const ATTACHMENT_DATA = {
             bestFor: '霰弹枪、冲锋手枪、盾牌干员'
         }
     },
+    // ================================================================
+    // 瞄具体系（Y9S1 "Deadly Omen" 重构后）
+    //   大类 = 放大倍率 (1.0x / 2.5x / 3.5x)
+    //   小类 = 瞄具类型 (机瞄 / 红点 / 全息 / 反射 / 放大镜 / 望远镜)
+    //   variants = 军械库内可选的具体型号，配游戏内原生 ICON
+    // Y9S1 移除 1.5x / 2.0x / 3.0x；2.0x 与 3.0x 统一升级为 3.5x 望远镜
+    // ================================================================
     sights: {
-        red_dot: {
-            name: '红点瞄准镜', nameEn: 'Red Dot Sight', slot: 'sight', icon: '🔴',
-            mag: '1.0x',
+        // ---------- 大类 1：1.0x 无放大 ----------
+        iron: {
+            name: '机瞄', nameEn: 'Iron Sight', slot: 'sight', icon: '▫️',
+            mag: '1.0x', magGroup: '1.0x', family: '机瞄', noSlot: true,
+            variants: [],
             effects: [
                 { type: 'info', label: '放大倍率', value: '1.0x' },
-                { type: 'positive', label: '视野', value: '最大' },
-                { type: 'neutral', label: 'ADS速度影响', value: '无' }
+                { type: 'positive', label: 'ADS 速度', value: '+10%（全瞄具最快）' },
+                { type: 'positive', label: '视野', value: '完全无遮挡' }
             ],
-            description: '无放大倍率的反射式瞄具，视野最大，适合近距离快速交战。',
+            description: '不装任何瞄具时的默认状态，不占配件槽。Y9S1 起获得 +10% ADS 速度加成，是所有选项里出镜最快的。',
+            bestFor: '极近距离、追求最快开镜的打法'
+        },
+        red_dot: {
+            name: '红点瞄准镜', nameEn: 'Red Dot Sight', slot: 'sight', icon: '🔴',
+            mag: '1.0x', magGroup: '1.0x', family: '非放大',
+            variants: [
+                { key: 'red_dot_a', name: '红点瞄准器 A', nameEn: 'Red Dot A', icon: 'images/sights/icons/red_dot_a.png', desc: '方形外壳 + 圆点准星，最常见外观' },
+                { key: 'red_dot_b', name: '红点瞄准器 B', nameEn: 'Red Dot B', icon: 'images/sights/icons/red_dot_b.png', desc: '宽镜体 + T 字准星，俄系风格' },
+                { key: 'red_dot_c', name: '红点瞄准器 C', nameEn: 'Red Dot C', icon: 'images/sights/icons/red_dot_c.png', desc: '抬高型，右下带调节旋钮（Y5S3 引入）' }
+            ],
+            effects: [
+                { type: 'info', label: '放大倍率', value: '1.0x' },
+                { type: 'positive', label: 'ADS 速度', value: '+5%' },
+                { type: 'positive', label: '视野', value: '最大' }
+            ],
+            description: '无放大倍率的反射式瞄具，视野最大，适合近距离快速交战。Y9S1 起非放大瞄具统一获得 +5% ADS 速度。',
             bestFor: '近距离CQB、快速清角'
         },
         holographic: {
             name: '全息瞄准镜', nameEn: 'Holographic Sight', slot: 'sight', icon: '🟢',
-            mag: '1.0x',
+            mag: '1.0x', magGroup: '1.0x', family: '非放大',
+            variants: [
+                { key: 'holo_a', name: '全息瞄准器 A', nameEn: 'Holographic A', icon: 'images/sights/icons/holo_a.png', desc: 'EOTech 风格方框 + 圆环带点准星' },
+                { key: 'holo_b', name: '全息瞄准器 B', nameEn: 'Holographic B', icon: 'images/sights/icons/holo_b.png', desc: '机身带 +/− 调节键 + 圆环十字准星' },
+                { key: 'holo_c', name: '全息瞄准器 C', nameEn: 'Holographic C', icon: 'images/sights/icons/holo_c.png', desc: '紧凑低矮宽体，准星为横向短划' },
+                { key: 'holo_d', name: '全息瞄准器 D', nameEn: 'Holographic D', icon: 'images/sights/icons/holo_d.png', desc: '极简窄框，准星收束极小（Y5S3 引入）' }
+            ],
             effects: [
                 { type: 'info', label: '放大倍率', value: '1.0x' },
-                { type: 'positive', label: '准星清晰度', value: '高' },
-                { type: 'neutral', label: 'ADS速度影响', value: '无' }
+                { type: 'positive', label: 'ADS 速度', value: '+5%' },
+                { type: 'positive', label: '准星清晰度', value: '高' }
             ],
             description: '全息投影技术，准星环形设计便于快速对准目标中心，框架稍大但准星辨识度高。',
             bestFor: '中近距离、需要精准瞄点'
         },
         reflex: {
             name: '反射瞄准镜', nameEn: 'Reflex Sight', slot: 'sight', icon: '🔺',
-            mag: '1.0x',
+            mag: '1.0x', magGroup: '1.0x', family: '非放大',
+            variants: [
+                { key: 'reflex_a', name: '反射式瞄准器 A', nameEn: 'Reflex A', icon: 'images/sights/icons/reflex_a.png', desc: '塑料外壳 + 绿色倒三角准星' },
+                { key: 'reflex_b', name: '反射式瞄准器 B', nameEn: 'Reflex B', icon: 'images/sights/icons/reflex_b.png', desc: '圆形金属镜体，最厚重，准星带横向标线' },
+                { key: 'reflex_c', name: '反射式瞄准器 C', nameEn: 'Reflex C', icon: 'images/sights/icons/reflex_c.png', desc: '复古低矮款，镜身最扁平，右侧带线缆造型' }
+            ],
             effects: [
                 { type: 'info', label: '放大倍率', value: '1.0x' },
-                { type: 'positive', label: '框架遮挡', value: '最小' },
-                { type: 'neutral', label: 'ADS速度影响', value: '无' }
+                { type: 'positive', label: 'ADS 速度', value: '+5%' },
+                { type: 'positive', label: '框架遮挡', value: '最小' }
             ],
             description: '三角形准星、开放式框架遮挡最少。个人偏好差异大，部分玩家觉得三角准星不如圆点直觉。',
             bestFor: '偏好开放视野的玩家'
         },
-        scope_1_5x: {
-            name: '1.5倍镜', nameEn: 'Scope 1.5x', slot: 'sight', icon: '🔍',
-            mag: '1.5x',
-            effects: [
-                { type: 'info', label: '放大倍率', value: '1.5x' },
-                { type: 'positive', label: '中距离辨识', value: '略有提升' },
-                { type: 'negative', label: 'ADS灵敏度乘数', value: '0.9x' }
+
+        // ---------- 大类 2：2.5x 放大镜 ----------
+        magnified: {
+            name: '放大瞄准镜', nameEn: 'Magnified Scope', slot: 'sight', icon: '🔭',
+            mag: '2.5x', magGroup: '2.5x', family: '放大镜',
+            variants: [
+                { key: 'scope_2_5x_a', name: '放大瞄准镜 A', nameEn: 'Magnified A', icon: 'images/sights/icons/scope_2_5x_a.png', desc: '宽体镜身四角带螺栓，竖直标线 + 中心点' },
+                { key: 'scope_2_5x_b', name: '放大瞄准镜 B', nameEn: 'Magnified B', icon: 'images/sights/icons/scope_2_5x_b.png', desc: '横向较宽的方肩镜体，向上箭头式标线' },
+                { key: 'scope_2_5x_c', name: '放大瞄准镜 C', nameEn: 'Magnified C', icon: 'images/sights/icons/scope_2_5x_c.png', desc: '高座紧凑镜体，梯形宽底座，半圆环分划' }
             ],
-            description: '最低倍率放大镜，视野损失最小，适合需要轻微放大又不想牺牲太多视野的场景。',
-            bestFor: '防守方替代高倍镜'
-        },
-        scope_2_0x: {
-            name: '2.0倍镜', nameEn: 'Scope 2.0x', slot: 'sight', icon: '🔍',
-            mag: '2.0x',
             effects: [
-                { type: 'info', label: '放大倍率', value: '2.0x' },
-                { type: 'neutral', label: '视野', value: '中等' },
-                { type: 'negative', label: 'ADS灵敏度乘数', value: '0.8x' }
-            ],
-            description: '平衡的中距离倍镜，适合需要一定放大但又不想太窄视野的情况。',
-            bestFor: '中距离交战'
-        },
-        scope_2_5x: {
-            name: '2.5倍镜', nameEn: 'Scope 2.5x (ACOG)', slot: 'sight', icon: '🔭',
-            mag: '2.5x',
-            effects: [
-                { type: 'info', label: '放大倍率', value: '2.5x' },
+                { type: 'info', label: '放大倍率', value: '约 2.5x' },
                 { type: 'positive', label: '中远距离优势', value: '显著' },
-                { type: 'negative', label: 'ADS灵敏度乘数', value: '0.7x' },
-                { type: 'negative', label: '近距离劣势', value: '视野窄' }
+                { type: 'negative', label: '近距离', value: '视野受限' },
+                { type: 'info', label: '进攻方', value: '全主武器可用' },
+                { type: 'negative', label: '防守方', value: '仅限白名单武器/干员' }
             ],
-            description: '经典ACOG倍镜，曾是进攻方的标志性配件。中远距离优势明显，但近距离视野受限。',
+            description: 'Y9S1 由原 1.5x 升级而来的 ACOG 类倍镜。进攻方所有主武器均可装配；防守方受严格限制，仅少数武器的特定干员可用。',
             bestFor: '中远距离架点、进攻方长距离交战'
         },
-        scope_3_0x: {
-            name: '3.0倍镜', nameEn: 'Scope 3.0x', slot: 'sight', icon: '🔭',
-            mag: '3.0x',
-            effects: [
-                { type: 'info', label: '放大倍率', value: '3.0x' },
-                { type: 'positive', label: '远距离精度', value: '极佳' },
-                { type: 'negative', label: 'ADS灵敏度乘数', value: '0.6x' },
-                { type: 'negative', label: '近距离', value: '严重劣势' }
+
+        // ---------- 大类 3：3.5x 望远镜 ----------
+        telescopic: {
+            name: '望远式瞄准镜', nameEn: 'Telescopic Scope', slot: 'sight', icon: '🎯',
+            mag: '3.5x', magGroup: '3.5x', family: '望远镜',
+            variants: [
+                { key: 'scope_3_5x_a', name: '望远式瞄准镜 A', nameEn: 'Telescopic A', icon: 'images/sights/icons/scope_3_5x_a.png', desc: '左上带斜向遮光罩／导轨，细十字 + 中心点' },
+                { key: 'scope_3_5x_b', name: '望远式瞄准镜 B', nameEn: 'Telescopic B', icon: 'images/sights/icons/scope_3_5x_b.png', desc: '十字对称镜体更粗壮，准星带红色圆环辅助圈' }
             ],
-            description: '高倍率瞄具，仅适合远距离交战。近距离CQB中使用几乎是自杀行为。',
-            bestFor: 'DMR、远距离架点'
+            effects: [
+                { type: 'info', label: '放大倍率', value: '约 3.5x' },
+                { type: 'positive', label: '远距离精度', value: '极佳' },
+                { type: 'negative', label: '近距离', value: '严重劣势' },
+                { type: 'negative', label: '可用范围', value: '仅进攻方 DMR' }
+            ],
+            description: 'Y9S1 由原 2.0x / 3.0x 合并升级而来，是当前版本最高倍率的通用瞄具。可用范围极窄——只有进攻方的射手步枪（DMR）能装。',
+            bestFor: '进攻方 DMR 远距离架点'
         }
     }
+};
+
+// ================================================================
+// 瞄具大类分组（按放大倍率）— 供 UI 分组渲染
+// ================================================================
+const SIGHT_GROUPS = [
+    {
+        key: 'mag_1x', label: '1.0x 无放大', icon: '⚪',
+        desc: '不改变视野倍率。Y9S1 起机瞄 +10% ADS 速度，红点/全息/反射 +5%。',
+        families: ['iron', 'red_dot', 'holographic', 'reflex']
+    },
+    {
+        key: 'mag_2_5x', label: '2.5x 放大镜', icon: '🔭',
+        desc: '进攻方全主武器可用；防守方仅限白名单武器与干员。',
+        families: ['magnified']
+    },
+    {
+        key: 'mag_3_5x', label: '3.5x 望远镜', icon: '🎯',
+        desc: '当前版本最高倍率通用瞄具，仅进攻方 DMR 可装。',
+        families: ['telescopic']
+    }
+];
+
+// 防守方 2.5x 放大镜白名单（Y9S1 官方分配表）
+const DEF_MAGNIFIED_WHITELIST = {
+    '9mm C1': ['Frost'], 'P10 RONI': ['Mozzie'], '9x19VSN': ['Tachanka'],
+    'ACS12': ['Alibi', 'Maestro', 'Azami'], 'AR-15.50': ['Tubarão'],
+    'BOSG.12.2': ['Vigil'], 'Mk 14 EBR': ['Aruni'], 'MP5K': ['Wamai'],
+    'MP5': ['Doc', 'Melusi', 'Rook'], 'P90': ['Doc', 'Rook'],
+    'TCSG12': ['Goyo', 'Kaid'], 'UMP45': ['Castle'],
+    'UZK50GI': ['Thorn'], 'Vector .45': ['Goyo']
 };
 
 // ADS时间基准 + 转角握把效果
@@ -195,15 +255,14 @@ const ADS_TIMES = {
     pistol: { base: 200, angled: 136, saved: 64, label: '手枪' }
 };
 
-// 瞄准镜 ADS 灵敏度乘数
+// 瞄准镜 ADS 灵敏度乘数（Y9S1 重构后）
+// ⚠️ 1.5x / 2.0x / 3.0x 已于 Y9S1 从游戏移除，故删除
+// ⚠️ 3.5x 望远镜与 Y11S3 新版 CSRX 的乘数官方未公布，标 null 而非估算
 const SIGHT_MULTIPLIERS = [
-    { mag: '1.0x', multiplier: 1.0 },
-    { mag: '1.5x', multiplier: 0.9 },
-    { mag: '2.0x', multiplier: 0.8 },
-    { mag: '2.5x', multiplier: 0.7 },
-    { mag: '3.0x', multiplier: 0.6 },
-    { mag: '5.0x', multiplier: 0.4 },
-    { mag: '12.0x', multiplier: 0.17 }
+    { mag: '1.0x', multiplier: 1.0, note: '机瞄/红点/全息/反射' },
+    { mag: '2.5x', multiplier: 0.7, note: '放大镜 Magnified' },
+    { mag: '3.5x', multiplier: null, note: '望远镜 Telescopic — 官方未公布' },
+    { mag: '3.5x/8.0x', multiplier: null, note: 'CSRX 300 内置镜（Y11S3 起）— 官方未公布；改版前 5x/12x 为 0.4 / 0.17' }
 ];
 
 // ---- 武器分类体系 ----
@@ -283,7 +342,7 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
-    { name: 'Commando 9', type: 'ar', damage: 36, rpm: 780, mag: 25, operators: ['Mozzie','Sentry'], side: 'def',
+    { name: 'Commando 9', type: 'ar', damage: 36, rpm: 780, mag: 25, operators: ['Mozzie','Sentry','Noor'], side: 'def',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
@@ -362,10 +421,11 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: ['angled_grip'] } },
-    { name: 'AR-15.50', type: 'dmr', damage: 67, rpm: 439, mag: 10, operators: ['Maverick','Tubarão'], side: 'mixed',
+    { name: 'AR-15.50', type: 'dmr', damage: 59, rpm: 444, mag: 10, operators: ['Maverick','Tubarão'], side: 'mixed',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: [] },
+      barrelNote: 'Y11S3 起 Tubarão 不可装制退器（Maverick 保留）',
       notes: '半自动' },
     { name: 'AK-74M', type: 'ar', damage: 44, rpm: 650, mag: 40, operators: ['Nomad','Deimos'], side: 'atk',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
@@ -502,7 +562,7 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: [] } },
-    { name: 'ALDA 5.56', type: 'lmg', damage: 35, rpm: 900, mag: 80, operators: ['Maestro'], side: 'def',
+    { name: 'ALDA 5.56', type: 'lmg', damage: 35, rpm: 900, mag: 80, operators: ['Maestro','Noor'], side: 'def',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
       grips: ['vertical_grip'],
       y7s3_new: { barrels: [], grips: [] } },
@@ -517,11 +577,11 @@ const WEAPONS = [
       notes: '仅可装瞄准镜+激光' },
 
     // ===== 狙击步枪 (Sniper) =====
-    { name: 'CSRX 300', type: 'sniper', damage: 135, rpm: 55, mag: 5, operators: ['Kali'], side: 'atk',
+    { name: 'CSRX 300', type: 'sniper', damage: 135, rpm: 63, mag: 5, operators: ['Kali'], side: 'atk',
       barrels: [],
       grips: [],
       y7s3_new: { barrels: [], grips: [] },
-      notes: '栓动狙击步枪，内置 5x/12x 倍镜' },
+      notes: '栓动狙击步枪，内置 3.5x/8x 倍镜（Y11S3 由 5x/12x 下调）' },
 
     // ===== 射手步枪 (DMR) =====
     { name: '417', type: 'dmr', damage: 69, rpm: 444, mag: 20, operators: ['Twitch','Lion','Sens','Rauora'], side: 'atk',
@@ -541,10 +601,11 @@ const WEAPONS = [
       barrels: ['muzzle_brake','flash_hider','suppressor'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: ['angled_grip'] } },
-    { name: 'Mk 14 EBR', type: 'dmr', damage: 60, rpm: 457, mag: 20, operators: ['Dokkaebi','Aruni'], side: 'mixed',
+    { name: 'Mk 14 EBR', type: 'dmr', damage: 56, rpm: 444, mag: 20, operators: ['Dokkaebi','Aruni'], side: 'mixed',
       barrels: ['muzzle_brake','flash_hider','suppressor'],
       grips: ['vertical_grip','angled_grip'],
-      y7s3_new: { barrels: [], grips: [] } },
+      y7s3_new: { barrels: [], grips: [] },
+      barrelNote: 'Y11S3 起 Aruni 不可装制退器（Dokkaebi 保留）' },
     { name: 'PMR90A2', type: 'dmr', damage: 62, rpm: 444, mag: 20, operators: ['Solid Snake','Thatcher','Capitão','Hibana','Nøkk'], side: 'atk',
       barrels: ['muzzle_brake','suppressor'],
       grips: ['vertical_grip','angled_grip'],
@@ -634,7 +695,7 @@ const WEAPONS = [
     { name: 'RG15', type: 'pistol', damage: 38, rpm: 0, mag: 15, operators: ['Ela','Zofia','Melusi'], side: 'mixed',
       barrels: ['muzzle_brake','suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] },
       notes: '内置微型红点瞄具' },
-    { name: '1911 TACOPS', type: 'pistol', damage: 55, rpm: 0, mag: 8, operators: ['Maverick','Thorn'], side: 'atk',
+    { name: '1911 TACOPS', type: 'pistol', damage: 55, rpm: 0, mag: 8, operators: ['Maverick','Thorn','Noor'], side: 'mixed',
       barrels: ['muzzle_brake','suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] } },
     { name: 'USP40', type: 'pistol', damage: 48, rpm: 0, mag: 12, operators: ['Jackal','Mira','Oryx','Brava'], side: 'mixed',
       barrels: ['muzzle_brake','suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] } },
@@ -651,7 +712,7 @@ const WEAPONS = [
     { name: 'TACIT .45', type: 'pistol', damage: 52, rpm: 0, mag: 8, operators: ['Solid Snake'], side: 'atk',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] },
       notes: 'Y11S1新增，内置消音器+反射瞄具' },
-    { name: 'Bailiff 410', type: 'pistol', damage: 30, rpm: 0, mag: 5, operators: ['Maestro','Alibi','Oryx','Doc','Grim'], side: 'def',
+    { name: 'Bailiff 410', type: 'pistol', damage: 30, rpm: 0, mag: 5, operators: ['Maestro','Alibi','Oryx','Doc','Grim','Noor'], side: 'def',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] },
       notes: '副武器左轮霰弹枪，主要用于开洞' },
     { name: '.44 Vendetta', type: 'pistol', damage: 78, rpm: 0, mag: 6, operators: ['Deimos'], side: 'atk',
@@ -667,7 +728,7 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['angled_grip'],
       y7s3_new: { barrels: ['muzzle_brake','extended_barrel'], grips: ['angled_grip'] } },
-    { name: 'SMG-12', type: 'smg_sec', damage: 28, rpm: 1270, mag: 32, operators: ['Dokkaebi','Vigil','Warden'], side: 'mixed',
+    { name: 'SMG-12', type: 'smg_sec', damage: 16, rpm: 1273, mag: 22, operators: ['Dokkaebi','Vigil','Warden'], side: 'mixed',
       barrels: ['compensator','flash_hider','suppressor'],
       grips: ['angled_grip'],
       y7s3_new: { barrels: [], grips: [] } },
@@ -675,7 +736,7 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: [],
       y7s3_new: { barrels: ['muzzle_brake','extended_barrel'], grips: [] } },
-    { name: 'SPSMG9', type: 'smg_sec', damage: 33, rpm: 980, mag: 20, operators: ['Kali','Clash'], side: 'mixed',
+    { name: 'SPSMG9', type: 'smg_sec', damage: 35, rpm: 980, mag: 20, operators: ['Kali','Clash'], side: 'mixed',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: [],
       y7s3_new: { barrels: ['muzzle_brake','compensator','extended_barrel'], grips: [] } },
@@ -710,196 +771,199 @@ const WEAPONS = [
 const WEAPON_EXTENDED = {
     // === 突击步枪 ===
     'M4': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.7, reloadEmpty: 3.3,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '稳定上升，略向右偏' },
         falloff: { start: 25, end: 35, min: 26 }
     },
     'Commando 9': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.1,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '非常平稳，几乎直线上升' },
         falloff: { start: 25, end: 35, min: 21 }
     },
     'L85A2': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.7, reloadEmpty: 3.3,
         recoil: { vertical: 'low', horizontal: 'high', pattern: '垂直后坐力低，水平晃动大' },
         falloff: { start: 25, end: 35, min: 28 }
     },
     'AR33': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.9, reloadEmpty: 3.6,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，有轻微左右摇摆' },
         falloff: { start: 25, end: 35, min: 24 }
     },
     'G36C': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.9, reloadEmpty: 3.4,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '后坐力非常小，容易控制' },
         falloff: { start: 25, end: 35, min: 22 }
     },
     'R4-C': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.7, reloadEmpty: 3.4,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '垂直后坐力高，水平偏移小' },
         falloff: { start: 25, end: 35, min: 23 }
     },
     '556XI': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.9, reloadEmpty: 3.6,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，稳定可控' },
         falloff: { start: 25, end: 35, min: 28 }
     },
     'F2': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.6, reloadEmpty: 3.3,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '极高射速导致极高垂直后坐力，需要强力下压' },
         falloff: { start: 25, end: 35, min: 22 }
     },
     'AK-12': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.6, reloadEmpty: 3.4,
         recoil: { vertical: 'high', horizontal: 'high', pattern: '前几发稳定，第4发后水平后坐力恶化' },
         falloff: { start: 25, end: 35, min: 24 }
     },
     'AUG A2': {
-        sights: ['red_dot','holographic','reflex','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '非常稳定，适合新手' },
         falloff: { start: 25, end: 35, min: 25 }
     },
     '552 Commando': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.9, reloadEmpty: 3.6,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，弹道略向右偏' },
         falloff: { start: 25, end: 35, min: 25 }
     },
     '416-C CARBINE': {
-        sights: ['red_dot','holographic','reflex'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.6,
         recoil: { vertical: 'low_medium', horizontal: 'low', pattern: 'Y11S2.2降低垂直后坐力+平滑水平，最难控段从第8发推迟到第10发，整体更易控' },
         falloff: { start: 25, end: 35, min: 22 }
     },
     'C8-SFW': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.7, reloadEmpty: 3.3,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '极高后坐力，Skeleton Key占用下挂' },
         falloff: { start: 25, end: 35, min: 24 }
     },
     'Mk17 CQB': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.6,
         recoil: { vertical: 'high', horizontal: 'medium', pattern: '7.62mm大口径，单发后坐力大但射速低补偿' },
         falloff: { start: 25, end: 35, min: 26 }
     },
     'PARA-308': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.8,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，弹道偏右' },
         falloff: { start: 25, end: 35, min: 28 }
     },
     'Type-89': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 3.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等垂直后坐力，水平稳定' },
         falloff: { start: 25, end: 35, min: 24 }
     },
     'C7E': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.7, reloadEmpty: 3.3,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '非常平稳的弹道，容易全自动控枪' },
         falloff: { start: 25, end: 35, min: 25 }
     },
     'M762': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'high', horizontal: 'high', pattern: '高后坐力，弹道呈S形左右摇摆' },
         falloff: { start: 25, end: 35, min: 27 }
     },
     'V308': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 3.2, reloadEmpty: 4.0,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，50发弹匣提供持续火力' },
         falloff: { start: 25, end: 35, min: 26 }
     },
     'Spear .308': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，非常容易控制' },
         falloff: { start: 25, end: 35, min: 25 }
     },
     'AR-15.50': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用；防守方 Tubarão 亦在官方白名单内；3.5x 望远镜仅进攻方 DMR 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
-        recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，单发后坐力大但有恢复时间' },
-        falloff: { start: 30, end: 40, min: 46 }
+        recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，单发后坐力大但有恢复时间；Y11S3 首发后坐力提升' },
+        falloff: { start: 29, end: 40, min: 41 } // [Y11S3 实测] 59→41 (29-40m)
     },
     'AK-74M': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '典型AK后坐力模式，Y11S2新增全部握把可改善控枪' },
         falloff: { start: 25, end: 35, min: 26 }
     },
     'ARX200': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.6, reloadEmpty: 3.2,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，水平稳定' },
         falloff: { start: 25, end: 35, min: 28 }
     },
     'F90': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，适合远距离连射' },
         falloff: { start: 25, end: 35, min: 22 }
     },
     'SC3000K': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.6, reloadEmpty: 3.3,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，整体平稳' },
         falloff: { start: 25, end: 35, min: 27 }
     },
     'POF-9': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.2,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '9mm口径，后坐力非常小' },
         falloff: { start: 25, end: 35, min: 22 }
     },
     'PCX-33': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.2,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，防守方可用' },
         falloff: { start: 25, end: 35, min: 21 }
     },
     'XK23': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 3.5, reloadEmpty: null,
         recoil: { vertical: 'low-medium', horizontal: 'low', pattern: '易控制、稳定一致的后坐力模式' },
@@ -908,140 +972,151 @@ const WEAPON_EXTENDED = {
 
     // === 冲锋枪 ===
     'FMG-9': {
-        sights: ['red_dot','holographic','reflex'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'low', horizontal: 'medium', pattern: '低垂直，中等水平后坐力' },
         falloff: { start: 18, end: 28, min: 20 }
     },
     'MP5K': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Wamai 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，适合近距离扫射' },
         falloff: { start: 18, end: 28, min: 18 }
     },
     'UMP45': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Castle 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'very_low', horizontal: 'very_low', pattern: '几乎无后坐力，激光般稳定' },
         falloff: { start: 18, end: 28, min: 25 }
     },
     'MP5': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Doc/Melusi/Rook 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，滚柱闭锁带来平稳射击' },
         falloff: { start: 18, end: 28, min: 16 }
     },
     'P90': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Doc/Rook 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，高射速需要控制' },
         falloff: { start: 18, end: 28, min: 13 }
     },
     'MP5SD': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '与MP5相似的低后坐力' },
         falloff: { start: 18, end: 28, min: 18 }
     },
     '9x19VSN': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Tachanka 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '非常稳定的弹道' },
         falloff: { start: 18, end: 28, min: 20 }
     },
     'MP7': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等垂直后坐力，水平稳定' },
         falloff: { start: 18, end: 28, min: 19 }
     },
     '9mm C1': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Frost 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来极低后坐力' },
         falloff: { start: 18, end: 28, min: 21 }
     },
     'MPX': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'very_low', horizontal: 'very_low', pattern: '接近零后坐力，被称为"激光枪"' },
         falloff: { start: 18, end: 28, min: 15 }
     },
     'M12': {
-        sights: ['red_dot','holographic','reflex'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来稳定后坐力' },
         falloff: { start: 18, end: 28, min: 25 }
     },
     'PDW9': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.1,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，50发弹匣提供持续火力' },
         falloff: { start: 18, end: 28, min: 20 }
     },
     'Vector .45': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Goyo 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.0, reloadEmpty: 2.8,
         recoil: { vertical: 'very_low', horizontal: 'high', pattern: '垂直极低(Super V系统)，水平随机且大' },
         falloff: { start: 18, end: 28, min: 13 }
     },
     'T-5 SMG': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，近距离非常好用' },
         falloff: { start: 18, end: 28, min: 16 }
     },
     'Scorpion EVO': {
-        sights: ['red_dot','holographic','reflex'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.1,
         recoil: { vertical: 'very_high', horizontal: 'very_high', pattern: '极高后坐力，全游戏最难控制的冲锋枪之一' },
         falloff: { start: 18, end: 28, min: 13 }
     },
     'K1A': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，容易控制' },
         falloff: { start: 18, end: 28, min: 21 }
     },
     'Mx4 Storm': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'low', horizontal: 'medium', pattern: '低垂直，中等水平后坐力' },
         falloff: { start: 18, end: 28, min: 15 }
     },
     'AUG A3': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '犊牛式布局，后坐力稳定' },
         falloff: { start: 18, end: 28, min: 21 }
     },
     'P10 RONI': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Mozzie 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，15发弹匣限制火力持续' },
         falloff: { start: 18, end: 28, min: 15 }
     },
     'UZK50GI': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Thorn 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，整体可控' },
@@ -1050,56 +1125,56 @@ const WEAPON_EXTENDED = {
 
     // === 轻机枪 ===
     'M249': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 5.5, reloadEmpty: 6.5,
         recoil: { vertical: 'high', horizontal: 'medium', pattern: '高垂直后坐力，弹链供弹换弹极慢' },
         falloff: { start: 30, end: 40, min: 31 }
     },
     '6P41': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 5.0, reloadEmpty: 6.0,
         recoil: { vertical: 'high', horizontal: 'high', pattern: '高后坐力，弹道不可预测' },
         falloff: { start: 30, end: 40, min: 29 }
     },
     'G8A1': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 4.5, reloadEmpty: 5.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，高射速要求持续下压' },
         falloff: { start: 30, end: 40, min: 24 }
     },
     'T-95 LSW': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 3.4, reloadEmpty: 4.4,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，弹鼓供弹' },
         falloff: { start: 30, end: 40, min: 29 }
     },
     'LMG-E': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 5.0, reloadEmpty: 6.0,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，150发弹匣' },
         falloff: { start: 30, end: 40, min: 26 }
     },
     'ALDA 5.56': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 4.5, reloadEmpty: 5.5,
         recoil: { vertical: 'medium', horizontal: 'high', pattern: '高射速LMG，水平后坐力较大' },
         falloff: { start: 30, end: 40, min: 22 }
     },
     'M249 SAW': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 4.5, reloadEmpty: 5.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，短枪管版本' },
         falloff: { start: 30, end: 40, min: 31 }
     },
     'DP27': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 5.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来稳定的后坐力' },
@@ -1112,20 +1187,22 @@ const WEAPON_EXTENDED = {
         underbarrel: false, mobility: 50,
         reloadTactical: 3.8, reloadEmpty: 4.5,
         recoil: { vertical: 'n/a', horizontal: 'n/a', pattern: '栓动步枪，单发射击无连射后坐力' },
-        falloff: { start: 30, end: 40, min: 108 }, // [实测] 135→108 (系数0.8, 30-40m)
-        specialNote: '内置5x/12x双倍率瞄准镜，不可更换'
+        falloff: { start: 29, end: 40, min: 108 }, // [Y11S3 实测] 135→108 (29-40m)
+        specialNote: '内置 3.5x/8x 双倍率瞄准镜，不可更换（Y11S3 由 5x/12x 下调；pump 时间 1s→0.8s，总弹药 36→51）'
     },
 
     // === 射手步枪 ===
     '417': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
+        sightNote: '3.5x 望远镜仅进攻方 DMR 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.9, reloadEmpty: 3.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，单发上跳大但回正快' },
         falloff: { start: 30, end: 40, min: 48 }
     },
     'OTs-03': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
+        sightNote: '3.5x 望远镜仅进攻方 DMR 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，后坐力大但射速慢有恢复时间' },
@@ -1133,28 +1210,32 @@ const WEAPON_EXTENDED = {
         specialNote: '热感瞄准镜可切换'
     },
     'CAMRS': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
+        sightNote: '3.5x 望远镜仅进攻方 DMR 可用',
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，后坐力中等' },
         falloff: { start: 30, end: 40, min: 48 }
     },
     'SR-25': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
+        sightNote: '3.5x 望远镜仅进攻方 DMR 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.9, reloadEmpty: 3.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，20发弹匣提供持续火力' },
         falloff: { start: 30, end: 40, min: 42 }
     },
     'Mk 14 EBR': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用；防守方 Aruni 亦在官方白名单内；3.5x 望远镜仅进攻方 DMR 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
-        recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，中等后坐力' },
-        falloff: { start: 30, end: 40, min: 42 }
+        recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，中等后坐力；Y11S3 首发后坐力提升' },
+        falloff: { start: 29, end: 40, min: 39 } // [Y11S3 实测] 56→39 (29-40m)
     },
     'PMR90A2': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
+        sightNote: '3.5x 望远镜仅进攻方 DMR 可用',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动射手步枪，Y11S1新增' },
@@ -1172,91 +1253,97 @@ const WEAPON_EXTENDED = {
     //   - falloff 为 null 表示暂无可靠来源，宁缺毋错
     //   - 数据源优先级: 育碧官网 > 灰机wiki > Fandom Wiki (需确认为Siege数据)
     'M870': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，单发后坐力大但有充足恢复时间' },
         falloff: { start: 5, midStart: 7, mid: 31, midEnd: 10, end: 13, min: 18, pellets: 8 } // [GitHub实测Y11S1.1] 42→31→18
     },
     'M590A1': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用',
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，后坐力大但可控' },
         falloff: { start: 5, midStart: 7, mid: 36, midEnd: 10, end: 13, min: 21, pellets: 8 } // [GitHub实测Y11S1.1] 48→36→21
     },
     'M1014': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用',
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，连续射击后坐力累积' },
         falloff: { start: 5, midStart: 7, mid: 21, midEnd: 10, end: 13, min: 12, pellets: 8 } // [GitHub实测Y11S1.1] 28→21→12
     },
     'SG-CQB': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用',
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，单发伤害高' },
         falloff: { start: 5, midStart: 7, mid: 33, midEnd: 10, end: 13, min: 19, pellets: 8 } // [GitHub实测Y11S1.1] 44→33→19
     },
     'SASG-12': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '半自动，AK平台，弹匣供弹可快速换弹' },
         falloff: { start: 5, midStart: 7, mid: 19, midEnd: 10, end: 13, min: 11, pellets: 8 } // [GitHub实测Y11S1.1] 26→19→11
     },
     'SUPER 90': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，惯性闭锁系统后坐力适中' },
         falloff: { start: 5, midStart: 7, mid: 20, midEnd: 10, end: 13, min: 12, pellets: 8 } // [GitHub实测Y11S1.1] 27→20→12
     },
     'SPAS-12': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，后坐力中等' },
         falloff: { start: 5, midStart: 7, mid: 23, midEnd: 10, end: 13, min: 13, pellets: 8 } // [GitHub实测Y11S1.1] 31→23→13
     },
     'SPAS-15': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，弹匣供弹，后坐力平稳' },
         falloff: { start: 5, midStart: 7, mid: 18, midEnd: 10, end: 13, min: 10, pellets: 8 } // [GitHub实测Y11S1.1] 24→18→10
     },
     'SuperNova': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用',
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，ComforTech缓冲系统' },
         falloff: { start: 5, midStart: 7, mid: 36, midEnd: 10, end: 13, min: 21, pellets: 8 } // [GitHub实测Y11S1.1] 48→36→21
     },
     'FO-12': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.34, reloadEmpty: 3.29,
         recoil: { vertical: 'very_high', horizontal: 'high', pattern: '全自动霰弹枪，极高射速带来剧烈后坐力' },
         falloff: { start: 5, midStart: 7, mid: 18, midEnd: 10, end: 13, min: 10, pellets: 8 } // [GitHub实测Y11S1.1] 24→18→10
     },
     'SIX12': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: false, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 4.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '旋转弹仓供弹，后坐力中等' },
         falloff: { start: 5, midStart: 7, mid: 34, midEnd: 10, end: 13, min: 20, pellets: 8 } // [GitHub实测Y11S1.1] 46→34→20
     },
     'SIX12 SD': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用',
         underbarrel: false, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 4.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '自带消音器的旋转弹仓霰弹枪' },
         falloff: { start: 5, midStart: 7, mid: 34, midEnd: 10, end: 13, min: 20, pellets: 8 } // [GitHub实测Y11S1.1] 46→34→20（与SIX12相同）
     },
     'ITA12L': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用',
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，长管版ITA12' },
@@ -1267,28 +1354,31 @@ const WEAPON_EXTENDED = {
     // 独头弹和普通枪械一样是单段衰减（两段伤害）
     // 衰减规则: 系数0.6, 15-25m, min = floor(damage × 0.6)
     'BOSG.12.2': {
-        sights: ['red_dot','holographic','reflex','scope_2_5x','scope_3_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅进攻方干员可用；防守方 Vigil 亦在官方白名单内',
         underbarrel: false, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.0,
         recoil: { vertical: 'very_high', horizontal: 'low', pattern: '双管独头弹，巨大的单发后坐力' },
         falloff: { start: 15, end: 25, min: 75 } // [GitHub实测Y11S1.1] 125→75 (Y9S4.2: 衰减15-25m, 最低60%)
     },
     'ACS12': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Alibi/Maestro/Azami 可用',
         underbarrel: false, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.8,
         recoil: { vertical: 'high', horizontal: 'medium', pattern: '半自动独头弹，30发弹匣持续输出' },
         falloff: { start: 15, end: 25, min: 41 } // [GitHub实测Y11S1.1] 69→41 (Y9S4.2: 衰减15-25m, 最低60%)
     },
     'TCSG12': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x','scope_2_5x'],
+        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sightNote: '2.5x 放大镜仅 Goyo/Kaid 可用',
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动独头弹，450RPM射速' },
         falloff: { start: 15, end: 25, min: 45 } // [GitHub实测Y11S1.1] 75→45 (Y9S4.2: 57→75buff, 衰减15-25m, 最低60%)
     },
     'Glaive-12': {
-        sights: ['red_dot','holographic','reflex','scope_1_5x','scope_2_0x'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.0,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '独头霰弹枪' },
@@ -1320,35 +1410,35 @@ const WEAPON_EXTENDED = {
         falloff: { start: 18, end: 28, min: 21 }
     },
     'SMG-11': {
-        sights: ['red_dot','holographic','reflex'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 1.8, reloadEmpty: 2.4,
         recoil: { vertical: 'very_high', horizontal: 'very_high', pattern: '极高后坐力，16发弹匣不到1秒清空' },
         falloff: { start: 18, end: 28, min: 19 }
     },
     'SMG-12': {
-        sights: ['red_dot','holographic','reflex'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.0, reloadEmpty: 2.6,
         recoil: { vertical: 'very_high', horizontal: 'very_high', pattern: '极高后坐力，全游戏最难控制武器之一' },
-        falloff: { start: 18, end: 28, min: 16 }
+        falloff: { start: 17, end: 28, min: 9 } // [Y11S3 实测] 16→9 (17-28m)，40m 维持 9
     },
     'Bearing 9': {
-        sights: ['red_dot','holographic','reflex'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 1.9, reloadEmpty: 2.5,
         recoil: { vertical: 'high', horizontal: 'high', pattern: '1100RPM高射速，后坐力大' },
         falloff: { start: 18, end: 28, min: 19 }
     },
     'SPSMG9': {
-        sights: ['red_dot','holographic','reflex'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 1.9, reloadEmpty: 2.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，副武器中较可控' },
-        falloff: { start: 18, end: 28, min: 19 }
+        falloff: { start: 17, end: 27, min: 21 } // [Y11S3 实测] 35→21 (17-27m)
     },
     'Reaper MK2': {
-        sights: ['red_dot','holographic','reflex'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.0, reloadEmpty: 2.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: 'Y11S2.3优化：后坐力阶段延后至第0/3/10/25发（原0/3/7/13），连续射击更平稳，通用副武器SMG' },
@@ -2508,6 +2598,20 @@ function getWeaponRecoilURL(weaponName) {
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'patch',
+        date: '2026-09-01',
+        title: 'Y11S3「Operation Split Fire」正式上线 — 主表数值已落地',
+        content: '<ul><li>✅ <strong>本站主表已按正式版数值更新</strong>（GitHub hanslhansl 实测 + 官方设计师笔记双源核对）</li><li>🔫 <strong>SMG-12</strong>：伤害 28→<strong>16</strong> / 弹匣 32→<strong>22</strong> / 射速 1270→1273 / 衰减重做 17-28m（28m 起 9）/ 备弹 96→78</li><li>🔫 <strong>AR-15.50</strong>：伤害 67→<strong>59</strong> / 射速 439→<strong>444</strong> / 衰减 29-40m（40m 41）/ <strong>Tubarão 不可装制退器</strong>（Maverick 保留）</li><li>🔫 <strong>Mk 14 EBR</strong>：伤害 60→<strong>56</strong> / 射速 457→<strong>444</strong> / 衰减 29-40m（40m 39）/ <strong>Aruni 不可装制退器</strong>（Dokkaebi 保留）</li><li>🔫 <strong>SPSMG9</strong>：伤害 33→<strong>35</strong> / 衰减 17-27m（27m 起 21）</li><li>🔭 <strong>CSRX 300</strong>：射速 55→<strong>63</strong> / 内置镜 5x/12x→<strong>3.5x/8x</strong> / pump 1s→0.8s / 总弹药 36→51 / 40m 109→108 / V-Lance 不再打断 ADS</li><li>🆕 <strong>新干员 Noor</strong>（防守方 2速2血，埃及）已挂载至 Commando 9 / ALDA 5.56 / 1911 TACOPS / Bailiff 410</li><li>⚠️ 新版 CSRX 倍率对应的 ADS 灵敏度乘数官方未公布，本站标注为「暂缺」而非估算</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates'
+    },
+    {
+        type: 'info',
+        date: '2026-09-04',
+        title: '瞄具体系重构 — 按放大倍率分大类、瞄具类型分小类',
+        content: '<ul><li>🔭 <strong>修复长期数据错误</strong>：本站此前仍在使用 <strong>Y9S1 已从游戏移除</strong>的 1.5x / 2.0x / 3.0x 倍镜（分别出现 53 / 26 / 18 处），且完全缺失当前版本最高倍率 3.5x</li><li>📐 <strong>新分类</strong>：大类按放大倍率（<strong>1.0x 无放大 / 2.5x 放大镜 / 3.5x 望远镜</strong>），小类按瞄具类型（机瞄 / 红点 / 全息 / 反射 / Magnified / Telescopic）</li><li>🖼️ <strong>15 款军械库瞄具原生 ICON</strong> 已逐款接入武器详情页与配件图鉴</li><li>📋 <strong>可用性依 Y9S1 官方分配表重算</strong>：2.5x 进攻方全主武器可用、防守方仅 14 组白名单；3.5x 仅进攻方 DMR（全库 7 把）</li><li>⚠️ 29 把武器补充了干员级可用性说明（如「2.5x 仅 Doc/Melusi/Rook 可用」）</li><li>ℹ️ 机瞄 +10% ADS 速度、非放大瞄具 +5%，均为 Y9S1 引入</li></ul>',
+        link: 'https://www.liquipedia.net/rainbowsix/9.1.0_Patch'
+    },
     {
         type: 'designer',
         date: '2026-08-17',

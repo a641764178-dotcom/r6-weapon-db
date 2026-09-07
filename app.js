@@ -1190,7 +1190,7 @@
                         ${o.armor ? `<span class="op-stat">🛡 ${o.armor}</span>` : ''}
                         ${o.speed ? `<span class="op-stat">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
                     </div>
-                    <div class="op-card-gadget">${o.gadget ? esc(o.gadget) : '<span class="muted">无固定独特技能</span>'}</div>
+                    <div class="op-card-gadget">${(o.gadget_zh || o.gadget) ? esc(o.gadget_zh || o.gadget) : '<span class="muted">无固定独特技能</span>'}</div>
                 </div>`;
         }).join('');
 
@@ -1216,7 +1216,12 @@
         const weapons = (o.weapons || []).map(w => {
             const wd = WEAPONS.find(x => x.name === w);
             const cat = wd ? (TYPE_NAMES[wd.type] || wd.type) : '';
-            return `<span class="op-weapon-chip" data-weapon="${w.replace(/'/g, "\\'")}">${w}${cat ? `<em>${cat}</em>` : ''}</span>`;
+            const thumb = (typeof getWeaponThumbURL === 'function') ? getWeaponThumbURL(w) : null;
+            return `<span class="op-weapon-chip" data-weapon="${w.replace(/'/g, "\\'")}">
+                        ${thumb ? `<img class="op-weapon-thumb" src="${thumb}" alt="${w}" loading="lazy" onerror="this.style.display='none'">` : ''}
+                        <span class="op-weapon-name">${w}</span>
+                        ${cat ? `<em>${cat}</em>` : ''}
+                    </span>`;
         }).join('');
 
         $('#operator-modal-body').innerHTML = `
@@ -1236,10 +1241,19 @@
                     ${(o.function || []).length ? `<div class="op-detail-func">职能：${o.function.map(esc).join(' / ')}</div>` : ''}
                 </div>
             </div>
-            ${o.gadget ? `<div class="op-detail-section-title">独特技能</div>
-                <div class="op-detail-gadget">${esc(o.gadget)}</div>
-                ${o.gadget_desc ? `<div class="op-detail-desc">${esc(o.gadget_desc)}</div>` : ''}`
-                : `<div class="op-detail-note muted">⚠️ 该干员<strong>没有独特技能</strong>（Liquipedia 干员页无 GadgetCard 条目）。
+            ${o.gadget || o.gadget_zh ? (() => {
+                const zh = o.gadget_zh, en = o.gadget;
+                const title = zh && en && zh !== en
+                    ? `${esc(zh)} <span class="op-gadget-en">${esc(en)}</span>`
+                    : esc(zh || en);
+                const desc = o.gadget_zh_desc || o.gadget_desc;
+                const stats = (o.gadget_stats || []);
+                return `<div class="op-detail-section-title">独特技能</div>
+                    <div class="op-detail-gadget">${title}</div>
+                    ${desc ? `<div class="op-detail-desc">${esc(desc)}</div>` : ''}
+                    ${stats.length ? `<ul class="op-gadget-stats">${stats.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}`;
+            })()
+                : `<div class="op-detail-note muted">⚠️ 该干员<strong>没有固定独特技能</strong>（Liquipedia 干员页无 GadgetCard 条目）。
                     Recruit 类干员（如 Striker / Sentry）不设专属装备，可在装备池中自由搭配。</div>`}
             <div class="op-detail-section-title">携带武器 · ${(o.weapons || []).length}</div>
             <div class="op-detail-weapons">${weapons || '<span class="muted">暂无数据</span>'}</div>

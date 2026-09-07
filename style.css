@@ -2077,3 +2077,36 @@ body {
     line-height: 1.6;
     color: var(--text-muted);
 }
+
+/* 武器 chip 缩略图版 */
+.op-weapon-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 12px 4px 5px;
+}
+.op-weapon-thumb {
+    width: 52px;
+    height: 26px;
+    object-fit: contain;
+    display: block;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px;
+}
+.op-weapon-name { font-weight: 600; color: var(--text-primary); }
+.op-weapon-chip:hover .op-weapon-name { color: var(--accent); }
+.op-weapon-chip em { margin-left: 2px; }
+
+.op-gadget-en { font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: 6px; }
+.op-gadget-stats {
+    margin: 8px 0 0;
+    padding: 8px 10px 8px 24px;
+    background: rgba(79, 195, 247, 0.05);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 11px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+}

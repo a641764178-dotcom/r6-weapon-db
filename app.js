@@ -652,13 +652,13 @@
             ${profileHTML}
 
             <div class="modal-section">
-                <div class="modal-section-title">使用干员</div>
+                <div class="modal-section-title">使用干员 <span style="font-size:11px;color:var(--text-muted);font-weight:400">点击查看干员档案</span></div>
                 <div class="modal-operators">
                     ${w.operators.map(op => {
                         const side = w.side === 'atk' ? 'atk' : w.side === 'def' ? 'def' : 'atk';
                         const iconUrl = getOperatorIconURL(op);
                         const iconHTML = iconUrl ? `<img class="modal-op-icon" src="${iconUrl}" alt="${op}" loading="lazy">` : '';
-                        return `<span class="modal-op-tag ${side}">${iconHTML}${op}</span>`;
+                        return `<span class="modal-op-tag ${side}" style="cursor:pointer" data-op-name="${op.replace(/'/g, "\\'")}">${iconHTML}${op}</span>`;
                     }).join('')}
                 </div>
             </div>
@@ -697,6 +697,19 @@
 
             ${triviaHTML}
         `;
+
+        // 干员点击事件绑定 → 跳转干员档案
+        if (typeof OPERATORS !== 'undefined' && typeof openOperatorModal === 'function') {
+            body.querySelectorAll('.modal-op-tag[data-op-name]').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (OPERATORS.find(o => o.name === this.dataset.opName)) {
+                        $('#weapon-modal').classList.remove('active');
+                        openOperatorModal(this.dataset.opName);
+                    }
+                });
+            });
+        }
 
         // 配件点击事件绑定
         body.querySelectorAll('.modal-att-item[data-att-key]').forEach(el => {
@@ -1255,6 +1268,8 @@
             })()
                 : `<div class="op-detail-note muted">⚠️ 该干员<strong>没有固定独特技能</strong>（Liquipedia 干员页无 GadgetCard 条目）。
                     Recruit 类干员（如 Striker / Sentry）不设专属装备，可在装备池中自由搭配。</div>`}
+            ${(o.gadget_zh_desc && /^(俗称|别名|又名)/.test(o.gadget_zh_desc)) ? `
+                <div class="op-detail-desc">🏷️ ${esc(o.gadget_zh_desc)}<span style="color:var(--text-muted)">（玩家俗称）</span></div>` : ''}
             <div class="op-detail-section-title">携带武器 · ${(o.weapons || []).length}</div>
             <div class="op-detail-weapons">${weapons || '<span class="muted">暂无数据</span>'}</div>
             <div class="op-detail-section-title">档案</div>

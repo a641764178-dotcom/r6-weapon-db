@@ -15,7 +15,7 @@ const ATTACHMENT_SLOTS = [
     { key: 'barrel',      name: '枪管',   nameEn: 'Barrel',      icon: '🔧',
       desc: '主要调节后坐力形态，Y7S3 后消音器不再降低伤害。' },
     { key: 'grip',        name: '握把',   nameEn: 'Grip',        icon: '✊',
-      desc: 'Y9S1 重做：新增水平握把，垂直握把下调至 20%，转角握把改提供装填速度。各武器可装的握把种类由武器决定，请以武器详情页「可用配件」为准。' },
+      desc: 'Y9S1 重做：新增水平前握把，垂直前握把下调至 20%，拐角握把改提供装填速度。各武器可装的握把种类由武器决定，请以武器详情页「可用配件」为准。' },
     { key: 'underbarrel', name: '下挂',   nameEn: 'Under Barrel', icon: '🔴',
       desc: 'Y9S1 重做：激光不再改善腰射，改为 +10% ADS 速度。' }
 ];
@@ -23,7 +23,8 @@ const ATTACHMENT_SLOTS = [
 const ATTACHMENT_DATA = {
     barrels: {
         muzzle_brake: {
-            name: '制退器', nameEn: 'Muzzle Brake', slot: 'barrel', icon: '🔧',
+            name: '枪口制退器', nameEn: 'Muzzle Brake', slot: 'barrel', icon: '🔧',
+            image: 'images/attachments/icons/muzzle_brake.png',
             effects: [
                 { type: 'positive', label: '首发后坐力减少', value: '-45%' },
                 { type: 'positive', label: '回正时间减少', value: '-45%' },
@@ -35,6 +36,7 @@ const ATTACHMENT_DATA = {
         },
         compensator: {
             name: '补偿器', nameEn: 'Compensator', slot: 'barrel', icon: '⚙️',
+            image: 'images/attachments/icons/compensator.png',
             effects: [
                 { type: 'positive', label: '水平后坐力减少', value: '-35%' },
                 { type: 'neutral', label: '垂直/首发后坐力', value: '不变' },
@@ -45,6 +47,7 @@ const ATTACHMENT_DATA = {
         },
         flash_hider: {
             name: '消焰器', nameEn: 'Flash Hider', slot: 'barrel', icon: '🔥',
+            image: 'images/attachments/icons/flash_hider.png',
             effects: [
                 { type: 'positive', label: '每发垂直后坐力减少', value: '-15%' },
                 { type: 'positive', label: '首发垂直后坐力额外减少', value: '-13%' },
@@ -56,6 +59,7 @@ const ATTACHMENT_DATA = {
         },
         suppressor: {
             name: '消音器', nameEn: 'Suppressor', slot: 'barrel', icon: '🤫',
+            image: 'images/attachments/icons/suppressor.png',
             effects: [
                 { type: 'positive', label: '射击方向标记', value: '完全消除' },
                 { type: 'positive', label: '射击声音距离', value: '大幅降低' },
@@ -67,19 +71,21 @@ const ATTACHMENT_DATA = {
             bestFor: '游走/侧翼干员、隐蔽打法'
         },
         extended_barrel: {
-            name: '加长枪管', nameEn: 'Extended Barrel', slot: 'barrel', icon: '📏',
+            name: '延伸枪管', nameEn: 'Extended Barrel', slot: 'barrel', icon: '📏',
+            image: 'images/attachments/icons/extended_barrel.png',
             effects: [
                 { type: 'positive', label: '伤害衰减幅度减少', value: '-15~20%' },
                 { type: 'neutral', label: '衰减起始距离', value: '不变' },
                 { type: 'negative', label: '后坐力减少', value: '无' }
             ],
-            description: '数据挖掘确认，加长枪管不会推迟伤害衰减开始距离，实际效果是减少衰减幅度。在中远距离交战中有效保留更多伤害。',
+            description: '数据挖掘确认，延伸枪管不会推迟伤害衰减开始距离，实际效果是减少衰减幅度。在中远距离交战中有效保留更多伤害。',
             bestFor: '后坐力可控的中远距离武器'
         }
     },
     grips: {
         vertical_grip: {
-            name: '垂直握把', nameEn: 'Vertical Grip', slot: 'grip', icon: '✊',
+            name: '垂直前握把', nameEn: 'Vertical Grip', slot: 'grip', icon: '✊',
+            image: 'images/attachments/icons/vertical_grip.png',
             changedIn: 'Y9S1',
             effects: [
                 { type: 'positive', label: '后坐力控制', value: '20%（Y9S1 前为 25%）' },
@@ -89,7 +95,8 @@ const ATTACHMENT_DATA = {
             bestFor: '后坐力大的武器、新手玩家'
         },
         angled_grip: {
-            name: '转角握把', nameEn: 'Angled Grip', slot: 'grip', icon: '📐',
+            name: '拐角握把', nameEn: 'Angled Grip', slot: 'grip', icon: '📐',
+            image: 'images/attachments/icons/angled_grip.png',
             changedIn: 'Y9S1',
             effects: [
                 { type: 'positive', label: '装填速度', value: '+20%' },
@@ -100,7 +107,8 @@ const ATTACHMENT_DATA = {
             bestFor: '弹匣消耗快、频繁补弹的武器'
         },
         horizontal_grip: {
-            name: '水平握把', nameEn: 'Horizontal Grip', slot: 'grip', icon: '🤲',
+            name: '水平前握把', nameEn: 'Horizontal Grip', slot: 'grip', icon: '🤲',
+            image: 'images/attachments/icons/horizontal_grip.png',
             newIn: 'Y9S1',
             effects: [
                 { type: 'positive', label: '干员移动速度', value: '提升' },
@@ -114,6 +122,7 @@ const ATTACHMENT_DATA = {
     underbarrel: {
         laser_sight: {
             name: '激光瞄准器', nameEn: 'Laser Sight', slot: 'underbarrel', icon: '🔴',
+            image: 'images/attachments/icons/laser_sight.png',
             changedIn: 'Y9S1',
             effects: [
                 { type: 'positive', label: 'ADS 速度', value: '+10%' },
@@ -445,7 +454,7 @@ const WEAPONS = [
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: [] },
-      barrelNote: 'Y11S3 起 Tubarão 不可装制退器（Maverick 保留）',
+      barrelNote: 'Y11S3 起 Tubarão 不可装枪口制退器（Maverick 保留）',
       notes: '半自动' },
     { name: 'AK-74M', type: 'ar', damage: 44, rpm: 650, mag: 40, operators: ['Nomad','Deimos'], side: 'atk',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
@@ -625,7 +634,7 @@ const WEAPONS = [
       barrels: ['muzzle_brake','flash_hider','suppressor'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: [] },
-      barrelNote: 'Y11S3 起 Aruni 不可装制退器（Dokkaebi 保留）' },
+      barrelNote: 'Y11S3 起 Aruni 不可装枪口制退器（Dokkaebi 保留）' },
     { name: 'PMR90A2', type: 'dmr', damage: 62, rpm: 444, mag: 20, operators: ['Solid Snake','Thatcher','Capitão','Hibana','Nøkk'], side: 'atk',
       barrels: ['muzzle_brake','suppressor'],
       grips: ['vertical_grip','angled_grip'],
@@ -2618,6 +2627,27 @@ function getWeaponRecoilURL(weaponName) {
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'info',
+        date: '2026-09-07',
+        title: '配件图标补齐 — 枪管 / 握把 / 下挂 9 款全部配图，配件名称对齐游戏内官方名',
+        content: '<ul><li>🖼️ <strong>9 款配件 ICON 全部补齐</strong>：枪管 5（消焰器 / 补偿器 / 枪口制退器 / 消音器 / 延伸枪管）+ 握把 3（垂直前握把 / 拐角握把 / 水平前握把）+ 下挂 1（激光瞄准器），取自游戏内军械库原生截图，程序化切图、透明底，与瞄具 15 款同规格</li><li>✏️ <strong>配件名称对齐游戏内官方名</strong>：制退器 → <strong>枪口制退器</strong> / 加长枪管 → <strong>延伸枪管</strong> / 垂直握把 → <strong>垂直前握把</strong> / 转角握把 → <strong>拐角握把</strong> / 水平握把 → <strong>水平前握把</strong></li><li>📁 图标存放于 <code>images/attachments/icons/</code>，与瞄具图标（<code>images/sights/icons/</code>）分目录管理</li></ul>',
+        link: ''
+    },
+    {
+        type: 'patch',
+        date: '2026-09-01',
+        title: 'Y11S3 补丁笔记补遗 — TTS 期间 Bug 修复随正式版一并上线',
+        content: '<ul><li>🔧 <strong>Bearing 9 / Super Shorty 机瞄修复</strong>：修复无法使用这两把武器的机械瞄具开镜瞄准的问题</li><li>🔧 <strong>水平握把修复</strong>：修复自定义枪械时无法选用水平前握把的问题</li><li>🔧 Montagne 盘石盾展开/收缩动画不流畅</li><li>🔧 Pulse 心跳传感器无法显示侦测到的敌人</li><li>🔧 AI 训练机器人：修复绕开 Azami 牙刃壁障（改为尝试破坏）、游艇地图不生成、绳降过慢</li><li>🔧 3v3 街机模式：选相同干员时对战结束崩溃</li><li>🔧 靶场多个教程目标无法完成</li><li>⚠️ <strong>无武器伤害/射速/弹匣/配件兼容性变更</strong>，纯 TTS 期间 Bug 修复</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/6HzsdnbOYovXelORy4mB7z/y11s3-patch-notes-addendum'
+    },
+    {
+        type: 'info',
+        date: '2026-08-30',
+        title: 'Gamescom 社区直播回顾 — Y12 起每年 4 名新干员 + 人质模式重做',
+        content: '<ul><li>🆕 <strong>Y12 起每年 4 名新干员</strong>（当前 Y11 为每年 3 名），意味着更多新武器需持续跟踪</li><li>🎭 <strong>Noor 深度背景</strong>：父亲 Jamal Murrad（Unit 777，曾出现在 Rogue Spear / Raven Shield）；Ahmed 曾在赫里福德基地与埃及成长，后与 Delta Force / SAS / GIGN 联训</li><li>🎮 <strong>人质模式重做</strong>（Hostage Rework）确认开发中</li><li>💀 <strong>预告：将有一名可操作干员死亡</strong>（叙事向，暂未透露具体干员）</li><li>🌐 <strong>Rainbow Six Tactics</strong> 公布：单人回合制战术游戏，与围攻共享世界观与叙事线</li><li>⚠️ <strong>无当前版本武器/配件改动</strong>，纯未来规划与叙事向内容</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/3CgEMLbWxEo0WCu5TMKXxX/gamescom-livestream-recap'
+    },
     {
         type: 'patch',
         date: '2026-09-01',

@@ -18,11 +18,11 @@
     const maxDPS = Math.max(...WEAPONS.filter(w => w.rpm > 0).map(calcDPS));
 
     const BARREL_NAMES = {
-        muzzle_brake: '制退器', compensator: '补偿器', flash_hider: '消焰器',
-        suppressor: '消音器', extended_barrel: '加长枪管'
+        muzzle_brake: '枪口制退器', compensator: '补偿器', flash_hider: '消焰器',
+        suppressor: '消音器', extended_barrel: '延伸枪管'
     };
     const GRIP_NAMES = {
-        vertical_grip: '垂直握把', angled_grip: '转角握把'
+        vertical_grip: '垂直前握把', angled_grip: '拐角握把', horizontal_grip: '水平前握把'
     };
     // Y9S1 重构后的瞄具键（1.5x / 2.0x / 3.0x 已从游戏移除）
     const SIGHT_NAMES = {

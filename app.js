@@ -1174,7 +1174,7 @@
                         ${o.armor ? `<span class="op-stat">🛡 ${o.armor}</span>` : ''}
                         ${o.speed ? `<span class="op-stat">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
                     </div>
-                    <div class="op-card-gadget">${o.gadget ? esc(o.gadget) : '<span class="muted">技能暂无数据</span>'}</div>
+                    <div class="op-card-gadget">${o.gadget ? esc(o.gadget) : '<span class="muted">无固定独特技能</span>'}</div>
                 </div>`;
         }).join('');
 
@@ -1223,7 +1223,8 @@
             ${o.gadget ? `<div class="op-detail-section-title">独特技能</div>
                 <div class="op-detail-gadget">${esc(o.gadget)}</div>
                 ${o.gadget_desc ? `<div class="op-detail-desc">${esc(o.gadget_desc)}</div>` : ''}`
-                : `<div class="op-detail-note muted">⚠️ 该干员技能暂无可靠来源数据</div>`}
+                : `<div class="op-detail-note muted">⚠️ 该干员<strong>没有独特技能</strong>（Liquipedia 干员页无 GadgetCard 条目）。
+                    Recruit 类干员（如 Striker / Sentry）不设专属装备，可在装备池中自由搭配。</div>`}
             <div class="op-detail-section-title">携带武器 · ${(o.weapons || []).length}</div>
             <div class="op-detail-weapons">${weapons || '<span class="muted">暂无数据</span>'}</div>
             <div class="op-detail-section-title">档案</div>

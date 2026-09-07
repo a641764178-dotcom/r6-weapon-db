@@ -2058,3 +2058,22 @@ body {
     .op-detail-head { flex-direction: column; }
     .op-detail-visual { flex: none; width: 100%; }
 }
+
+/* ---- 延伸枪管衰减对比 ---- */
+.falloff-ext {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: rgba(79, 195, 247, 0.05);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+.falloff-ext-title { font-size: 11px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+.falloff-ext-body { display: flex; flex-wrap: wrap; gap: 14px; font-size: 11px; color: var(--text-secondary); }
+.falloff-ext-body .trans { color: var(--warning); }
+.falloff-ext-body .min { color: var(--danger); }
+.falloff-ext-note {
+    margin-top: 6px;
+    font-size: 10px;
+    line-height: 1.6;
+    color: var(--text-muted);
+}

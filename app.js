@@ -464,6 +464,22 @@
                     <div class="falloff-legend">
                         ${legendHTML}
                     </div>
+                    ${(ext && ext.falloffExt && ext.falloffExt.start > 0) ? `
+                    <div class="falloff-ext">
+                        <div class="falloff-ext-title">📏 装备延伸枪管后</div>
+                        <div class="falloff-ext-body">
+                            <span>0–${ext.falloffExt.start}m 全额伤害</span>
+                            <span class="trans">${ext.falloffExt.start}–${ext.falloffExt.end}m 线性衰减</span>
+                            <span class="min">${ext.falloffExt.end}m+ 最低 <strong>${ext.falloffExt.min}</strong></span>
+                        </div>
+                        <div class="falloff-ext-note">
+                            对比基础衰减最低 <strong>${f.min}</strong>
+                            ${ext.falloffExt.min > f.min
+                                ? `，延伸枪管使远距离多保留 <strong>${ext.falloffExt.min - f.min}</strong> 点伤害`
+                                : ''}
+                            ；衰减起始距离不推迟。数据来源：GitHub hanslhansl 实测曲线
+                        </div>
+                    </div>` : ''}
                 </div>
             </div>`;
         } else {

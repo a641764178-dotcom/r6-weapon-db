@@ -744,7 +744,7 @@ const WEAPONS = [
     { name: 'Bailiff 410', type: 'pistol', damage: 30, rpm: 0, mag: 5, operators: ['Maestro','Alibi','Oryx','Doc','Grim','Noor'], side: 'def',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] },
       notes: '副武器左轮霰弹枪，主要用于开洞' },
-    { name: '.44 Vendetta', type: 'pistol', damage: 78, rpm: 0, mag: 6, operators: ['Deimos'], side: 'atk',
+    { name: '.44 Vendetta', type: 'revolver', damage: 78, rpm: 0, mag: 6, operators: ['Deimos'], side: 'atk',
       barrels: ['muzzle_brake','suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] },
       notes: 'Deimos专属高伤害左轮' },
 
@@ -804,14 +804,16 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.7, reloadEmpty: 3.3,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '稳定上升，略向右偏' },
-        falloff: { start: 25, end: 35, min: 26 }
+        falloff: { start: 25, end: 35, min: 26 },
+        falloffExt: { start: 26, end: 35, min: 39 },
     },
     'Commando 9': {
         sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.1,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '非常平稳，几乎直线上升' },
-        falloff: { start: 25, end: 35, min: 21 }
+        falloff: { start: 25, end: 35, min: 21 },
+        falloffExt: { start: 26, end: 34, min: 32 },
     },
     'L85A2': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -832,14 +834,16 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.9, reloadEmpty: 3.4,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '后坐力非常小，容易控制' },
-        falloff: { start: 25, end: 35, min: 22 }
+        falloff: { start: 25, end: 35, min: 22 },
+        falloffExt: { start: 27, end: 35, min: 33 },
     },
     'R4-C': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.7, reloadEmpty: 3.4,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '垂直后坐力高，水平偏移小' },
-        falloff: { start: 25, end: 35, min: 23 }
+        falloff: { start: 25, end: 35, min: 23 },
+        falloffExt: { start: 27, end: 35, min: 34 },
     },
     '556XI': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -853,7 +857,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.6, reloadEmpty: 3.3,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '极高射速导致极高垂直后坐力，需要强力下压' },
-        falloff: { start: 25, end: 35, min: 22 }
+        falloff: { start: 25, end: 35, min: 22 },
+        falloffExt: { start: 26, end: 34, min: 33 },
     },
     'AK-12': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -875,35 +880,40 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.9, reloadEmpty: 3.6,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，弹道略向右偏' },
-        falloff: { start: 25, end: 35, min: 25 }
+        falloff: { start: 25, end: 35, min: 25 },
+        falloffExt: { start: 26, end: 35, min: 38 },
     },
     '416-C CARBINE': {
         sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.6,
         recoil: { vertical: 'low_medium', horizontal: 'low', pattern: 'Y11S2.2降低垂直后坐力+平滑水平，最难控段从第8发推迟到第10发，整体更易控' },
-        falloff: { start: 25, end: 35, min: 22 }
+        falloff: { start: 25, end: 35, min: 22 },
+        falloffExt: { start: 27, end: 35, min: 33 },
     },
     'C8-SFW': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: false, mobility: 50,
         reloadTactical: 2.7, reloadEmpty: 3.3,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '极高后坐力，Skeleton Key占用下挂' },
-        falloff: { start: 25, end: 35, min: 24 }
+        falloff: { start: 25, end: 35, min: 24 },
+        falloffExt: { start: 27, end: 35, min: 35 },
     },
     'Mk17 CQB': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.6,
         recoil: { vertical: 'high', horizontal: 'medium', pattern: '7.62mm大口径，单发后坐力大但射速低补偿' },
-        falloff: { start: 25, end: 35, min: 26 }
+        falloff: { start: 25, end: 35, min: 26 },
+        falloffExt: { start: 26, end: 35, min: 39 },
     },
     'PARA-308': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.8,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，弹道偏右' },
-        falloff: { start: 25, end: 35, min: 28 }
+        falloff: { start: 25, end: 35, min: 28 },
+        falloffExt: { start: 26, end: 34, min: 42 },
     },
     'Type-89': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -939,7 +949,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，非常容易控制' },
-        falloff: { start: 25, end: 35, min: 25 }
+        falloff: { start: 25, end: 35, min: 25 },
+        falloffExt: { start: 25, end: 35, min: 37 },
     },
     'AR-15.50': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
@@ -947,7 +958,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，单发后坐力大但有恢复时间；Y11S3 首发后坐力提升' },
-        falloff: { start: 29, end: 40, min: 41 } // [Y11S3 实测] 59→41 (29-40m)
+        falloff: { start: 30, end: 40, min: 41 } // [Y11S3 实测] 59→41 (29-40m)
     },
     'AK-74M': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -968,35 +979,40 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，适合远距离连射' },
-        falloff: { start: 25, end: 35, min: 22 }
+        falloff: { start: 25, end: 35, min: 22 },
+        falloffExt: { start: 27, end: 35, min: 33 },
     },
     'SC3000K': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.6, reloadEmpty: 3.3,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，整体平稳' },
-        falloff: { start: 25, end: 35, min: 27 }
+        falloff: { start: 25, end: 35, min: 27 },
+        falloffExt: { start: 26, end: 35, min: 40 },
     },
     'POF-9': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.2,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '9mm口径，后坐力非常小' },
-        falloff: { start: 25, end: 35, min: 22 }
+        falloff: { start: 25, end: 35, min: 22 },
+        falloffExt: { start: 26, end: 34, min: 33 },
     },
     'PCX-33': {
         sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.2,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，防守方可用' },
-        falloff: { start: 25, end: 35, min: 21 }
+        falloff: { start: 25, end: 35, min: 21 },
+        falloffExt: { start: 26, end: 34, min: 32 },
     },
     'XK23': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 3.5, reloadEmpty: null,
         recoil: { vertical: 'low-medium', horizontal: 'low', pattern: '易控制、稳定一致的后坐力模式' },
-        falloff: { start: 25, end: 35, min: 29 }
+        falloff: { start: 25, end: 35, min: 29 },
+        falloffExt: { start: 27, end: 35, min: 43 },
     },
 
     // === 冲锋枪 ===
@@ -1006,7 +1022,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'low', horizontal: 'medium', pattern: '低垂直，中等水平后坐力' },
-        falloff: { start: 18, end: 28, min: 20 }
+        falloff: { start: 18, end: 28, min: 20 },
+        falloffExt: { start: 18, end: 28, min: 30 },
     },
     'MP5K': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1014,7 +1031,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，适合近距离扫射' },
-        falloff: { start: 18, end: 28, min: 18 }
+        falloff: { start: 18, end: 28, min: 18 },
+        falloffExt: { start: 20, end: 28, min: 26 },
     },
     'UMP45': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1022,7 +1040,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'very_low', horizontal: 'very_low', pattern: '几乎无后坐力，激光般稳定' },
-        falloff: { start: 18, end: 28, min: 25 }
+        falloff: { start: 18, end: 28, min: 25 },
+        falloffExt: { start: 18, end: 28, min: 37 },
     },
     'MP5': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1030,7 +1049,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，滚柱闭锁带来平稳射击' },
-        falloff: { start: 18, end: 28, min: 16 }
+        falloff: { start: 18, end: 28, min: 16 },
+        falloffExt: { start: 19, end: 27, min: 24 },
     },
     'P90': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1038,7 +1058,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，高射速需要控制' },
-        falloff: { start: 18, end: 28, min: 13 }
+        falloff: { start: 18, end: 28, min: 13 },
+        falloffExt: { start: 21, end: 28, min: 19 },
     },
     'MP5SD': {
         sights: ['red_dot', 'holographic', 'reflex'],
@@ -1053,7 +1074,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '非常稳定的弹道' },
-        falloff: { start: 18, end: 28, min: 20 }
+        falloff: { start: 18, end: 28, min: 20 },
+        falloffExt: { start: 18, end: 28, min: 30 },
     },
     'MP7': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1061,7 +1083,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等垂直后坐力，水平稳定' },
-        falloff: { start: 18, end: 28, min: 19 }
+        falloff: { start: 18, end: 28, min: 19 },
+        falloffExt: { start: 20, end: 28, min: 28 },
     },
     '9mm C1': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1069,28 +1092,32 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来极低后坐力' },
-        falloff: { start: 18, end: 28, min: 21 }
+        falloff: { start: 18, end: 28, min: 21 },
+        falloffExt: { start: 19, end: 27, min: 32 },
     },
     'MPX': {
         sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'very_low', horizontal: 'very_low', pattern: '接近零后坐力，被称为"激光枪"' },
-        falloff: { start: 18, end: 28, min: 15 }
+        falloff: { start: 18, end: 28, min: 15 },
+        falloffExt: { start: 19, end: 27, min: 23 },
     },
     'M12': {
         sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来稳定后坐力' },
-        falloff: { start: 18, end: 28, min: 25 }
+        falloff: { start: 18, end: 28, min: 25 },
+        falloffExt: { start: 18, end: 28, min: 37 },
     },
     'PDW9': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.1,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，50发弹匣提供持续火力' },
-        falloff: { start: 18, end: 28, min: 20 }
+        falloff: { start: 18, end: 28, min: 20 },
+        falloffExt: { start: 18, end: 28, min: 30 },
     },
     'Vector .45': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1098,14 +1125,16 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.0, reloadEmpty: 2.8,
         recoil: { vertical: 'very_low', horizontal: 'high', pattern: '垂直极低(Super V系统)，水平随机且大' },
-        falloff: { start: 18, end: 28, min: 13 }
+        falloff: { start: 18, end: 28, min: 13 },
+        falloffExt: { start: 21, end: 28, min: 20 },
     },
     'T-5 SMG': {
         sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，近距离非常好用' },
-        falloff: { start: 18, end: 28, min: 16 }
+        falloff: { start: 18, end: 28, min: 16 },
+        falloffExt: { start: 19, end: 27, min: 25 },
     },
     'Scorpion EVO': {
         sights: ['red_dot', 'holographic', 'reflex'],
@@ -1119,21 +1148,24 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，容易控制' },
-        falloff: { start: 18, end: 28, min: 21 }
+        falloff: { start: 18, end: 28, min: 21 },
+        falloffExt: { start: 19, end: 27, min: 32 },
     },
     'Mx4 Storm': {
         sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'low', horizontal: 'medium', pattern: '低垂直，中等水平后坐力' },
-        falloff: { start: 18, end: 28, min: 15 }
+        falloff: { start: 18, end: 28, min: 15 },
+        falloffExt: { start: 19, end: 27, min: 23 },
     },
     'AUG A3': {
         sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 3.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '犊牛式布局，后坐力稳定' },
-        falloff: { start: 18, end: 28, min: 21 }
+        falloff: { start: 18, end: 28, min: 21 },
+        falloffExt: { start: 19, end: 27, min: 32 },
     },
     'P10 RONI': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1141,7 +1173,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，15发弹匣限制火力持续' },
-        falloff: { start: 18, end: 28, min: 15 }
+        falloff: { start: 18, end: 28, min: 15 },
+        falloffExt: { start: 19, end: 27, min: 23 },
     },
     'UZK50GI': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1149,7 +1182,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，整体可控' },
-        falloff: { start: 18, end: 28, min: 21 }
+        falloff: { start: 18, end: 28, min: 21 },
+        falloffExt: { start: 19, end: 27, min: 32 },
     },
 
     // === 轻机枪 ===
@@ -1165,7 +1199,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 5.0, reloadEmpty: 6.0,
         recoil: { vertical: 'high', horizontal: 'high', pattern: '高后坐力，弹道不可预测' },
-        falloff: { start: 30, end: 40, min: 29 }
+        falloff: { start: 30, end: 40, min: 30 }
     },
     'G8A1': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1193,7 +1227,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 4.5, reloadEmpty: 5.5,
         recoil: { vertical: 'medium', horizontal: 'high', pattern: '高射速LMG，水平后坐力较大' },
-        falloff: { start: 30, end: 40, min: 22 }
+        falloff: { start: 30, end: 40, min: 23 }
     },
     'M249 SAW': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1207,7 +1241,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 5.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来稳定的后坐力' },
-        falloff: { start: 30, end: 40, min: 39 }
+        falloff: { start: 30, end: 40, min: 40 }
     },
 
     // === 狙击步枪 ===
@@ -1216,7 +1250,7 @@ const WEAPON_EXTENDED = {
         underbarrel: false, mobility: 50,
         reloadTactical: 3.8, reloadEmpty: 4.5,
         recoil: { vertical: 'n/a', horizontal: 'n/a', pattern: '栓动步枪，单发射击无连射后坐力' },
-        falloff: { start: 29, end: 40, min: 108 }, // [Y11S3 实测] 135→108 (29-40m)
+        falloff: { start: 30, end: 40, min: 108 }, // [Y11S3 实测] 135→108 (29-40m)
         specialNote: '内置 3.5x/8x 双倍率瞄准镜，不可更换（Y11S3 由 5x/12x 下调；pump 时间 1s→0.8s，总弹药 36→51）'
     },
 
@@ -1227,7 +1261,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.9, reloadEmpty: 3.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，单发上跳大但回正快' },
-        falloff: { start: 30, end: 40, min: 48 }
+        falloff: { start: 30, end: 40, min: 49 }
     },
     'OTs-03': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
@@ -1235,7 +1269,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，后坐力大但射速慢有恢复时间' },
-        falloff: { start: 30, end: 40, min: 49 },
+        falloff: { start: 30, end: 40, min: 57 },
         specialNote: '热感瞄准镜可切换'
     },
     'CAMRS': {
@@ -1244,7 +1278,7 @@ const WEAPON_EXTENDED = {
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，后坐力中等' },
-        falloff: { start: 30, end: 40, min: 48 }
+        falloff: { start: 30, end: 40, min: 49 }
     },
     'SR-25': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
@@ -1252,7 +1286,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.9, reloadEmpty: 3.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，20发弹匣提供持续火力' },
-        falloff: { start: 30, end: 40, min: 42 }
+        falloff: { start: 30, end: 40, min: 43 }
     },
     'Mk 14 EBR': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
@@ -1260,7 +1294,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，中等后坐力；Y11S3 首发后坐力提升' },
-        falloff: { start: 29, end: 40, min: 39 } // [Y11S3 实测] 56→39 (29-40m)
+        falloff: { start: 30, end: 40, min: 39 } // [Y11S3 实测] 56→39 (29-40m)
     },
     'PMR90A2': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
@@ -1353,7 +1387,8 @@ const WEAPON_EXTENDED = {
         underbarrel: false, mobility: 50,
         reloadTactical: 2.34, reloadEmpty: 3.29,
         recoil: { vertical: 'very_high', horizontal: 'high', pattern: '全自动霰弹枪，极高射速带来剧烈后坐力' },
-        falloff: { start: 5, midStart: 7, mid: 18, midEnd: 10, end: 13, min: 10, pellets: 8 } // [GitHub实测Y11S1.1] 24→18→10
+        falloffExt: { start: 6, end: 13, min: 16 },
+        falloff: { start: 5, midStart: 7, mid: 18, midEnd: 10, end: 13, min: 10, pellets: 8 } // [GitHub实测Y11S1.1] 24→18→10,
     },
     'SIX12': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1443,7 +1478,8 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 1.8, reloadEmpty: 2.4,
         recoil: { vertical: 'very_high', horizontal: 'very_high', pattern: '极高后坐力，16发弹匣不到1秒清空' },
-        falloff: { start: 18, end: 28, min: 19 }
+        falloff: { start: 18, end: 28, min: 19 },
+        falloffExt: { start: 20, end: 28, min: 28 },
     },
     'SMG-12': {
         sights: ['red_dot', 'holographic', 'reflex'],
@@ -1457,14 +1493,16 @@ const WEAPON_EXTENDED = {
         underbarrel: false, mobility: 50,
         reloadTactical: 1.9, reloadEmpty: 2.5,
         recoil: { vertical: 'high', horizontal: 'high', pattern: '1100RPM高射速，后坐力大' },
-        falloff: { start: 18, end: 28, min: 19 }
+        falloff: { start: 18, end: 28, min: 19 },
+        falloffExt: { start: 21, end: 28, min: 29 },
     },
     'SPSMG9': {
         sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: false, mobility: 50,
         reloadTactical: 1.9, reloadEmpty: 2.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，副武器中较可控' },
-        falloff: { start: 17, end: 27, min: 21 } // [Y11S3 实测] 35→21 (17-27m)
+        falloffExt: { start: 19, end: 28, min: 31 },
+        falloff: { start: 17, end: 27, min: 21 } // [Y11S3 实测] 35→21 (17-27m),
     },
     'Reaper MK2': {
         sights: ['red_dot', 'holographic', 'reflex'],
@@ -1479,38 +1517,57 @@ const WEAPON_EXTENDED = {
         sights: [], underbarrel: true, mobility: 50,
         reloadTactical: 1.6, reloadEmpty: 2.2,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '半自动手枪，后坐力小' },
-        falloff: { start: 12, end: 15, min: 25 }
+        falloff: { start: 12, end: 14, min: 25 }
     },
     'P12': {
         sights: [], underbarrel: true, mobility: 50,
         reloadTactical: 1.6, reloadEmpty: 2.2,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '半自动手枪，标准后坐力' },
-        falloff: { start: 12, end: 15, min: 26 }
+        falloff: { start: 12, end: 14, min: 26 }
     },
     'PMM': {
         sights: [], underbarrel: true, mobility: 50,
         reloadTactical: 1.5, reloadEmpty: 2.1,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '高伤害手枪，后坐力稍大' },
-        falloff: { start: 12, end: 15, min: 36 }
+        falloff: { start: 12, end: 14, min: 36 }
     },
     'D-50': {
         sights: [], underbarrel: true, mobility: 50,
         reloadTactical: 1.8, reloadEmpty: 2.4,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '沙漠之鹰，极大后坐力' },
-        falloff: { start: 12, end: 15, min: 42 }
+        falloff: { start: 12, end: 14, min: 42 }
     },
     'LFP586': {
         sights: [], underbarrel: false, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 2.5,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '左轮，单发后坐力极大' },
-        falloff: { start: 12, end: 15, min: 46 }
+        falloff: { start: 12, end: 14, min: 46 }
     },
     'Keratos .357': {
         sights: [], underbarrel: false, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 2.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '底部枪管设计降低上跳' },
-        falloff: { start: 12, end: 15, min: 46 }
-    }
+        falloff: { start: 12, end: 14, min: 46 }
+    },
+
+    // === 2026-09-07 依 GitHub 实测补齐手枪/左轮衰减 ===
+    '.44 Mag Semi-Auto': { falloff: { start: 12, end: 14, min: 32 } },
+    '.44 Vendetta': { falloff: { start: 12, end: 14, min: 46 } },
+    '1911 TACOPS': { falloff: { start: 12, end: 14, min: 33 } },
+    'GSH-18': { falloff: { start: 12, end: 14, min: 26 } },
+    'Luison': { falloff: { start: 12, end: 14, min: 39 } },
+    'M45 MEUSOC': { falloff: { start: 12, end: 14, min: 34 } },
+    'Mk1 9mm': { falloff: { start: 12, end: 14, min: 28 } },
+    'P-10C': { falloff: { start: 12, end: 14, min: 24 } },
+    'P226 MK 25': { falloff: { start: 12, end: 14, min: 30 } },
+    'P229': { falloff: { start: 12, end: 14, min: 30 } },
+    'P9': { falloff: { start: 12, end: 14, min: 27 } },
+    'PRB92': { falloff: { start: 12, end: 14, min: 25 } },
+    'Q-929': { falloff: { start: 12, end: 14, min: 36 } },
+    'RG15': { falloff: { start: 12, end: 14, min: 22 } },
+    'SDP 9mm': { falloff: { start: 12, end: 14, min: 28 } },
+    'TACIT .45': { falloff: { start: 12, end: 14, min: 31 } },
+    'USP40': { falloff: { start: 12, end: 14, min: 28 } },
 };
 
 // ---- 武器详细档案 ----

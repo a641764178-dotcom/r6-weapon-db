@@ -19,6 +19,7 @@
             </div>
             <nav class="nav">
                 <a href="#" class="nav-link active" data-tab="weapons">武器库</a>
+                <a href="#" class="nav-link" data-tab="operators">干员</a>
                 <a href="#" class="nav-link" data-tab="attachments">配件图鉴</a>
                 <a href="#" class="nav-link" data-tab="compare">对比工具</a>
                 <a href="#" class="nav-link" data-tab="updates">官方更新</a>
@@ -70,6 +71,28 @@
         </section>
 
         <!-- 配件图鉴页面 -->
+        <!-- 干员页面 -->
+        <section id="tab-operators" class="tab-content">
+            <h2 class="section-title">干员档案</h2>
+            <p class="section-desc">
+                资料来源：GitHub hanslhansl operators.json（携带武器 / 阵营）· Liquipedia（护甲 / 速度 / 职能 / 技能 / 档案）· Ubisoft 官方公告（Noor 等新干员）。<br>
+                无可靠来源的字段一律留空，不做估算。点击卡片查看完整档案，点击武器名可跳转到该武器详情。
+            </p>
+            <div class="op-toolbar">
+                <div class="op-filters">
+                    <button class="op-filter active" data-side="all">全部</button>
+                    <button class="op-filter" data-side="atk">⚔️ 进攻方</button>
+                    <button class="op-filter" data-side="def">🛡️ 防守方</button>
+                </div>
+                <div class="search-box op-search">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <input type="text" id="op-search-input" placeholder="搜索干员 / 技能 / 武器…">
+                </div>
+                <div class="op-count" id="op-count"></div>
+            </div>
+            <div id="operator-cards" class="operator-cards"></div>
+        </section>
+
         <section id="tab-attachments" class="tab-content">
             <div class="attachment-overview">
                 <h2 class="section-title">配件属性总览</h2>
@@ -128,6 +151,15 @@
         <div class="modal-content">
             <button class="modal-close">&times;</button>
             <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- 干员详情弹窗 -->
+    <div id="operator-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div id="operator-modal-body"></div>
         </div>
     </div>
 

@@ -1116,9 +1116,159 @@
         `).join('');
     }
 
+    // ============================================================
+    //                        干 员 页 签
+    // ============================================================
+    const SPEED_LABEL = { fast: '3 速', medium: '2 速', slow: '1 速' };
+    const DIFF_LABEL = { easy: '简单', normal: '普通', hard: '困难' };
+    const COUNTRY_FLAG = {
+        us: '🇺🇸', gb: '🇬🇧', fr: '🇫🇷', de: '🇩🇪', ru: '🇷🇺', ca: '🇨🇦', br: '🇧🇷',
+        jp: '🇯🇵', kr: '🇰🇷', cn: '🇨🇳', au: '🇦🇺', nl: '🇳🇱', pl: '🇵🇱', se: '🇸🇪',
+        no: '🇳🇴', dk: '🇩🇰', fi: '🇫🇮', in: '🇮🇳', il: '🇮🇱', es: '🇪🇸', it: '🇮🇹',
+        mx: '🇲🇽', za: '🇿🇦', eg: '🇪🇬', ie: '🇮🇪', ch: '🇨🇭', at: '🇦🇹', be: '🇧🇪',
+        pt: '🇵🇹', tr: '🇹🇷', ua: '🇺🇦', sg: '🇸🇬', my: '🇲🇾', th: '🇹🇭', id: '🇮🇩',
+        ph: '🇵🇭', nz: '🇳🇿', ar: '🇦🇷', cl: '🇨🇱', co: '🇨🇴', pe: '🇵🇪'
+    };
+
+    const opState = { side: 'all', q: '' };
+
+    function operatorIconURL(op) {
+        if (!op.icon) return null;
+        return OPERATOR_ICON_CDN + op.icon;
+    }
+
+    function filteredOperators() {
+        const q = opState.q.trim().toLowerCase();
+        return OPERATORS.filter(o => {
+            if (opState.side !== 'all' && o.side !== opState.side) return false;
+            if (!q) return true;
+            const hay = [o.name, o.realname, o.gadget, o.affiliation, o.birthplace,
+                         ...(o.function || []), ...(o.weapons || [])]
+                .filter(Boolean).join(' ').toLowerCase();
+            return hay.includes(q);
+        });
+    }
+
+    function renderOperators() {
+        const box = $('#operator-cards');
+        if (!box) return;
+        const list = filteredOperators();
+        const cnt = $('#op-count');
+        if (cnt) cnt.textContent = `${list.length} / ${OPERATORS.length} 位`;
+
+        box.innerHTML = list.map(o => {
+            const badge = o.side === 'atk'
+                ? '<b class="op-side atk">⚔️ 进攻</b>'
+                : o.side === 'def' ? '<b class="op-side def">🛡️ 防守</b>' : '';
+            const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
+            const icon = operatorIconURL(o);
+            return `
+                <div class="op-card" data-op="${o.name.replace(/'/g, "\\'")}" tabindex="0" role="button">
+                    <div class="op-card-visual">
+                        ${icon ? `<img src="${icon}" alt="${o.name}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'op-card-fallback',textContent:'${o.name[0]}'}))">`
+                               : `<div class="op-card-fallback">${o.name[0]}</div>`}
+                    </div>
+                    <div class="op-card-name">${o.name}${flag ? ' ' + flag : ''}</div>
+                    <div class="op-card-meta">
+                        ${badge}
+                        ${o.armor ? `<span class="op-stat">🛡 ${o.armor}</span>` : ''}
+                        ${o.speed ? `<span class="op-stat">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
+                    </div>
+                    <div class="op-card-gadget">${o.gadget ? esc(o.gadget) : '<span class="muted">技能暂无数据</span>'}</div>
+                </div>`;
+        }).join('');
+
+        box.querySelectorAll('.op-card').forEach(c => {
+            const open = () => openOperatorModal(c.dataset.op);
+            c.addEventListener('click', open);
+            c.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+            });
+        });
+    }
+
+    function esc(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function openOperatorModal(name) {
+        const o = OPERATORS.find(x => x.name === name);
+        const modal = $('#operator-modal');
+        if (!o || !modal) return;
+        const icon = operatorIconURL(o);
+        const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
+        const weapons = (o.weapons || []).map(w => {
+            const wd = WEAPONS.find(x => x.name === w);
+            const cat = wd ? (TYPE_NAMES[wd.type] || wd.type) : '';
+            return `<span class="op-weapon-chip" data-weapon="${w.replace(/'/g, "\\'")}">${w}${cat ? `<em>${cat}</em>` : ''}</span>`;
+        }).join('');
+
+        $('#operator-modal-body').innerHTML = `
+            <div class="op-detail-head">
+                <div class="op-detail-visual">
+                    ${icon ? `<img src="${icon}" alt="${o.name}">` : `<div class="op-detail-fallback">${o.name[0]}</div>`}
+                </div>
+                <div class="op-detail-meta">
+                    <div class="op-detail-name">${o.name} ${flag}</div>
+                    ${o.realname ? `<div class="op-detail-en">${esc(o.realname)}</div>` : ''}
+                    <div class="op-detail-tags">
+                        <span class="op-tag ${o.side}">${o.side === 'atk' ? '⚔️ 进攻方' : o.side === 'def' ? '🛡️ 防守方' : '双阵营'}</span>
+                        ${o.armor ? `<span class="op-tag">🛡 护甲 ${o.armor}</span>` : ''}
+                        ${o.speed ? `<span class="op-tag">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
+                        ${o.difficulty ? `<span class="op-tag">难度 ${DIFF_LABEL[o.difficulty] || o.difficulty}</span>` : ''}
+                    </div>
+                    ${(o.function || []).length ? `<div class="op-detail-func">职能：${o.function.map(esc).join(' / ')}</div>` : ''}
+                </div>
+            </div>
+            ${o.gadget ? `<div class="op-detail-section-title">独特技能</div>
+                <div class="op-detail-gadget">${esc(o.gadget)}</div>
+                ${o.gadget_desc ? `<div class="op-detail-desc">${esc(o.gadget_desc)}</div>` : ''}`
+                : `<div class="op-detail-note muted">⚠️ 该干员技能暂无可靠来源数据</div>`}
+            <div class="op-detail-section-title">携带武器 · ${(o.weapons || []).length}</div>
+            <div class="op-detail-weapons">${weapons || '<span class="muted">暂无数据</span>'}</div>
+            <div class="op-detail-section-title">档案</div>
+            <div class="op-detail-profile">
+                ${o.affiliation ? `<div><span>所属</span>${esc(o.affiliation)}</div>` : ''}
+                ${o.birthplace ? `<div><span>出生地</span>${esc(o.birthplace)}</div>` : ''}
+                ${o.birthdate ? `<div><span>生日</span>${esc(o.birthdate)}</div>` : ''}
+                ${o.releasedate ? `<div><span>上线</span>${esc(o.releasedate)}</div>` : ''}
+            </div>
+        `;
+        modal.classList.add('active');
+
+        // 点武器 chip 跳到武器详情
+        modal.querySelectorAll('.op-weapon-chip').forEach(chip => {
+            chip.style.cursor = 'pointer';
+            chip.addEventListener('click', () => {
+                const w = WEAPONS.find(x => x.name === chip.dataset.weapon);
+                if (!w) return;
+                modal.classList.remove('active');
+                if (typeof showWeaponDetail === 'function') showWeaponDetail(w.name);
+            });
+        });
+    }
+
+    function initOperators() {
+        renderOperators();
+        $$('.op-filter').forEach(b => {
+            b.addEventListener('click', () => {
+                $$('.op-filter').forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                opState.side = b.dataset.side;
+                renderOperators();
+            });
+        });
+        const inp = $('#op-search-input');
+        if (inp) inp.addEventListener('input', () => {
+            opState.q = inp.value;
+            renderOperators();
+        });
+    }
+
     // ---- 初始化 ----
     renderWeaponGrid();
     renderAttachmentCards();
+    if (typeof OPERATORS !== 'undefined') initOperators();
     initCompatQuery();
     initCompare();
     renderUpdates();

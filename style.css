@@ -1940,3 +1940,121 @@ body {
     .att-detail-head { flex-direction: column; }
     .att-detail-visual { flex: none; width: 100%; }
 }
+
+/* ============================================
+   干员页签
+   ============================================ */
+.op-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 14px 0 18px;
+}
+.op-filters { display: flex; gap: 6px; }
+.op-filter {
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .15s;
+}
+.op-filter:hover { border-color: var(--accent); color: var(--text-primary); }
+.op-filter.active {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.op-search { flex: 1; min-width: 200px; max-width: 340px; }
+.op-count { margin-left: auto; font-size: 11px; color: var(--text-muted); }
+
+.operator-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    gap: 12px;
+}
+.op-card {
+    padding: 12px 10px 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+    cursor: pointer;
+    transition: transform .15s, border-color .15s, background .15s;
+}
+.op-card:hover { transform: translateY(-3px); border-color: var(--accent); background: var(--bg-card-hover); }
+.op-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.op-card-visual {
+    height: 76px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 8px;
+    background: linear-gradient(160deg, #141b24 0%, #1d2632 100%);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+.op-card-visual img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.op-card-fallback {
+    width: 46px; height: 46px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: var(--bg-card-hover);
+    border: 1px solid var(--border-light);
+    font-size: 18px; font-weight: 700; color: var(--text-secondary);
+}
+.op-card-name { font-size: 12px; font-weight: 600; color: var(--text-primary); line-height: 1.35; }
+.op-card-meta { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 6px; }
+.op-side { font-size: 9px; padding: 1px 6px; border-radius: 3px; font-weight: 700; }
+.op-side.atk { background: rgba(232,166,52,.18); color: var(--attack); }
+.op-side.def { background: rgba(74,158,255,.18); color: var(--defense); }
+.op-stat { font-size: 9px; padding: 1px 5px; border-radius: 3px; background: var(--bg-card-hover); color: var(--text-secondary); border: 1px solid var(--border); }
+.op-card-gadget {
+    margin-top: 7px; padding-top: 6px;
+    border-top: 1px dashed var(--border);
+    font-size: 9px; line-height: 1.35; color: var(--text-muted);
+}
+.muted { color: var(--text-muted); }
+
+/* ---- 干员详情弹窗 ---- */
+.op-detail-head { display: flex; gap: 16px; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.op-detail-visual {
+    flex: 0 0 128px; height: 128px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #141b24 0%, #1d2632 100%);
+    border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+}
+.op-detail-visual img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.op-detail-fallback { width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--bg-card-hover); font-size: 26px; font-weight: 700; color: var(--text-secondary); }
+.op-detail-meta { flex: 1; min-width: 0; }
+.op-detail-name { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+.op-detail-en { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.op-detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.op-tag { padding: 2px 8px; font-size: 10px; border-radius: 3px; background: var(--bg-card-hover); border: 1px solid var(--border-light); color: var(--text-secondary); }
+.op-tag.atk { border-color: var(--attack); color: var(--attack); }
+.op-tag.def { border-color: var(--defense); color: var(--defense); }
+.op-detail-func { margin-top: 8px; font-size: 11px; color: var(--text-secondary); }
+.op-detail-section-title { margin: 16px 0 8px; font-size: 12px; font-weight: 700; color: var(--text-secondary); letter-spacing: .5px; }
+.op-detail-gadget { font-size: 14px; font-weight: 600; color: var(--accent); }
+.op-detail-desc { margin-top: 6px; font-size: 12px; line-height: 1.7; color: var(--text-secondary); }
+.op-detail-weapons { display: flex; flex-wrap: wrap; gap: 6px; }
+.op-weapon-chip {
+    padding: 4px 10px; font-size: 11px; border-radius: 4px;
+    background: var(--bg-card-hover); border: 1px solid var(--border-light); color: var(--text-secondary);
+    transition: border-color .15s, color .15s;
+}
+.op-weapon-chip:hover { border-color: var(--accent); color: var(--accent); }
+.op-weapon-chip em { font-style: normal; margin-left: 5px; font-size: 9px; color: var(--text-muted); }
+.op-detail-profile { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+.op-detail-profile div { font-size: 12px; color: var(--text-primary); }
+.op-detail-profile span { display: inline-block; min-width: 52px; color: var(--text-muted); font-size: 11px; }
+.op-detail-note { margin-top: 10px; padding: 8px 10px; font-size: 11px; background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: var(--radius); }
+
+@media (max-width: 640px) {
+    .operator-cards { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+    .op-detail-head { flex-direction: column; }
+    .op-detail-visual { flex: none; width: 100%; }
+}

@@ -42,16 +42,16 @@
     const isSecondary = type => WEAPON_CATEGORY[type] === 'secondary';
 
     // ---- Tab 切换 ----
+    function switchTab(tab) {
+        $$('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.tab === tab));
+        $$('.tab-content').forEach(t => t.classList.toggle('active', t.id === `tab-${tab}`));
+    }
     $$('.nav-link').forEach(link => {
         link.addEventListener('click', e => {
             const tab = link.dataset.tab;
             if (!tab) return; // 没有 data-tab 的链接走默认行为（允许跳外部页面）
             e.preventDefault();
-            $$('.nav-link').forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-            $$('.tab-content').forEach(t => t.classList.remove('active'));
-            const target = $(`#tab-${tab}`);
-            if (target) target.classList.add('active');
+            switchTab(tab);
         });
     });
 
@@ -1159,7 +1159,103 @@
         ph: '🇵🇭', nz: '🇳🇿', ar: '🇦🇷', cl: '🇨🇱', co: '🇨🇴', pe: '🇵🇪'
     };
 
-    const opState = { side: 'all', q: '' };
+    const opState = { side: 'all', q: '', open: null, all: false };
+
+    // ---- 组织徽章（自制 SVG：缩写 + 所属国主色，无外部依赖）----
+    const ORG_COLOR_BY_CODE = {
+        us: '#4A7FE0', gb: '#3D6FD1', fr: '#4E86DB', de: '#E2483D', ru: '#E2544A',
+        ca: '#E0453F', br: '#21A85C', jp: '#D9534F', kr: '#D9534F', cn: '#D9534F',
+        au: '#3F6FCB', nl: '#D8544F', pl: '#E2483D', se: '#4A86D8', no: '#D9534F',
+        dk: '#E2483D', fi: '#4A86D8', in: '#F0A03C', il: '#4A86D8', es: '#D9534F',
+        it: '#3FA35C', mx: '#2E9E63', za: '#2E9E63', eg: '#D9534F', ie: '#3FA35C',
+        ch: '#E2483D', at: '#E2483D', be: '#E8C33A', pt: '#3FA35C', tr: '#E2483D',
+        ua: '#4A86D8', sg: '#E2483D', my: '#4A86D8', th: '#4A86D8', id: '#E2483D',
+        ph: '#4A86D8', nz: '#4A86D8', ar: '#6FA8E0', cl: '#E2483D', co: '#E8C33A',
+        pe: '#E2483D', hk: '#D9534F', ma: '#D9534F', gr: '#4A86D8'
+    };
+    const ORG_COLOR_DEFAULT = '#8B93A7';
+    const ORG_BADGE = {
+        '707th SMB': { abbr: '707' },
+        'AFEAU': { abbr: 'AFU' },
+        'APCA': { abbr: 'APCA' },
+        'BOPE': { abbr: 'BOPE' },
+        'Belgian Special Forces Group (B-SFG)': { abbr: 'SFG' },
+        'COT': { abbr: 'COT' },
+        'FES': { abbr: 'FES' },
+        'G.E.O.': { abbr: 'GEO' },
+        'G.I.S': { abbr: 'GIS' },
+        'GIGN': { abbr: 'GIGN' },
+        'GIGN CBRN': { abbr: 'CBRN', color: '#7FD1A8' },
+        'GIGR': { abbr: 'GIGR' },
+        'GROM': { abbr: 'GROM' },
+        'GSG 9': { abbr: 'GSG9' },
+        'Garda Emergency Response Unit': { abbr: 'ERU' },
+        'Hellenic Armed Forces': { abbr: 'HAF' },
+        'ITF': { abbr: 'ITF' },
+        'JTF2': { abbr: 'JTF2' },
+        'Jægerkorpset': { abbr: 'JGK' },
+        'MPS GSUTR': { abbr: 'MPS' },
+        'NAVY SEAL': { abbr: 'SEAL' },
+        'NDU': { abbr: 'NDU' },
+        'NIGHTHAVEN': { abbr: 'NH', color: '#F0A03C' },
+        'REU': { abbr: 'REU' },
+        'ROS': { abbr: 'ROS', color: '#7D8AA5' },
+        'S.A.S.': { abbr: 'SAS' },
+        'S.A.T.': { abbr: 'SAT' },
+        'S.D.U.': { abbr: 'SDU' },
+        'SASR': { abbr: 'SASR' },
+        'STAR-NET Aviation': { abbr: 'SNA' },
+        'SWAT': { abbr: 'SWAT' },
+        'Secret Service': { abbr: 'USSS' },
+        'Spetsnaz': { abbr: 'SPNZ' },
+        'Spetsnaz CBRN': { abbr: 'SPC', color: '#7FD1A8' },
+        'The Unit GSUTR': { abbr: 'UNIT' },
+        'Unit 777': { abbr: '777' },
+        'Team Rainbow': { abbr: 'RBW', color: '#6FD0E8' },
+        'Six': { abbr: 'VI', color: '#B58BE8' }
+    };
+
+    function orgBadgeMeta(key) {
+        const b = ORG_BADGE[key] || {};
+        const g = (typeof ORGANIZATIONS !== 'undefined')
+            ? ORGANIZATIONS.find(x => x.key === key) : null;
+        const color = b.color
+            || (g && g.country_code ? ORG_COLOR_BY_CODE[g.country_code] : null)
+            || ORG_COLOR_DEFAULT;
+        return { abbr: b.abbr || String(key || '?').slice(0, 3).toUpperCase(), color, org: g };
+    }
+
+    // 盾形徽章：填充 22% 底色 + 同色描边 + 缩写
+    function orgBadgeSVG(key, h) {
+        h = h || 20;
+        const meta = orgBadgeMeta(key);
+        const abbr = meta.abbr;
+        const c = meta.color;
+        const w = Math.max(h * 0.95, 8 + abbr.length * h * 0.36);
+        const r = 1.2;
+        const d = `M${r} ${r} H${(w - r).toFixed(1)} V${(h * 0.52).toFixed(1)}`
+            + ` C${(w - r).toFixed(1)} ${(h * 0.8).toFixed(1)} ${(w * 0.63).toFixed(1)} ${(h - r).toFixed(1)} ${(w / 2).toFixed(1)} ${(h - r).toFixed(1)}`
+            + ` C${(w * 0.37).toFixed(1)} ${(h - r).toFixed(1)} ${r} ${(h * 0.8).toFixed(1)} ${r} ${(h * 0.52).toFixed(1)} Z`;
+        const fs = abbr.length <= 2 ? h * 0.46 : abbr.length === 3 ? h * 0.41
+            : abbr.length === 4 ? h * 0.34 : h * 0.27;
+        return `<svg class="org-badge-svg" width="${w.toFixed(1)}" height="${h}" viewBox="0 0 ${w.toFixed(1)} ${h}" aria-hidden="true">`
+            + `<path d="${d}" fill="${c}" fill-opacity=".22" stroke="${c}" stroke-width="1.1" stroke-linejoin="round"/>`
+            + `<text class="org-badge-text" x="${(w / 2).toFixed(1)}" y="${(h * 0.52 + fs * 0.35).toFixed(1)}" text-anchor="middle" fill="${c}" font-size="${fs.toFixed(1)}" font-weight="800">${esc(abbr)}</text>`
+            + `</svg>`;
+    }
+
+    // 组织 chip：徽章 + 名称
+    function orgChipHTML(key, opts) {
+        if (!key) return '';
+        const meta = orgBadgeMeta(key);
+        const label = (typeof ORG_LABEL !== 'undefined' && ORG_LABEL[key] && ORG_LABEL[key].zh) || key;
+        const size = (opts && opts.size) || 20;
+        const withName = !opts || opts.name !== false;
+        return `<span class="org-chip" data-org="${esc(key)}" title="${esc(key)} · ${esc(label)}（点击查看组织）">`
+            + orgBadgeSVG(key, size)
+            + (withName ? `<span class="org-chip-name">${esc(label)}</span>` : '')
+            + `</span>`;
+    }
 
     function operatorIconURL(op) {
         if (!op.icon) return null;
@@ -1221,28 +1317,134 @@
                 ? '<b class="op-side atk">⚔️ 进攻</b>'
                 : o.side === 'def' ? '<b class="op-side def">🛡️ 防守</b>' : '';
             const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
+            const isOpen = opState.all || opState.open === o.name;
             return `
-                <div class="op-card" data-op="${o.name.replace(/'/g, "\\'")}" tabindex="0" role="button">
-                    <div class="op-card-visual">
-                        ${opVisualHTML(o, 'op-card-portrait', o.name[0])}
+                <article class="op-entry${isOpen ? ' open' : ''}" data-op="${o.name.replace(/'/g, "\\'")}">
+                    <div class="op-entry-head" tabindex="0" role="button" aria-expanded="${isOpen}">
+                        <div class="op-entry-visual">${opVisualHTML(o, 'op-card-portrait', o.name[0])}</div>
+                        <div class="op-entry-main">
+                            <div class="op-entry-name">${esc(o.name)}${flag ? ' ' + flag : ''}
+                                ${o.realname ? `<span class="op-entry-real">${esc(o.realname)}</span>` : ''}
+                            </div>
+                            <div class="op-entry-meta">
+                                ${badge}
+                                ${o.armor ? `<span class="op-stat">🛡 ${o.armor}</span>` : ''}
+                                ${o.speed ? `<span class="op-stat">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
+                                ${o.difficulty ? `<span class="op-stat">难度 ${DIFF_LABEL[o.difficulty] || o.difficulty}</span>` : ''}
+                            </div>
+                            <div class="op-entry-org">${o.affiliation ? orgChipHTML(o.affiliation, { size: 22 }) : '<span class="muted">暂无组织</span>'}</div>
+                            <div class="op-entry-gadget">${(o.gadget_zh || o.gadget) ? esc(o.gadget_zh || o.gadget) : '<span class="muted">无固定独特技能</span>'}</div>
+                        </div>
+                        <div class="op-entry-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></div>
                     </div>
-                    <div class="op-card-name">${o.name}${flag ? ' ' + flag : ''}</div>
-                    <div class="op-card-meta">
-                        ${badge}
-                        ${o.armor ? `<span class="op-stat">🛡 ${o.armor}</span>` : ''}
-                        ${o.speed ? `<span class="op-stat">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
-                    </div>
-                    <div class="op-card-gadget">${(o.gadget_zh || o.gadget) ? esc(o.gadget_zh || o.gadget) : '<span class="muted">无固定独特技能</span>'}</div>
-                </div>`;
+                    <div class="op-entry-body">${isOpen ? operatorBodyHTML(o) : ''}</div>
+                </article>`;
         }).join('');
 
-        box.querySelectorAll('.op-card').forEach(c => {
-            const open = () => openOperatorModal(c.dataset.op);
-            c.addEventListener('click', open);
-            c.addEventListener('keydown', e => {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+        box.querySelectorAll('.op-entry').forEach(entry => {
+            const head = entry.querySelector('.op-entry-head');
+            if (!head) return;
+            head.querySelectorAll('.org-chip[data-org]').forEach(c => {
+                c.style.cursor = 'pointer';
+                c.addEventListener('click', e => {
+                    e.stopPropagation();
+                    focusOrg(c.dataset.org);
+                });
+            });
+            const toggle = () => toggleOperatorEntry(entry);
+            head.addEventListener('click', e => {
+                if (e.target.closest('.org-chip')) return;
+                toggle();
+            });
+            head.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
             });
         });
+        bindOperatorBody(box);
+    }
+
+    function toggleOperatorEntry(entry) {
+        const name = entry.dataset.op;
+        const willOpen = !entry.classList.contains('open');
+        if (willOpen) {
+            const o = OPERATORS.find(x => x.name === name);
+            entry.querySelector('.op-entry-body').innerHTML = o ? operatorBodyHTML(o) : '';
+            bindOperatorBody(entry);
+        }
+        entry.classList.toggle('open', willOpen);
+        const head = entry.querySelector('.op-entry-head');
+        if (head) head.setAttribute('aria-expanded', String(willOpen));
+        if (!willOpen) entry.querySelector('.op-entry-body').innerHTML = '';
+    }
+
+    // 展开态内的交互：分区快跳按钮 / 武器 chip / 组织 chip
+    function bindOperatorBody(scope) {
+        scope.querySelectorAll('.op-jump-btn').forEach(b => {
+            b.addEventListener('click', e => {
+                e.stopPropagation();
+                const sec = scope.querySelector('#' + b.dataset.jump);
+                if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+        scope.querySelectorAll('.op-weapon-chip').forEach(chip => {
+            chip.style.cursor = 'pointer';
+            chip.addEventListener('click', e => {
+                e.stopPropagation();
+                const w = WEAPONS.find(x => x.name === chip.dataset.weapon);
+                if (w && typeof showWeaponDetail === 'function') showWeaponDetail(w.name);
+            });
+        });
+        scope.querySelectorAll('.org-chip[data-org]').forEach(c => {
+            c.style.cursor = 'pointer';
+            c.addEventListener('click', e => {
+                e.stopPropagation();
+                focusOrg(c.dataset.org);
+            });
+        });
+    }
+
+    // 点组织徽章 → 跳到组织图鉴并高亮该组织
+    function focusOrg(key) {
+        switchTab('orgs');
+        const card = [...document.querySelectorAll('.org-card')].find(c => c.dataset.org === key);
+        if (!card) return;
+        card.classList.remove('flash');
+        void card.offsetWidth;
+        card.classList.add('flash');
+        requestAnimationFrame(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+    }
+
+    // 从其他页面跳转过来：切到干员页签 → 展开 → 滚动定位 → 高亮
+    function focusOperator(name, opts) {
+        switchTab('operators');
+
+        const o = OPERATORS.find(x => x.name === name);
+        if (o) {
+            let dirty = false;
+            if (opState.side !== 'all' && o.side !== opState.side) { opState.side = 'all'; dirty = true; }
+            const q = opState.q.trim().toLowerCase();
+            if (q && !filteredOperators().some(x => x.name === name)) {
+                opState.q = '';
+                const inp = $('#op-search-input');
+                if (inp) inp.value = '';
+                dirty = true;
+            }
+            if (dirty) {
+                $$('.op-filter').forEach(b => b.classList.toggle('active', b.dataset.side === 'all'));
+                renderOperators();
+            }
+        }
+        const entry = [...document.querySelectorAll('.op-entry')].find(e => e.dataset.op === name);
+        if (!entry) return;
+        if (!entry.classList.contains('open')) toggleOperatorEntry(entry);
+        entry.classList.remove('flash');
+        void entry.offsetWidth;
+        entry.classList.add('flash');
+        if (!opts || opts.scroll !== false) {
+            requestAnimationFrame(() => {
+                entry.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
     }
 
     function esc(s) {
@@ -1265,10 +1467,8 @@
         return `<div class="op-detail-section-title">${esc(text)}</div>`;
     }
 
-    function openOperatorModal(name) {
-        const o = OPERATORS.find(x => x.name === name);
-        const modal = $('#operator-modal');
-        if (!o || !modal) return;
+    function operatorSections(o) {
+        if (!o) return { head: '', panes: [] };
         const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
         const weapons = (o.weapons || []).map(w => {
             const wd = WEAPONS.find(x => x.name === w);
@@ -1361,7 +1561,11 @@
             { id: 'kit', label: '装备 · 档案', html: kitPane, on: true }
         ].filter(p => p.on);
 
-        $('#operator-modal-body').innerHTML = `
+        // 详情头：大立绘 + 完整标签（组织用徽章）
+        const orgTag = o.affiliation
+            ? `<span class="op-tag org">${orgChipHTML(o.affiliation, { size: 18 })}</span>`
+            : '';
+        const head = `
             <div class="op-detail-head">
                 <div class="op-detail-visual">
                     ${opVisualHTML(o, 'op-detail-portrait', o.name[0])}
@@ -1374,40 +1578,38 @@
                         ${o.armor ? `<span class="op-tag">🛡 护甲 ${o.armor}</span>` : ''}
                         ${o.speed ? `<span class="op-tag">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
                         ${o.difficulty ? `<span class="op-tag">难度 ${DIFF_LABEL[o.difficulty] || o.difficulty}</span>` : ''}
-                        ${orgZh ? `<span class="op-tag org">🏢 ${esc(orgZh)}</span>` : ''}
+                        ${orgTag}
                     </div>
                     ${(o.function || []).length ? `<div class="op-detail-func">职能：${o.function.map(esc).join(' / ')}</div>` : ''}
                 </div>
-            </div>
-            <div class="op-modal-tabs">
-                ${panes.map((p, i) => `<button class="op-tab-btn${i === 0 ? ' active' : ''}" data-pane="op-pane-${p.id}">${esc(p.label)}</button>`).join('')}
-            </div>
-            ${panes.map((p, i) => `<div class="op-tab-pane${i === 0 ? ' active' : ''}" id="op-pane-${p.id}">${p.html}</div>`).join('')}
-        `;
-        modal.classList.add('active');
+            </div>`;
 
-        // 弹窗内分区切换
-        const body = $('#operator-modal-body');
-        body.querySelectorAll('.op-tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                body.querySelectorAll('.op-tab-btn').forEach(b => b.classList.remove('active'));
-                body.querySelectorAll('.op-tab-pane').forEach(p => p.classList.remove('active'));
-                btn.classList.add('active');
-                const pane = body.querySelector('#' + btn.dataset.pane);
-                if (pane) pane.classList.add('active');
-            });
-        });
+        return { head, panes };
+    }
 
-        // 点武器 chip 跳到武器详情
-        modal.querySelectorAll('.op-weapon-chip').forEach(chip => {
-            chip.style.cursor = 'pointer';
-            chip.addEventListener('click', () => {
-                const w = WEAPONS.find(x => x.name === chip.dataset.weapon);
-                if (!w) return;
-                modal.classList.remove('active');
-                if (typeof showWeaponDetail === 'function') showWeaponDetail(w.name);
-            });
-        });
+    // 干员唯一 id：用于分区锚点，避免多干员同时展开时 id 冲突
+    function opUid(o) {
+        return String(o.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    }
+
+    // 展开态完整档案：所有内容上下平铺，顶部附分区快跳按钮
+    function operatorBodyHTML(o) {
+        const { head, panes } = operatorSections(o);
+        const uid = opUid(o);
+        const jump = panes.length > 2
+            ? `<div class="op-jump">${panes.map(p =>
+                `<button class="op-jump-btn" data-jump="op-sec-${p.id}-${uid}">${esc(p.label)}</button>`).join('')}</div>`
+            : '';
+        return head + jump + panes.map(p => `
+            <section class="op-sec" id="op-sec-${p.id}-${uid}">
+                <h4 class="op-sec-title">${esc(p.label)}</h4>
+                ${p.html}
+            </section>`).join('');
+    }
+
+    // 兼容旧调用点（武器详情 / 组织图鉴）：直接跳到干员条目并展开
+    function openOperatorModal(name) {
+        focusOperator(name);
     }
 
     // ============================================================
@@ -1450,8 +1652,9 @@
         box.innerHTML = list.map(g => {
             const flag = g.country_code ? (COUNTRY_FLAG[g.country_code] || '') : '🏳️';
             return `
-            <div class="org-card type-${g.type || 'real'}">
+            <div class="org-card type-${g.type || 'real'}" data-org="${esc(g.key)}">
                 <div class="org-card-head">
+                    ${orgChipHTML(g.key, { size: 28, name: false })}
                     <span class="org-card-flag">${flag}</span>
                     <span class="org-card-name">${esc(g.name_zh || g.key)}</span>
                     <span class="org-type ${g.type || 'real'}">${ORG_TYPE_ICON[g.type] || '🌐'} ${ORG_TYPE_LABEL[g.type] || g.type || '—'}</span>
@@ -1542,14 +1745,33 @@
                 $$('.op-filter').forEach(x => x.classList.remove('active'));
                 b.classList.add('active');
                 opState.side = b.dataset.side;
+                opState.open = null;
                 renderOperators();
+                syncExpandAllBtn();
             });
         });
         const inp = $('#op-search-input');
         if (inp) inp.addEventListener('input', () => {
             opState.q = inp.value;
+            opState.open = null;
             renderOperators();
+            syncExpandAllBtn();
         });
+        const expBtn = $('#op-expand-all');
+        if (expBtn) expBtn.addEventListener('click', () => {
+            opState.all = !opState.all;
+            if (!opState.all) opState.open = null;
+            renderOperators();
+            syncExpandAllBtn();
+        });
+        syncExpandAllBtn();
+    }
+
+    function syncExpandAllBtn() {
+        const btn = $('#op-expand-all');
+        if (!btn) return;
+        btn.textContent = opState.all ? '📕 收起全部' : '📖 展开全部';
+        btn.classList.toggle('active', !!opState.all);
     }
 
     // ---- 初始化 ----

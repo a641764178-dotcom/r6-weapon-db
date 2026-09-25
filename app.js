@@ -1163,6 +1163,10 @@
 
     function operatorIconURL(op) {
         if (!op.icon) return null;
+        // 本地图标（站内 images/ 目录）或绝对地址直接用，其余走 r6operators CDN
+        if (/^(https?:)?\/\//.test(op.icon) || op.icon.indexOf('images/') === 0 || op.icon[0] === '.') {
+            return op.icon;
+        }
         return OPERATOR_ICON_CDN + op.icon;
     }
 
@@ -1245,6 +1249,22 @@
         return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
+    // 长文本按段落渲染
+    function para(text, cls) {
+        return String(text).split(/\n+/).map(s => s.trim()).filter(Boolean)
+            .map(s => `<p${cls ? ' class="' + cls + '"' : ''}>${esc(s)}</p>`).join('');
+    }
+
+    // 列表渲染（培训 / 经验 / 关系 / 提示 / 琐事 / 台词）
+    function bullets(arr, cls) {
+        if (!Array.isArray(arr) || !arr.length) return '';
+        return `<ul class="${cls || 'op-lore-list'}">${arr.map(s => `<li>${esc(s)}</li>`).join('')}</ul>`;
+    }
+
+    function sectionTitle(text) {
+        return `<div class="op-detail-section-title">${esc(text)}</div>`;
+    }
+
     function openOperatorModal(name) {
         const o = OPERATORS.find(x => x.name === name);
         const modal = $('#operator-modal');
@@ -1261,6 +1281,86 @@
                     </span>`;
         }).join('');
 
+        // ---- 独立技能面板 ----
+        const gTitleRaw = o.gadget_zh || o.gadget;
+        const gIcon = o.gadgetIcon
+            ? `<img class="op-gadget-icon" src="${o.gadgetIcon}" alt="${esc(o.gadgetIconName || o.gadget || '技能图标')}" loading="lazy" onerror="this.style.display='none'">`
+            : '';
+        const gadgetPane = gTitleRaw ? (() => {
+            const zh = o.gadget_zh, en = o.gadget;
+            const title = zh && en && zh !== en
+                ? `${esc(zh)} <span class="op-gadget-en">${esc(en)}</span>`
+                : esc(zh || en);
+            const desc = o.gadget_zh_desc || o.gadget_desc;
+            const stats = (o.gadget_stats || []);
+            return `${gIcon}
+                <div class="op-detail-gadget">${title}</div>
+                ${desc ? `<div class="op-detail-desc">${esc(desc)}</div>` : ''}
+                ${stats.length ? `<ul class="op-gadget-stats">${stats.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}
+                ${(o.gadget_zh_desc && /^(俗称|别名|又名)/.test(o.gadget_zh_desc)) ? `
+                    <div class="op-detail-desc">🏷️ ${esc(o.gadget_zh_desc)}<span style="color:var(--text-muted)">（玩家俗称）</span></div>` : ''}`;
+        })()
+            : `<div class="op-detail-note muted">⚠️ 该干员<strong>没有固定独特技能</strong>（Liquipedia 干员页无 GadgetCard 条目）。
+                Recruit 类干员（如 Striker / Sentry）不设专属装备，可在装备池中自由搭配。</div>`;
+
+        // ---- 背景故事面板 ----
+        const lorePane = (o.bio || o.psych || o.note) ? `
+            ${o.bio ? sectionTitle('背景') + `<div class="op-prose">${para(o.bio)}</div>` : ''}
+            ${o.psych ? sectionTitle('心理状态报告') + `<div class="op-prose op-psych">${para(o.psych)}</div>` : ''}
+            ${o.note ? sectionTitle('附注 · 装备评估') + `<div class="op-prose op-note">${para(o.note)}</div>` : ''}`
+            : '<div class="op-detail-note muted">暂无该干员的背景故事资料。</div>';
+
+        // ---- 培训与经验面板 ----
+        const recordPane = ((o.training || []).length || (o.experience || []).length) ? `
+            ${(o.training || []).length ? sectionTitle('培训经历') + bullets(o.training, 'op-chip-list') : ''}
+            ${(o.experience || []).length ? sectionTitle('相关经验') + bullets(o.experience, 'op-chip-list') : ''}`
+            : '<div class="op-detail-note muted">暂无培训 / 经验记录。</div>';
+
+        // ---- 人际关系与轶事面板 ----
+        const socialPane = (o.anecdote || (o.relations || []).length) ? `
+            ${o.anecdote ? sectionTitle('干员轶事') + `<div class="op-prose">${para(o.anecdote)}</div>` : ''}
+            ${(o.relations || []).length ? sectionTitle('人际关系') + bullets(o.relations) : ''}`
+            : '<div class="op-detail-note muted">暂无人际关系与轶事记录。</div>';
+
+        // ---- 战术要点面板 ----
+        const tipsPane = (o.tips || []).length
+            ? sectionTitle('游戏策略') + bullets(o.tips, 'op-tip-list')
+            : '<div class="op-detail-note muted">暂无战术要点记录。</div>';
+
+        // ---- 琐事与台词面板 ----
+        const triviaPane = ((o.trivia || []).length || (o.quotes || []).length) ? `
+            ${(o.trivia || []).length ? sectionTitle('琐事') + bullets(o.trivia) : ''}
+            ${(o.quotes || []).length ? sectionTitle('台词') + bullets(o.quotes, 'op-quote-list') : ''}`
+            : '<div class="op-detail-note muted">暂无琐事 / 台词记录。</div>';
+
+        // ---- 装备与档案面板 ----
+        // lore.js 中 org_label 是 {zh,en,country,code,type} 对象
+        const orgZh = o.org_label ? (typeof o.org_label === 'string' ? o.org_label : (o.org_label.zh || null)) : null;
+        const orgText = o.affiliation
+            ? esc(o.affiliation) + (orgZh && orgZh !== o.affiliation ? ` <span class="op-org-label">${esc(orgZh)}</span>` : '')
+            : '';
+        const kitPane = `
+            ${sectionTitle('携带武器 · ' + (o.weapons || []).length)}
+            <div class="op-detail-weapons">${weapons || '<span class="muted">暂无数据</span>'}</div>
+            ${sectionTitle('档案')}
+            <div class="op-detail-profile">
+                ${orgText ? `<div><span>所属</span>${orgText}</div>` : ''}
+                ${o.birthplace ? `<div><span>出生地</span>${esc(o.birthplace)}</div>` : ''}
+                ${o.birthdate ? `<div><span>生日</span>${esc(o.birthdate)}</div>` : ''}
+                ${o.releasedate ? `<div><span>上线</span>${esc(o.releasedate)}</div>` : ''}
+            </div>
+            ${(o.function || []).length ? sectionTitle('职能定位') + `<div class="op-func-tags">${o.function.map(f => `<span class="op-func-tag">${esc(f)}</span>`).join('')}</div>` : ''}`;
+
+        const panes = [
+            { id: 'gadget', label: '独特技能', html: gadgetPane, on: true },
+            { id: 'lore', label: '背景故事', html: lorePane, on: !!(o.bio || o.psych || o.note) },
+            { id: 'record', label: '培训 · 经验', html: recordPane, on: ((o.training || []).length + (o.experience || []).length) > 0 },
+            { id: 'social', label: '人际关系', html: socialPane, on: !!(o.anecdote || (o.relations || []).length) },
+            { id: 'tips', label: '战术要点', html: tipsPane, on: (o.tips || []).length > 0 },
+            { id: 'trivia', label: '琐事 · 台词', html: triviaPane, on: ((o.trivia || []).length + (o.quotes || []).length) > 0 },
+            { id: 'kit', label: '装备 · 档案', html: kitPane, on: true }
+        ].filter(p => p.on);
+
         $('#operator-modal-body').innerHTML = `
             <div class="op-detail-head">
                 <div class="op-detail-visual">
@@ -1274,41 +1374,29 @@
                         ${o.armor ? `<span class="op-tag">🛡 护甲 ${o.armor}</span>` : ''}
                         ${o.speed ? `<span class="op-tag">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
                         ${o.difficulty ? `<span class="op-tag">难度 ${DIFF_LABEL[o.difficulty] || o.difficulty}</span>` : ''}
+                        ${orgZh ? `<span class="op-tag org">🏢 ${esc(orgZh)}</span>` : ''}
                     </div>
                     ${(o.function || []).length ? `<div class="op-detail-func">职能：${o.function.map(esc).join(' / ')}</div>` : ''}
                 </div>
             </div>
-            ${o.gadget || o.gadget_zh ? (() => {
-                const zh = o.gadget_zh, en = o.gadget;
-                const title = zh && en && zh !== en
-                    ? `${esc(zh)} <span class="op-gadget-en">${esc(en)}</span>`
-                    : esc(zh || en);
-                const desc = o.gadget_zh_desc || o.gadget_desc;
-                const stats = (o.gadget_stats || []);
-                const gIcon = o.gadgetIcon
-                    ? `<img class="op-gadget-icon" src="${o.gadgetIcon}" alt="${esc(o.gadgetIconName || o.gadget || '技能图标')}" loading="lazy" onerror="this.style.display='none'">`
-                    : '';
-                return `<div class="op-detail-section-title">独特技能</div>
-                    ${gIcon}
-                    <div class="op-detail-gadget">${title}</div>
-                    ${desc ? `<div class="op-detail-desc">${esc(desc)}</div>` : ''}
-                    ${stats.length ? `<ul class="op-gadget-stats">${stats.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}`;
-            })()
-                : `<div class="op-detail-note muted">⚠️ 该干员<strong>没有固定独特技能</strong>（Liquipedia 干员页无 GadgetCard 条目）。
-                    Recruit 类干员（如 Striker / Sentry）不设专属装备，可在装备池中自由搭配。</div>`}
-            ${(o.gadget_zh_desc && /^(俗称|别名|又名)/.test(o.gadget_zh_desc)) ? `
-                <div class="op-detail-desc">🏷️ ${esc(o.gadget_zh_desc)}<span style="color:var(--text-muted)">（玩家俗称）</span></div>` : ''}
-            <div class="op-detail-section-title">携带武器 · ${(o.weapons || []).length}</div>
-            <div class="op-detail-weapons">${weapons || '<span class="muted">暂无数据</span>'}</div>
-            <div class="op-detail-section-title">档案</div>
-            <div class="op-detail-profile">
-                ${o.affiliation ? `<div><span>所属</span>${esc(o.affiliation)}</div>` : ''}
-                ${o.birthplace ? `<div><span>出生地</span>${esc(o.birthplace)}</div>` : ''}
-                ${o.birthdate ? `<div><span>生日</span>${esc(o.birthdate)}</div>` : ''}
-                ${o.releasedate ? `<div><span>上线</span>${esc(o.releasedate)}</div>` : ''}
+            <div class="op-modal-tabs">
+                ${panes.map((p, i) => `<button class="op-tab-btn${i === 0 ? ' active' : ''}" data-pane="op-pane-${p.id}">${esc(p.label)}</button>`).join('')}
             </div>
+            ${panes.map((p, i) => `<div class="op-tab-pane${i === 0 ? ' active' : ''}" id="op-pane-${p.id}">${p.html}</div>`).join('')}
         `;
         modal.classList.add('active');
+
+        // 弹窗内分区切换
+        const body = $('#operator-modal-body');
+        body.querySelectorAll('.op-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                body.querySelectorAll('.op-tab-btn').forEach(b => b.classList.remove('active'));
+                body.querySelectorAll('.op-tab-pane').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                const pane = body.querySelector('#' + btn.dataset.pane);
+                if (pane) pane.classList.add('active');
+            });
+        });
 
         // 点武器 chip 跳到武器详情
         modal.querySelectorAll('.op-weapon-chip').forEach(chip => {
@@ -1320,6 +1408,131 @@
                 if (typeof showWeaponDetail === 'function') showWeaponDetail(w.name);
             });
         });
+    }
+
+    // ============================================================
+    //                        组 织 图 鉴
+    // ============================================================
+    const orgState = { type: 'all', q: '' };
+    const ORG_TYPE_LABEL = { real: '现实部队', fictional: '游戏原创', faction: '阵营 / 编制' };
+    const ORG_TYPE_ICON = { real: '🌐', fictional: '🎮', faction: '🏳️' };
+
+    function orgMemberChips(g) {
+        return (g.members || []).map(n => {
+            const op = OPERATORS.find(x => x.name === n);
+            const icon = op ? operatorIconURL(op) : null;
+            return `<span class="org-member" data-op="${n.replace(/'/g, "\\'")}" title="${esc(n)}">
+                        ${icon ? `<img src="${icon}" alt="${esc(n)}" loading="lazy" onerror="this.style.display='none'">` : ''}
+                        <b>${esc(n)}</b>
+                        ${op ? `<i class="${op.side === 'atk' ? 'atk' : 'def'}">${op.side === 'atk' ? '攻' : '防'}</i>` : ''}
+                    </span>`;
+        }).join('');
+    }
+
+    function renderOrgs() {
+        const box = $('#org-cards');
+        if (!box || typeof ORGANIZATIONS === 'undefined') return;
+        const q = orgState.q.trim().toLowerCase();
+        const list = ORGANIZATIONS.filter(g => {
+            if (orgState.type !== 'all' && g.type !== orgState.type) return false;
+            if (!q) return true;
+            const hay = [g.name_zh, g.name_en, g.key, g.country, ...(g.tags || []), ...(g.members || [])]
+                .filter(Boolean).join(' ').toLowerCase();
+            return hay.includes(q);
+        }).sort((a, b) => (b.members.length - a.members.length)
+            || String(a.name_zh).localeCompare(String(b.name_zh), 'zh'));
+
+        const cnt = $('#org-count');
+        if (cnt) cnt.textContent = `${list.length} / ${ORGANIZATIONS.length} 个组织`;
+        const total = $('#org-total');
+        if (total) total.textContent = ORGANIZATIONS.length;
+
+        box.innerHTML = list.map(g => {
+            const flag = g.country_code ? (COUNTRY_FLAG[g.country_code] || '') : '🏳️';
+            return `
+            <div class="org-card type-${g.type || 'real'}">
+                <div class="org-card-head">
+                    <span class="org-card-flag">${flag}</span>
+                    <span class="org-card-name">${esc(g.name_zh || g.key)}</span>
+                    <span class="org-type ${g.type || 'real'}">${ORG_TYPE_ICON[g.type] || '🌐'} ${ORG_TYPE_LABEL[g.type] || g.type || '—'}</span>
+                </div>
+                <div class="org-card-en">${esc(g.name_en || '')}</div>
+                <div class="org-card-meta">
+                    ${g.country ? `<span>📍 ${esc(g.country)}</span>` : ''}
+                    ${g.founded ? `<span>🗓 ${esc(g.founded)}</span>` : ''}
+                    <span class="org-count-badge">👥 ${(g.members || []).length}</span>
+                </div>
+                <div class="org-card-desc">${esc(g.desc || '暂无简介')}</div>
+                ${(g.tags || []).length ? `<div class="org-tags">${g.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
+                ${(g.members || []).length ? `<div class="org-members">${orgMemberChips(g)}</div>` : '<div class="org-members empty">暂无在编干员</div>'}
+                ${g.source ? `<div class="org-source">来源：${esc(g.source)}</div>` : ''}
+            </div>`;
+        }).join('');
+
+        box.querySelectorAll('.org-member').forEach(m => {
+            m.style.cursor = 'pointer';
+            m.addEventListener('click', () => openOperatorModal(m.dataset.op));
+        });
+    }
+
+    function initOrgs() {
+        renderOrgs();
+        $$('.org-filter').forEach(b => {
+            b.addEventListener('click', () => {
+                $$('.org-filter').forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                orgState.type = b.dataset.orgType;
+                renderOrgs();
+            });
+        });
+        const inp = $('#org-search-input');
+        if (inp) inp.addEventListener('input', () => { orgState.q = inp.value; renderOrgs(); });
+    }
+
+    // ============================================================
+    //                        世 界 观
+    // ============================================================
+    function renderWorld() {
+        const box = $('#world-body');
+        if (!box || typeof WORLD_LORE === 'undefined') return;
+        const w = WORLD_LORE;
+        box.innerHTML = `
+            <div class="world-intro op-prose">${para(w.intro || '')}</div>
+            <h3 class="world-h3">📜 剧情时间线 · ${(w.timeline || []).length} 个节点</h3>
+            <div class="world-timeline">
+                ${(w.timeline || []).map(t => `
+                    <div class="tl-item">
+                        <div class="tl-year">${esc(t.year)}${t.season ? `<em>${esc(t.season)}</em>` : ''}</div>
+                        <div class="tl-body">
+                            <div class="tl-title">${esc(t.title)}</div>
+                            <div class="tl-desc">${esc(t.desc)}</div>
+                            ${t.source ? `<div class="tl-src">来源：${esc(t.source)}</div>` : ''}
+                        </div>
+                    </div>`).join('')}
+            </div>
+            <h3 class="world-h3">👤 关键人物 · ${(w.figures || []).length}</h3>
+            <div class="world-figures">
+                ${(w.figures || []).map(f => `
+                    <div class="wf-card">
+                        <div class="wf-name">${esc(f.name_zh || f.name)}<em>${esc(f.name || '')}</em></div>
+                        <div class="wf-role">${esc(f.role || '')}</div>
+                        <div class="wf-desc">${esc(f.desc || '')}</div>
+                        ${(f.related || []).length ? `<div class="wf-rel">${f.related.map(r => `<span>${esc(r)}</span>`).join('')}</div>` : ''}
+                        ${f.source ? `<div class="wf-src">来源：${esc(f.source)}</div>` : ''}
+                    </div>`).join('')}
+            </div>
+            <h3 class="world-h3">🏳️ 阵营与势力 · ${(w.factions || []).length}</h3>
+            <div class="world-factions">
+                ${(w.factions || []).map(f => `
+                    <div class="wfa-card">
+                        <div class="wfa-head"><span class="wfa-name">${esc(f.name)}</span><span class="wfa-rel">${esc(f.relation || '')}</span></div>
+                        <div class="wfa-desc">${esc(f.desc || '')}</div>
+                        ${f.source ? `<div class="wfa-src">来源：${esc(f.source)}</div>` : ''}
+                    </div>`).join('')}
+            </div>
+            <h3 class="world-h3">📚 资料来源 · ${(w.sources || []).length}</h3>
+            <ul class="world-sources">${(w.sources || []).map(s => `<li>${esc(s)}</li>`).join('')}</ul>
+        `;
     }
 
     function initOperators() {
@@ -1343,6 +1556,8 @@
     renderWeaponGrid();
     renderAttachmentCards();
     if (typeof OPERATORS !== 'undefined') initOperators();
+    if (typeof ORGANIZATIONS !== 'undefined') initOrgs();
+    if (typeof WORLD_LORE !== 'undefined') renderWorld();
     initCompatQuery();
     initCompare();
     renderUpdates();

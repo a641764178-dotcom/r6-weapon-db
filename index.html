@@ -21,6 +21,8 @@
             <nav class="nav">
                 <a href="#" class="nav-link active" data-tab="weapons">武器库</a>
                 <a href="#" class="nav-link" data-tab="operators">干员</a>
+                <a href="#" class="nav-link" data-tab="orgs">组织图鉴</a>
+                <a href="#" class="nav-link" data-tab="world">世界观</a>
                 <a href="#" class="nav-link" data-tab="attachments">配件图鉴</a>
                 <a href="#" class="nav-link" data-tab="compare">对比工具</a>
                 <a href="#" class="nav-link" data-tab="updates">官方更新</a>
@@ -71,12 +73,12 @@
             <div id="weapon-grid" class="weapon-grid"></div>
         </section>
 
-        <!-- 配件图鉴页面 -->
         <!-- 干员页面 -->
         <section id="tab-operators" class="tab-content">
             <h2 class="section-title">干员档案</h2>
             <p class="section-desc">
-                资料来源：GitHub hanslhansl operators.json（携带武器 / 阵营）· Liquipedia（护甲 / 速度 / 职能 / 技能 / 档案）· Ubisoft 官方公告（Noor 等新干员）。<br>
+                收录 <b>78</b> 位干员，含背景故事 / 心理状态报告 / 培训经历 / 相关经验 / 人际关系 / 战术要点 / 琐事台词。<br>
+                资料来源：灰机wiki 干员页原始 wikitext（背景与心理报告）· GitHub hanslhansl operators.json（携带武器 / 阵营）· Liquipedia（护甲 / 速度 / 职能 / 技能）· Ubisoft 官方公告（Noor 等新干员）。<br>
                 无可靠来源的字段一律留空，不做估算。点击卡片查看完整档案，点击武器名可跳转到该武器详情。
             </p>
             <div class="op-toolbar">
@@ -92,6 +94,39 @@
                 <div class="op-count" id="op-count"></div>
             </div>
             <div id="operator-cards" class="operator-cards"></div>
+        </section>
+
+        <!-- 组织图鉴页面 -->
+        <section id="tab-orgs" class="tab-content">
+            <h2 class="section-title">组织图鉴</h2>
+            <p class="section-desc">
+                收录彩虹小队干员所属的现实特种部队、游戏原创机构与剧情阵营，共 <b id="org-total">—</b> 个组织。<br>
+                现实部队条目依据公开资料整理并标注成立年份；游戏原创机构与剧情阵营单独标注「游戏原创 / 阵营」。点击成员头像可跳转该干员档案。
+            </p>
+            <div class="op-toolbar">
+                <div class="op-filters">
+                    <button class="org-filter active" data-org-type="all">全部</button>
+                    <button class="org-filter" data-org-type="real">🌐 现实部队</button>
+                    <button class="org-filter" data-org-type="fictional">🎮 游戏原创</button>
+                    <button class="org-filter" data-org-type="faction">🏳️ 阵营 / 编制</button>
+                </div>
+                <div class="search-box op-search">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <input type="text" id="org-search-input" placeholder="搜索组织 / 国家 / 干员…">
+                </div>
+                <div class="op-count" id="org-count"></div>
+            </div>
+            <div id="org-cards" class="org-cards"></div>
+        </section>
+
+        <!-- 世界观页面 -->
+        <section id="tab-world" class="tab-content">
+            <h2 class="section-title">世界观 · 剧情时间线</h2>
+            <p class="section-desc">
+                整理《彩虹六号：围攻》主线剧情：彩虹小队的重启与解散、永夜安港的加入与决裂、Deimos 与凯瑞斯军团的登场，以及第 11 年的收束。<br>
+                每条内容均附来源，无可靠来源的部分不予收录。
+            </p>
+            <div id="world-body" class="world-body"></div>
         </section>
 
         <section id="tab-attachments" class="tab-content">
@@ -174,12 +209,14 @@
     </div>
 
     <footer class="footer">
-        <p>R6资料库 · 数据来源: Ubisoft 官方设计师笔记 / GitHub hanslhansl 实测 / Liquipedia / Fandom Wiki</p>
+        <p>R6资料库 · 数据来源: Ubisoft 官方设计师笔记 / GitHub hanslhansl 实测 / 灰机wiki / Liquipedia / Fandom Wiki</p>
+        <p>干员背景 · 组织图鉴 · 世界观: 灰机wiki 干员页原始 wikitext / Ubisoft 官网干员页 / Wikipedia / Liquipedia（每条均标注来源，无来源不收录）</p>
         <p>版本基准: Year 11 Season 3「Operation Split Fire」(2026-09-01) · 含 Y11S3.1 中期补丁 (Update 3.49, 2026-09-22) · 最后更新: 2026-09-25</p>
         <p>瞄具体系依 Y9S1「Deadly Omen」重构：1.0x 无放大 / 2.5x 放大镜 / 3.5x 望远镜</p>
     </footer>
 
     <script src="data.js"></script>
+    <script src="lore.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

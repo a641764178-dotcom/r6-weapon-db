@@ -17,6 +17,29 @@
     };
     const maxDPS = Math.max(...WEAPONS.filter(w => w.rpm > 0).map(calcDPS));
 
+    // 武器缩略图降级链：主源（灰机 / Fandom）→ 备用源（Fandom）→ 隐藏
+    // 注意：灰机 wiki 有防盗链，所有缩略图 img 必须带 referrerpolicy="no-referrer"
+    const thumbFallbackURL = name =>
+        (typeof getWeaponThumbFallbackURL === 'function') ? getWeaponThumbFallbackURL(name) : null;
+
+    window.__thumbFallback = function(img, altUrl) {
+        if (!img) return;
+        if (altUrl && !img.dataset.fell) {
+            img.dataset.fell = '1';
+            img.src = altUrl;
+            return;
+        }
+        img.style.display = 'none';
+    };
+
+    const thumbImgHTML = (name, cls) => {
+        const url = (typeof getWeaponThumbURL === 'function') ? getWeaponThumbURL(name) : null;
+        if (!url) return '';
+        const alt = thumbFallbackURL(name);
+        return `<img class="${cls}" src="${url}" alt="${String(name).replace(/"/g, '&quot;')}" loading="lazy"`
+            + ` referrerpolicy="no-referrer" onerror="__thumbFallback(this${alt ? ",'" + alt + "'" : ''})">`;
+    };
+
     const BARREL_NAMES = {
         muzzle_brake: '枪口制退器', compensator: '补偿器', flash_hider: '消焰器',
         suppressor: '消音器', extended_barrel: '延伸枪管'
@@ -103,8 +126,24 @@
             return;
         }
 
-        grid.innerHTML = weapons.map(w => {
-            const dps = calcDPS(w);
+        // 「全部」视图下主武器 / 副武器分两个区块展示，不再混在一起
+        const renderGroup = (title, sub) => sub.length
+            ? `<div class="weapon-group-title"><span>${title}</span><em>${sub.length} 把</em></div>`
+                + sub.map(weaponCardHTML).join('')
+            : '';
+        if (currentFilter === 'all') {
+            grid.innerHTML = renderGroup('🔫 主武器', weapons.filter(w => isPrimary(w.type)))
+                + renderGroup('🔫 副武器', weapons.filter(w => isSecondary(w.type)))
+                + renderGroup('🧰 其他', weapons.filter(w => !isPrimary(w.type) && !isSecondary(w.type)));
+            return;
+        }
+
+        grid.innerHTML = weapons.map(w => weaponCardHTML(w)).join('');
+    }
+
+    // 单张武器卡片
+    function weaponCardHTML(w) {
+        const dps = calcDPS(w);
             const ttk = calcTTK(w);
             const dpsPercent = w.rpm > 0 ? Math.round(dps / maxDPS * 100) : 0;
             const typeColor = `var(--${w.type})`;
@@ -125,15 +164,13 @@
                 attTags.push('<span class="att-tag" style="color:var(--danger)">无配件</span>');
             }
 
-            const thumbURL = (typeof getWeaponThumbURL === 'function') ? getWeaponThumbURL(w.name) : null;
-
             return `
                 <div class="weapon-card" data-type="${w.type}" data-category="${category}" data-name="${w.name}" onclick="showWeaponDetail('${w.name.replace(/'/g, "\\'")}')">
                     <div class="weapon-card-header">
                         <span class="weapon-name">${w.name}</span>
                         <span class="weapon-type-badge ${w.type}">${TYPE_NAMES[w.type]}</span>
                     </div>
-                    ${thumbURL ? `<div class="weapon-thumb-row"><img class="weapon-thumb" src="${thumbURL}" alt="${w.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none'"></div>` : ''}
+                    ${thumbImgHTML(w.name, 'weapon-thumb') ? `<div class="weapon-thumb-row">${thumbImgHTML(w.name, 'weapon-thumb')}</div>` : ''}
                     ${detail ? `
                     <div class="weapon-real-info">
                         <span class="real-name" title="现实原型">${detail.realName}</span>
@@ -173,7 +210,6 @@
                     </div>` : ''}
                 </div>
             `;
-        }).join('');
     }
 
     // 筛选按钮
@@ -210,7 +246,6 @@
         const category = isPrimary(w.type) ? '主武器' : '副武器';
         const detail = (typeof WEAPON_DETAILS !== 'undefined') ? WEAPON_DETAILS[w.name] : null;
         const ext = (typeof WEAPON_EXTENDED !== 'undefined') ? WEAPON_EXTENDED[w.name] : null;
-        const thumbURL = (typeof getWeaponThumbURL === 'function') ? getWeaponThumbURL(w.name) : null;
         const recoilURL = (typeof getWeaponRecoilURL === 'function') ? getWeaponRecoilURL(w.name) : null;
 
         // ADS时间
@@ -590,7 +625,7 @@
         const effectsPanelHTML = '<div id="att-effect-panel" class="att-effect-panel" style="display:none"></div>';
 
         body.innerHTML = `
-            ${thumbURL ? `<div class="modal-weapon-image"><img src="${thumbURL}" alt="${w.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none'"></div>` : ''}
+            ${thumbImgHTML(w.name, '') ? `<div class="modal-weapon-image">${thumbImgHTML(w.name, '')}</div>` : ''}
             <div class="modal-weapon-name">${w.name}</div>
             <div class="modal-weapon-type">${category} · ${TYPE_NAMES[w.type]}${w.notes ? ' · ' + w.notes : ''}</div>
             ${detail ? `<div class="modal-weapon-real">${detail.realName} · ${detail.country}</div>` : ''}
@@ -1159,7 +1194,7 @@
         ph: '🇵🇭', nz: '🇳🇿', ar: '🇦🇷', cl: '🇨🇱', co: '🇨🇴', pe: '🇵🇪'
     };
 
-    const opState = { side: 'all', q: '', open: null, all: false };
+    const opState = { side: 'all', q: '' };
 
     // ---- 组织徽章（自制 SVG：缩写 + 所属国主色，无外部依赖）----
     const ORG_COLOR_BY_CODE = {
@@ -1305,6 +1340,7 @@
         });
     }
 
+    // 干员页签：卡片网格，点击弹出完整档案弹窗
     function renderOperators() {
         const box = $('#operator-cards');
         if (!box) return;
@@ -1317,72 +1353,44 @@
                 ? '<b class="op-side atk">⚔️ 进攻</b>'
                 : o.side === 'def' ? '<b class="op-side def">🛡️ 防守</b>' : '';
             const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
-            const isOpen = opState.all || opState.open === o.name;
             return `
-                <article class="op-entry${isOpen ? ' open' : ''}" data-op="${o.name.replace(/'/g, "\\'")}">
-                    <div class="op-entry-head" tabindex="0" role="button" aria-expanded="${isOpen}">
-                        <div class="op-entry-visual">${opVisualHTML(o, 'op-card-portrait', o.name[0])}</div>
-                        <div class="op-entry-main">
-                            <div class="op-entry-name">${esc(o.name)}${flag ? ' ' + flag : ''}
-                                ${o.realname ? `<span class="op-entry-real">${esc(o.realname)}</span>` : ''}
-                            </div>
-                            <div class="op-entry-meta">
-                                ${badge}
-                                ${o.armor ? `<span class="op-stat">🛡 ${o.armor}</span>` : ''}
-                                ${o.speed ? `<span class="op-stat">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
-                                ${o.difficulty ? `<span class="op-stat">难度 ${DIFF_LABEL[o.difficulty] || o.difficulty}</span>` : ''}
-                            </div>
-                            <div class="op-entry-org">${o.affiliation ? orgChipHTML(o.affiliation, { size: 22 }) : '<span class="muted">暂无组织</span>'}</div>
-                            <div class="op-entry-gadget">${(o.gadget_zh || o.gadget) ? esc(o.gadget_zh || o.gadget) : '<span class="muted">无固定独特技能</span>'}</div>
-                        </div>
-                        <div class="op-entry-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></div>
+                <div class="op-card" data-op="${o.name.replace(/'/g, "\\'")}" tabindex="0" role="button"
+                     aria-label="查看 ${esc(o.name)} 的完整档案" title="点击查看 ${esc(o.name)} 档案">
+                    <div class="op-card-visual">${opVisualHTML(o, 'op-card-portrait', o.name[0])}</div>
+                    <div class="op-card-name">${esc(o.name)}${flag ? ' ' + flag : ''}</div>
+                    <div class="op-card-meta">
+                        ${badge}
+                        ${o.armor ? `<span class="op-stat">🛡 ${o.armor}</span>` : ''}
+                        ${o.speed ? `<span class="op-stat">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
                     </div>
-                    <div class="op-entry-body">${isOpen ? operatorBodyHTML(o) : ''}</div>
-                </article>`;
+                    <div class="op-card-org">${o.affiliation ? orgChipHTML(o.affiliation, { size: 18 }) : '<span class="muted">暂无组织</span>'}</div>
+                    <div class="op-card-gadget">${(o.gadget_zh || o.gadget) ? esc(o.gadget_zh || o.gadget) : '<span class="muted">无固定独特技能</span>'}</div>
+                </div>`;
         }).join('');
 
-        box.querySelectorAll('.op-entry').forEach(entry => {
-            const head = entry.querySelector('.op-entry-head');
-            if (!head) return;
-            head.querySelectorAll('.org-chip[data-org]').forEach(c => {
-                c.style.cursor = 'pointer';
-                c.addEventListener('click', e => {
-                    e.stopPropagation();
-                    focusOrg(c.dataset.org);
-                });
-            });
-            const toggle = () => toggleOperatorEntry(entry);
-            head.addEventListener('click', e => {
+        box.querySelectorAll('.op-card').forEach(card => {
+            const open = () => openOperatorModal(card.dataset.op);
+            card.addEventListener('click', e => {
                 if (e.target.closest('.org-chip')) return;
-                toggle();
+                open();
             });
-            head.addEventListener('keydown', e => {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
             });
+            const chip = card.querySelector('.org-chip[data-org]');
+            if (chip) {
+                chip.style.cursor = 'pointer';
+                chip.addEventListener('click', e => { e.stopPropagation(); focusOrg(chip.dataset.org); });
+            }
         });
-        bindOperatorBody(box);
     }
 
-    function toggleOperatorEntry(entry) {
-        const name = entry.dataset.op;
-        const willOpen = !entry.classList.contains('open');
-        if (willOpen) {
-            const o = OPERATORS.find(x => x.name === name);
-            entry.querySelector('.op-entry-body').innerHTML = o ? operatorBodyHTML(o) : '';
-            bindOperatorBody(entry);
-        }
-        entry.classList.toggle('open', willOpen);
-        const head = entry.querySelector('.op-entry-head');
-        if (head) head.setAttribute('aria-expanded', String(willOpen));
-        if (!willOpen) entry.querySelector('.op-entry-body').innerHTML = '';
-    }
-
-    // 展开态内的交互：分区快跳按钮 / 武器 chip / 组织 chip
+    // 弹窗/页签内的交互：分区快跳按钮 / 武器 chip / 组织 chip
     function bindOperatorBody(scope) {
         scope.querySelectorAll('.op-jump-btn').forEach(b => {
             b.addEventListener('click', e => {
                 e.stopPropagation();
-                const sec = scope.querySelector('#' + b.dataset.jump);
+                const sec = document.getElementById(b.dataset.jump);
                 if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
@@ -1391,13 +1399,18 @@
             chip.addEventListener('click', e => {
                 e.stopPropagation();
                 const w = WEAPONS.find(x => x.name === chip.dataset.weapon);
-                if (w && typeof showWeaponDetail === 'function') showWeaponDetail(w.name);
+                if (!w || typeof showWeaponDetail !== 'function') return;
+                // 两个弹窗 z-index 相同，先关干员弹窗再开武器弹窗，避免被盖住
+                const opModal = $('#operator-modal');
+                if (opModal) opModal.classList.remove('active');
+                showWeaponDetail(w.name);
             });
         });
         scope.querySelectorAll('.org-chip[data-org]').forEach(c => {
             c.style.cursor = 'pointer';
             c.addEventListener('click', e => {
                 e.stopPropagation();
+                c.closest('.modal')?.classList.remove('active');
                 focusOrg(c.dataset.org);
             });
         });
@@ -1414,8 +1427,8 @@
         requestAnimationFrame(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }));
     }
 
-    // 从其他页面跳转过来：切到干员页签 → 展开 → 滚动定位 → 高亮
-    function focusOperator(name, opts) {
+    // 从其他页面跳转过来：切到干员页签 → 复位筛选 → 直接弹出该干员档案
+    function focusOperator(name) {
         switchTab('operators');
 
         const o = OPERATORS.find(x => x.name === name);
@@ -1433,18 +1446,14 @@
                 $$('.op-filter').forEach(b => b.classList.toggle('active', b.dataset.side === 'all'));
                 renderOperators();
             }
+            const card = [...document.querySelectorAll('.op-card')].find(c => c.dataset.op === name);
+            if (card) {
+                card.classList.remove('flash');
+                void card.offsetWidth;
+                card.classList.add('flash');
+            }
         }
-        const entry = [...document.querySelectorAll('.op-entry')].find(e => e.dataset.op === name);
-        if (!entry) return;
-        if (!entry.classList.contains('open')) toggleOperatorEntry(entry);
-        entry.classList.remove('flash');
-        void entry.offsetWidth;
-        entry.classList.add('flash');
-        if (!opts || opts.scroll !== false) {
-            requestAnimationFrame(() => {
-                entry.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        }
+        openOperatorModal(name);
     }
 
     function esc(s) {
@@ -1470,16 +1479,35 @@
     function operatorSections(o) {
         if (!o) return { head: '', panes: [] };
         const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
-        const weapons = (o.weapons || []).map(w => {
+
+        // 武器按「主武器 / 副武器」分组展示
+        const weaponChip = w => {
             const wd = WEAPONS.find(x => x.name === w);
             const cat = wd ? (TYPE_NAMES[wd.type] || wd.type) : '';
-            const thumb = (typeof getWeaponThumbURL === 'function') ? getWeaponThumbURL(w) : null;
-            return `<span class="op-weapon-chip" data-weapon="${w.replace(/'/g, "\\'")}">
-                        ${thumb ? `<img class="op-weapon-thumb" src="${thumb}" alt="${w}" loading="lazy" onerror="this.style.display='none'">` : ''}
-                        <span class="op-weapon-name">${w}</span>
-                        ${cat ? `<em>${cat}</em>` : ''}
+            return `<span class="op-weapon-chip" data-weapon="${w.replace(/'/g, "\\'")}" title="查看 ${esc(w)} 详情">
+                        ${thumbImgHTML(w, 'op-weapon-thumb')}
+                        <span class="op-weapon-name">${esc(w)}</span>
+                        ${cat ? `<em>${esc(cat)}</em>` : ''}
                     </span>`;
-        }).join('');
+        };
+        const opWeaponNames = o.weapons || [];
+        const primNames = [], secNames = [], otherNames = [];
+        opWeaponNames.forEach(w => {
+            const wd = WEAPONS.find(x => x.name === w);
+            if (!wd) otherNames.push(w);
+            else if (isPrimary(wd.type)) primNames.push(w);
+            else if (isSecondary(wd.type)) secNames.push(w);
+            else otherNames.push(w);
+        });
+        const wGroup = (title, names, icon) => names.length
+            ? `<div class="op-wgroup">
+                   <div class="op-wgroup-title">${icon} ${title} · ${names.length}</div>
+                   <div class="op-detail-weapons">${names.map(weaponChip).join('')}</div>
+               </div>`
+            : '';
+        const weapons = wGroup('主武器', primNames, '🔫')
+            + wGroup('副武器', secNames, '🔫')
+            + wGroup('其他', otherNames, '🧰');
 
         // ---- 独立技能面板 ----
         const gTitleRaw = o.gadget_zh || o.gadget;
@@ -1540,8 +1568,8 @@
             ? esc(o.affiliation) + (orgZh && orgZh !== o.affiliation ? ` <span class="op-org-label">${esc(orgZh)}</span>` : '')
             : '';
         const kitPane = `
-            ${sectionTitle('携带武器 · ' + (o.weapons || []).length)}
-            <div class="op-detail-weapons">${weapons || '<span class="muted">暂无数据</span>'}</div>
+            ${sectionTitle('武器装备 · 共 ' + (o.weapons || []).length + ' 把（主 ' + primNames.length + ' / 副 ' + secNames.length + '）')}
+            ${weapons || '<div class="op-detail-note muted">暂无武器数据</div>'}
             ${sectionTitle('档案')}
             <div class="op-detail-profile">
                 ${orgText ? `<div><span>所属</span>${orgText}</div>` : ''}
@@ -1551,14 +1579,15 @@
             </div>
             ${(o.function || []).length ? sectionTitle('职能定位') + `<div class="op-func-tags">${o.function.map(f => `<span class="op-func-tag">${esc(f)}</span>`).join('')}</div>` : ''}`;
 
+        // 展示顺序：装备 → 独特技能 → 其他（背景 / 培训 / 人际 / 战术 / 琐事）
         const panes = [
-            { id: 'gadget', label: '独特技能', html: gadgetPane, on: true },
-            { id: 'lore', label: '背景故事', html: lorePane, on: !!(o.bio || o.psych || o.note) },
-            { id: 'record', label: '培训 · 经验', html: recordPane, on: ((o.training || []).length + (o.experience || []).length) > 0 },
-            { id: 'social', label: '人际关系', html: socialPane, on: !!(o.anecdote || (o.relations || []).length) },
-            { id: 'tips', label: '战术要点', html: tipsPane, on: (o.tips || []).length > 0 },
-            { id: 'trivia', label: '琐事 · 台词', html: triviaPane, on: ((o.trivia || []).length + (o.quotes || []).length) > 0 },
-            { id: 'kit', label: '装备 · 档案', html: kitPane, on: true }
+            { id: 'kit', label: '🔫 装备 · 档案', html: kitPane, on: true },
+            { id: 'gadget', label: '🛠 独特技能', html: gadgetPane, on: true },
+            { id: 'lore', label: '📖 背景故事', html: lorePane, on: !!(o.bio || o.psych || o.note) },
+            { id: 'record', label: '🎓 培训 · 经验', html: recordPane, on: ((o.training || []).length + (o.experience || []).length) > 0 },
+            { id: 'social', label: '🤝 人际关系', html: socialPane, on: !!(o.anecdote || (o.relations || []).length) },
+            { id: 'tips', label: '🧭 战术要点', html: tipsPane, on: (o.tips || []).length > 0 },
+            { id: 'trivia', label: '💡 琐事 · 台词', html: triviaPane, on: ((o.trivia || []).length + (o.quotes || []).length) > 0 }
         ].filter(p => p.on);
 
         // 详情头：大立绘 + 完整标签（组织用徽章）
@@ -1607,9 +1636,17 @@
             </section>`).join('');
     }
 
-    // 兼容旧调用点（武器详情 / 组织图鉴）：直接跳到干员条目并展开
+    // 干员详情弹窗：内容全部垂直平铺，可直接滚动看完整份档案
     function openOperatorModal(name) {
-        focusOperator(name);
+        const o = OPERATORS.find(x => x.name === name);
+        const modal = $('#operator-modal');
+        if (!o || !modal) return;
+        const body = $('#operator-modal-body');
+        body.innerHTML = operatorBodyHTML(o);
+        bindOperatorBody(body);
+        modal.classList.add('active');
+        const content = modal.querySelector('.modal-content');
+        if (content) content.scrollTop = 0;
     }
 
     // ============================================================
@@ -1674,7 +1711,7 @@
 
         box.querySelectorAll('.org-member').forEach(m => {
             m.style.cursor = 'pointer';
-            m.addEventListener('click', () => openOperatorModal(m.dataset.op));
+            m.addEventListener('click', () => focusOperator(m.dataset.op));
         });
     }
 
@@ -1745,33 +1782,14 @@
                 $$('.op-filter').forEach(x => x.classList.remove('active'));
                 b.classList.add('active');
                 opState.side = b.dataset.side;
-                opState.open = null;
                 renderOperators();
-                syncExpandAllBtn();
             });
         });
         const inp = $('#op-search-input');
         if (inp) inp.addEventListener('input', () => {
             opState.q = inp.value;
-            opState.open = null;
             renderOperators();
-            syncExpandAllBtn();
         });
-        const expBtn = $('#op-expand-all');
-        if (expBtn) expBtn.addEventListener('click', () => {
-            opState.all = !opState.all;
-            if (!opState.all) opState.open = null;
-            renderOperators();
-            syncExpandAllBtn();
-        });
-        syncExpandAllBtn();
-    }
-
-    function syncExpandAllBtn() {
-        const btn = $('#op-expand-all');
-        if (!btn) return;
-        btn.textContent = opState.all ? '📕 收起全部' : '📖 展开全部';
-        btn.classList.toggle('active', !!opState.all);
     }
 
     // ---- 初始化 ----

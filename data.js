@@ -2705,6 +2705,13 @@ function getWeaponThumbURL(weaponName) {
     return FANDOM_CDN + '/' + img.thumb + '/revision/latest?cb=20220525145532';
 }
 
+// 缩略图备用源（Fandom）：灰机 wiki 图片服务有防盗链，带 Referer 请求会 403
+function getWeaponThumbFallbackURL(weaponName) {
+    const img = WEAPON_IMAGES[weaponName];
+    if (!img || !img.thumb) return null;
+    return FANDOM_CDN + '/' + img.thumb + '/revision/latest?cb=20220525145532';
+}
+
 function getWeaponRecoilURL(weaponName) {
     const img = WEAPON_IMAGES[weaponName];
     if (!img) return null;

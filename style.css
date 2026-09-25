@@ -288,6 +288,31 @@ body {
     gap: 12px;
 }
 
+/* 主武器 / 副武器 分组标题（占满整行） */
+.weapon-group-title {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: .5px;
+}
+.weapon-group-title:first-child { margin-top: 0; }
+.weapon-group-title em {
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 1px 7px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
 .weapon-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -2056,7 +2081,7 @@ body {
     70%  { box-shadow: 0 0 0 3px rgba(232,166,52,.22); }
     100% { box-shadow: 0 0 0 0 rgba(232,166,52,0); }
 }
-.op-entry.flash, .org-card.flash { animation: opFlash 1.7s ease-out 1; }
+.op-entry.flash, .op-card.flash, .org-card.flash { animation: opFlash 1.7s ease-out 1; }
 .op-card {
     padding: 12px 10px 10px;
     background: var(--bg-card);
@@ -2092,6 +2117,7 @@ body {
 }
 .op-card-name { font-size: 12px; font-weight: 600; color: var(--text-primary); line-height: 1.35; }
 .op-card-meta { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 6px; }
+.op-card-org { display: flex; justify-content: center; margin-top: 5px; min-height: 18px; }
 .op-side { font-size: 9px; padding: 1px 6px; border-radius: 3px; font-weight: 700; }
 .op-side.atk { background: rgba(232,166,52,.18); color: var(--attack); }
 .op-side.def { background: rgba(74,158,255,.18); color: var(--defense); }
@@ -2192,6 +2218,20 @@ body {
 .op-weapon-name { font-weight: 600; color: var(--text-primary); }
 .op-weapon-chip:hover .op-weapon-name { color: var(--accent); }
 .op-weapon-chip em { margin-left: 2px; }
+
+/* 干员详情：主武器 / 副武器 分组 */
+.op-wgroup { margin-bottom: 10px; }
+.op-wgroup-title {
+    font-size: 11px; font-weight: 700; color: var(--text-secondary);
+    margin: 0 0 6px; letter-spacing: .5px;
+}
+.op-wgroup-title::after {
+    content: '';
+    display: block;
+    height: 1px;
+    margin-top: 5px;
+    background: var(--border);
+}
 
 .op-gadget-en { font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: 6px; }
 .op-gadget-stats {

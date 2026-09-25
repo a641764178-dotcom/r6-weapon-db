@@ -1,6 +1,6 @@
 // ============================================
 // R6S 武器配件数据库 - 数据层
-// 版本基准: Y11S3 "Operation Split Fire" (2026-09-01 上线) — 主表已落地
+// 版本基准: Y11S3 "Operation Split Fire" (2026-09-01 上线) + Y11S3.1 中期补丁 (2026-09-22, Update 3.49) — 主表已落地
 // 瞄具体系已按 Y9S1 "Deadly Omen" 重构: 1.0x / 2.5x / 3.5x 三大类
 // 分类体系: 主武器7类 + 副武器4类
 // ============================================
@@ -647,7 +647,7 @@ const WEAPONS = [
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '泵动霰弹枪' },
     { name: 'M590A1', type: 'shotgun', damage: 48, rpm: 0, mag: 7, operators: ['Smoke','Mute','Thatcher','Sledge','Warden','Deimos'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '泵动霰弹枪' },
-    { name: 'M1014', type: 'shotgun', damage: 28, rpm: 0, mag: 8, operators: ['Thermite','Castle','Pulse','Ace'], side: 'mixed',
+    { name: 'M1014', type: 'shotgun', damage: 30, rpm: 0, mag: 8, operators: ['Thermite','Castle','Pulse','Ace'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '半自动霰弹枪' },
     { name: 'SG-CQB', type: 'shotgun', damage: 44, rpm: 0, mag: 7, operators: ['Doc','Rook','Twitch','Grim','Lion'], side: 'mixed',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '泵动霰弹枪' },
@@ -657,7 +657,7 @@ const WEAPONS = [
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '半自动霰弹枪' },
     { name: 'SPAS-12', type: 'shotgun', damage: 31, rpm: 0, mag: 7, operators: ['Valkyrie','Oryx'], side: 'def',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '半自动霰弹枪' },
-    { name: 'SPAS-15', type: 'shotgun', damage: 24, rpm: 0, mag: 6, operators: ['Caveira','Thunderbird'], side: 'def',
+    { name: 'SPAS-15', type: 'shotgun', damage: 26, rpm: 0, mag: 6, operators: ['Caveira','Thunderbird'], side: 'def',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '半自动霰弹枪' },
     { name: 'SuperNova', type: 'shotgun', damage: 48, rpm: 0, mag: 7, operators: ['Echo','Hibana','Amaru'], side: 'mixed',
       barrels: ['suppressor'], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '泵动霰弹枪' },
@@ -1336,7 +1336,7 @@ const WEAPON_EXTENDED = {
         underbarrel: false, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，连续射击后坐力累积' },
-        falloff: { start: 5, midStart: 7, mid: 21, midEnd: 10, end: 13, min: 12, pellets: 8 } // [GitHub实测Y11S1.1] 28→21→12
+        falloff: { start: 5, midStart: 7, mid: 22, midEnd: 10, end: 13, min: 13, pellets: 8 } // [Y11S3.1官网dmg30 + 本站霰弹衰减规则推算] 30→22→13（原 28→21→12）
     },
     'SG-CQB': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1372,7 +1372,7 @@ const WEAPON_EXTENDED = {
         underbarrel: false, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，弹匣供弹，后坐力平稳' },
-        falloff: { start: 5, midStart: 7, mid: 18, midEnd: 10, end: 13, min: 10, pellets: 8 } // [GitHub实测Y11S1.1] 24→18→10
+        falloff: { start: 5, midStart: 7, mid: 19, midEnd: 10, end: 13, min: 11, pellets: 8 } // [Y11S3.1官网dmg26 + 本站霰弹衰减规则推算] 26→19→11（原 24→18→10）
     },
     'SuperNova': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -2769,7 +2769,7 @@ const OPERATORS = [
     { name: 'Mozzie', side: 'def', icon: 'mozzie.svg', armor: '2', speed: 'medium', difficulty: 'normal', function: ['Anti-Gadget', 'Intel'], realname: 'Max Goose', birthplace: 'Portland', birthdate: '1984-02-15', affiliation: 'SASR', country: ['au'], releasedate: '2019-03-06', gadget: 'Pest Launcher', gadget_desc: 'Launches autonomous bots that latch onto nearby enemy drones, hijacking their controls.', gadget_zh: '骇虫发射器', gadget_zh_desc: '俗称：偷车、黑小车、恐怖机器人、抱脸虫', gadget_stats: ['数量：4', '部署后就绪所需时间：1.7秒', '作用范围半径：1.75米', '装填时间：2秒', '骇虫可以入侵到进攻方的无人机，并且使Mozzie获得完整的控制权。保留无人机的所有功能，但却不能把无人机收起来随身携带。', '骇虫发射器可以直接击中无人机，或者朝平面射击作为伏击进攻方无人机的陷阱。', '*骇虫为中心球形半径1.75米范围以内且没有其他障碍物的情况下，进入范围内的无人机会被夺取控制权。', '可以骇入夺取控制权的无人机：'], weapons: ['Commando 9', 'P10 RONI', 'SDP 9mm'] },
     { name: 'Mute', side: 'def', icon: 'mute.svg', armor: '3', speed: 'slow', difficulty: 'easy', function: ['Anti-Gadget', 'Crowd Control'], realname: 'Mark Chander', birthplace: 'York', birthdate: '1991-10-11', affiliation: 'S.A.S.', country: ['uk'], releasedate: null, gadget: 'GC90 Signal Disrupter', gadget_desc: 'He brings with him a Signal Disruptor from his former career, which allows Chandar to jam all communications in a set area, preventing remote detonations, the use of drones and him and his teammates can remain hidden from Lion’s scan if within range of the jammer. The GC90 “Moni”, blocks the signal from a remote detonator or control from reaching any device within range.', gadget_zh: null, gadget_zh_desc: '俗称：WiFi、路由器', gadget_stats: ['数量：4', '作用范围：半径2.6米的球形。', '干扰警告范围：半径4.875米的球形。', '部署所需时间：2秒', '信号干扰器只能部署在地面或宽大桌面等有足够空间部署的水平面上。', '多数情况下，干扰器的作用是干扰电子设备之间的信号传递，在范围内需要接收或传递信号的设备和部分进入范围的敌方干员都会被影响，以下列出部分影响效果，包括但不限于：', '* 爆破炸药、、、等需要遥控触发的电子设备；', '* 侦察无人机、、、等观测工具设备；'], weapons: ['M590A1', 'MP5K', 'P226 MK 25', 'SMG-11'] },
     { name: 'Nomad', side: 'atk', icon: 'nomad.svg', armor: '2', speed: 'medium', difficulty: 'hard', function: ['Front Line', 'Map Control'], realname: 'Sanaa El Maktoub', birthplace: 'Marrakesh, Morocco', birthdate: '1979-07-27', affiliation: 'GIGR', country: ['ma'], releasedate: '2018-12-04', gadget: 'Airjab Launcher', gadget_desc: 'Nomad’s custom rifle attachment allows her to launch Airjab repulsion grenades. They can explode midair when in close proximity to an enemy or they can stick to a surface and detonate later, again when an enemy is within range. Nomad enters the field with three Airjab grenades. These pushback devices are non-lethal but they disorient those affected.', gadget_zh: null, gadget_zh_desc: '步枪的配件，可以射出有黏性的推斥榴弹，接近敌人时引爆。', gadget_stats: ['使用次数：3', '激活范围：3.25米', '作用范围：3.5米', '初始数量为2，每隔60秒额外获得一次。', '最大可携带数量：2', '最大可部署数量：2', '按下激活，按下即可发射部署气震槌', '*可按下进行瞄准，此时射出的气震槌会略微偏向准星左侧位置。'], weapons: ['.44 Mag Semi-Auto', 'AK-74M', 'ARX200', 'GONNE-6 Rev', 'PRB92'] },
-    { name: 'Noor', side: 'def', icon: null, armor: '2', speed: 'medium', difficulty: null, function: ['Anti-Shield', 'Area Denial'], realname: null, birthplace: null, birthdate: null, affiliation: null, country: ['eg'], releasedate: null, gadget: 'Horus Lance Launcher', gadget_desc: '发射 5 发穿透火焰弹，可穿透护盾并进行区域封锁（Ubisoft Y11S3 官方公告）', gadget_zh: '荷鲁斯之枪发射器', gadget_zh_desc: '简称：荷鲁斯之枪', gadget_stats: ['备弹数量：2+3个', '直击伤害：50点', '火焰伤害：12点/0.25秒', '火焰持续时间：10秒', '常规部署火焰释放延迟：1.5秒', '加固墙部署、牙刃壁障、龙鳞版火焰释放延迟：5秒', '按下拿出发射器，按下以发射。', '按住可以进行瞄准。'], weapons: ['1911 TACOPS', 'ALDA 5.56', 'Bailiff 410', 'Commando 9'] },
+    { name: 'Noor', side: 'def', icon: null, armor: '2', speed: 'medium', difficulty: null, function: ['Anti-Shield', 'Area Denial'], realname: null, birthplace: null, birthdate: null, affiliation: null, country: ['eg'], releasedate: '2026-09-01', gadget: 'Horus Lance Launcher', gadget_desc: '发射 5 发穿透火焰弹，可穿透护盾并进行区域封锁（Ubisoft Y11S3 官方公告）', gadget_zh: '荷鲁斯之枪发射器', gadget_zh_desc: '简称：荷鲁斯之枪', gadget_stats: ['备弹数量：2+3个', '直击伤害：50点', '火焰伤害：12点/0.25秒', '火焰持续时间：10秒', '常规部署火焰释放延迟：1.5秒', '加固墙部署、牙刃壁障、龙鳞版火焰释放延迟：5秒', '按下拿出发射器，按下以发射。', '按住可以进行瞄准。'], weapons: ['1911 TACOPS', 'ALDA 5.56', 'Bailiff 410', 'Commando 9'] },
     { name: 'Nøkk', side: 'atk', icon: 'nokk.svg', armor: '2', speed: 'medium', difficulty: 'hard', function: ['Front Line', 'Map Control'], realname: 'Karina Gaarddhøje', birthplace: null, birthdate: null, affiliation: 'Jægerkorpset', country: ['dk'], releasedate: '2019-06-11', gadget: 'Hel Presence Reduction', gadget_desc: 'Counter-intel that wipes Nøkk\'s image from observation tools.', gadget_zh: '隐逸无痕消除器', gadget_zh_desc: '反情报可以令观测工具无法察觉其存在。', gadget_stats: ['使用次数：无限制', '最大使用时间：无限制或异常状态13秒', '最大充能时间：120秒', '关闭冷却：0.8秒', '技能主动开关硬直：0.2秒', 'Nøkk的技能可以抹除其在敌方监控设备里的影像，且无法被敌方标记：包括观测设备标记和触发。', '技能在正常运作期间不会消耗能量，可以无限使用。', '导致技能异常的情况：'], weapons: ['5.7 USG', 'D-50', 'FMG-9', 'GONNE-6', 'PMR90A2', 'SIX12 SD'] },
     { name: 'Oryx', side: 'def', icon: 'oryx.svg', armor: '2', speed: 'medium', difficulty: 'normal', function: ['Support'], realname: 'Saif Al Hadid', birthplace: 'Azraq', birthdate: '1975-7-3', affiliation: null, country: [], releasedate: '2020-03-10', gadget: 'Remah Dash', gadget_desc: 'The Remah Dash is his signature move, its speed allows him to roam efficiently and cover short distances with unprecedented swiftness. It can also be used to knock down opponents, which gives him a unique way to deal with an Operator like Montagne.', gadget_zh: '双重战线', gadget_zh_desc: 'Oryx拥有2个相互独立且无关联的特性/技能。', gadget_stats: ['最大冲锋距离：5米', '突破可破坏墙面所须消耗生命值：5/次', '充能所需时间：5秒/次', '充能上限：3', '冲撞后僵直时间：0.5秒', '初始数量为3，每隔8秒额外获得一次。', '最大可携带数量：3', '按下即可使用。'], weapons: ['Bailiff 410', 'Reaper MK2', 'SPAS-12', 'T-5 SMG', 'USP40'] },
     { name: 'Osa', side: 'atk', icon: 'osa.svg', armor: '3', speed: 'slow', difficulty: 'normal', function: ['Intel', 'Support'], realname: 'Anja Katarina Janković', birthplace: 'Split, Croatia', birthdate: '1994-04-29', affiliation: null, country: [], releasedate: '2021-09-07', gadget: 'Talon-8 Clear Shield', gadget_desc: 'The transparent and bulletproof Talon-8 Shield can be carried by Osa or deployed on floors or window frames, giving her a protective line of sight while she formulates an attack strategy.', gadget_zh: null, gadget_zh_desc: '透明防弹护盾，可手持或部署在地板和窗框上。', gadget_stats: ['数量：2', '部署时间：1.8秒', '按下拿出护盾。', '按住部署护盾。', '对已部署且未破碎的护盾，按住回收。', '透明护盾可以完全抵挡子弹与激光伤害。', '当Osa手持透明护盾时：', '* 站立会露出腿部，蹲下可保护全身，但移动时会露出脚；'], weapons: ['556XI', 'PDW9', 'PMM'] },
@@ -2803,6 +2803,27 @@ const OPERATORS = [
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'info',
+        date: '2026-09-23',
+        title: '废土巡回赛（Wasteland Circuit）限时活动开启 — 无人机竞速，9/23–10/13',
+        content: '<ul><li>🏁 <strong>全新限时模式：无人机竞速狂潮</strong>，俄勒冈乡间屋宅大幅改造为末日后大奖赛场地，含 3 条赛道（垃圾场竞速 / 地下室环道 / 建筑公路）</li><li>🎁 <strong>赛道可拾取道具</strong>：电磁脉冲炮、害虫陷阱、无限无人机加速等；排名末 3 位可获得更强道具用于翻盘</li><li>📺 <strong>同期 Twitch 掉宝</strong>：活动期间可获取专属无人机皮肤与聊天徽章</li><li>⚠️ <strong>纯活动模式，无武器伤害 / 配件 / 干员数值变更</strong></li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/3I3MQqISetKnGIyV5jx8iI/new-twitch-drop-and-badge-available-during-the-wasteland-circuit-event'
+    },
+    {
+        type: 'patch',
+        date: '2026-09-22',
+        title: 'Y11S3.1 补丁 (Update 3.49) — M1014 / SPAS-15 伤害上调，Buck / Castle / Sledge 等干员优化',
+        content: '<ul><li>🔫 <strong>M1014</strong>：基础伤害 28 → <strong>30</strong>（衰减 30→22→13）；影响干员 <strong>Ace / Castle / Pulse / Thermite</strong></li><li>🔫 <strong>SPAS-15</strong>：基础伤害 24 → <strong>26</strong>（衰减 26→19→11）；影响干员 <strong>Caveira / Thunderbird</strong></li><li>🔑 <strong>Buck 万能钥匙</strong>：总弹药 31 → <strong>36</strong></li><li>🛡️ <strong>Castle 装甲板</strong>：摧毁所需近战次数 9 → <strong>10</strong></li><li>😱 <strong>Fenrir F-NATT 恐惧地雷</strong>：气体扩散至最大范围耗时 2s → <strong>1.9s</strong>（响应更快）</li><li>👁️ <strong>Maestro 邪眼</strong>：电池续航 8s → <strong>9s</strong></li><li>💥 <strong>Thermite 铝热炸药</strong>：伤害 200 → <strong>220</strong></li><li>🔨 <strong>Sledge 战术突破锤</strong>：挥动耗时 1s → <strong>0.8s</strong></li><li>🐛 <strong>Bug 修复</strong>：大量 Noor 荷鲁斯之枪与盾牌干员交互异常修复；匹配重连 / 队伍颜色重置 / 靶场跟随等 UX 修复</li><li>⚠️ <strong>无新增配件、无配件数值调整、无配件分发 / 瞄具兼容性变更</strong>；本站主表两把霰弹枪伤害与衰减已同步更新</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/game/rainbow-six/siege/news-updates/3WMly2DNZqv1GpUK9GNGm5/y11s31-patch-notes'
+    },
+    {
+        type: 'patch',
+        date: '2026-09-09',
+        title: 'Y11S3 热修复 (Update 3.48) — Doc 装填 / Blackbeard 盾牌与 Noor 交互修复',
+        content: '<ul><li>🔧 <strong>Doc 装填修复</strong>：修复 Doc 无法装填弹药的问题</li><li>🛡️ <strong>Blackbeard 盾牌修复</strong>：修复 Blackbeard 步枪盾与 Noor 荷鲁斯之枪交互时的异常表现</li><li>🎭 <strong>头饰修复</strong>：修复部分头饰导致玩家在加载时卡住的问题（受影响头饰暂时禁用，待确认后重新启用）</li><li>🏆 <strong>传奇分段</strong>：禁用传奇分段奖励页签，待赛季中期上线时启用</li><li>📝 <strong>通行证</strong>：更新高级战斗通行证说明，明确奖励等级机制</li><li>⚡ <strong>性能</strong>：修复过度缓存更新的问题</li><li>⚠️ <strong>无武器伤害 / 射速 / 弹匣 / 配件兼容性变更</strong>，纯 Bug 修复</li></ul>',
+        link: ''
+    },
     {
         type: 'info',
         date: '2026-09-07',

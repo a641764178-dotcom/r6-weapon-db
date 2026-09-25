@@ -1166,6 +1166,33 @@
         return OPERATOR_ICON_CDN + op.icon;
     }
 
+    // 干员立绘加载失败的降级链：立绘 → 军械库圆形头像 → 首字母占位
+    window.__opImgFallback = function (img, iconUrl, initial) {
+        if (!img) return;
+        if (iconUrl && !img.dataset.fellBack) {
+            img.dataset.fellBack = '1';
+            img.className = 'op-icon-fallback';
+            img.src = iconUrl;
+            return;
+        }
+        const d = document.createElement('div');
+        d.className = 'op-card-fallback';
+        d.textContent = initial || '?';
+        img.replaceWith(d);
+    };
+
+    // 生成干员视觉区 HTML（立绘优先，回退头像，再回退首字母）
+    function opVisualHTML(o, portraitClass, initial) {
+        const icon = operatorIconURL(o) || '';
+        if (o.portrait) {
+            return `<img class="${portraitClass}" src="${o.portrait}" alt="${esc(o.name)}" loading="lazy" onerror="__opImgFallback(this,'${icon}','${initial}')">`;
+        }
+        if (icon) {
+            return `<img class="op-icon-fallback" src="${icon}" alt="${esc(o.name)}" loading="lazy" onerror="__opImgFallback(this,'','${initial}')">`;
+        }
+        return `<div class="op-card-fallback">${initial}</div>`;
+    }
+
     function filteredOperators() {
         const q = opState.q.trim().toLowerCase();
         return OPERATORS.filter(o => {
@@ -1190,12 +1217,10 @@
                 ? '<b class="op-side atk">⚔️ 进攻</b>'
                 : o.side === 'def' ? '<b class="op-side def">🛡️ 防守</b>' : '';
             const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
-            const icon = operatorIconURL(o);
             return `
                 <div class="op-card" data-op="${o.name.replace(/'/g, "\\'")}" tabindex="0" role="button">
                     <div class="op-card-visual">
-                        ${icon ? `<img src="${icon}" alt="${o.name}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'op-card-fallback',textContent:'${o.name[0]}'}))">`
-                               : `<div class="op-card-fallback">${o.name[0]}</div>`}
+                        ${opVisualHTML(o, 'op-card-portrait', o.name[0])}
                     </div>
                     <div class="op-card-name">${o.name}${flag ? ' ' + flag : ''}</div>
                     <div class="op-card-meta">
@@ -1224,7 +1249,6 @@
         const o = OPERATORS.find(x => x.name === name);
         const modal = $('#operator-modal');
         if (!o || !modal) return;
-        const icon = operatorIconURL(o);
         const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
         const weapons = (o.weapons || []).map(w => {
             const wd = WEAPONS.find(x => x.name === w);
@@ -1240,7 +1264,7 @@
         $('#operator-modal-body').innerHTML = `
             <div class="op-detail-head">
                 <div class="op-detail-visual">
-                    ${icon ? `<img src="${icon}" alt="${o.name}">` : `<div class="op-detail-fallback">${o.name[0]}</div>`}
+                    ${opVisualHTML(o, 'op-detail-portrait', o.name[0])}
                 </div>
                 <div class="op-detail-meta">
                     <div class="op-detail-name">${o.name} ${flag}</div>
@@ -1261,7 +1285,11 @@
                     : esc(zh || en);
                 const desc = o.gadget_zh_desc || o.gadget_desc;
                 const stats = (o.gadget_stats || []);
+                const gIcon = o.gadgetIcon
+                    ? `<img class="op-gadget-icon" src="${o.gadgetIcon}" alt="${esc(o.gadgetIconName || o.gadget || '技能图标')}" loading="lazy" onerror="this.style.display='none'">`
+                    : '';
                 return `<div class="op-detail-section-title">独特技能</div>
+                    ${gIcon}
                     <div class="op-detail-gadget">${title}</div>
                     ${desc ? `<div class="op-detail-desc">${esc(desc)}</div>` : ''}
                     ${stats.length ? `<ul class="op-gadget-stats">${stats.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}`;

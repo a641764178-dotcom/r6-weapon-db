@@ -23,10 +23,9 @@
                 <a href="#" class="nav-link" data-tab="operators">干员</a>
                 <a href="#" class="nav-link" data-tab="orgs">组织图鉴</a>
                 <a href="#" class="nav-link" data-tab="world">世界观</a>
-                <a href="#" class="nav-link" data-tab="attachments">配件图鉴</a>
+                <a href="#" class="nav-link" data-tab="attachments" title="含瞄具图鉴：15 款军械库瞄具原生 ICON + 4 款专属内置瞄具">配件 · 瞄具</a>
                 <a href="#" class="nav-link" data-tab="compare">对比工具</a>
                 <a href="#" class="nav-link" data-tab="updates">官方更新</a>
-                <a href="sights-preview.html" class="sights-preview-link" style="color:#ff9800;border:1px solid #ff9800;padding:4px 10px;border-radius:4px;margin-left:8px;text-decoration:none;font-size:13px;" title="瞄具图鉴：15 款军械库瞄具原生 ICON + 4 款专属内置瞄具">🎯 瞄具图鉴</a>
             </nav>
             <div class="version-badge">Y11S3</div>
         </div>
@@ -60,6 +59,10 @@
             </div>
             <div class="stats-bar">
                 <span id="weapon-count">正在加载...</span>
+                <div class="view-switch" role="group" aria-label="视图切换">
+                    <button class="view-btn active" data-view="card" title="卡片视图：带武器立绘">▦ 卡片</button>
+                    <button class="view-btn" data-view="table" title="表格视图：保留立绘，一屏看更多，便于横向对比">☰ 表格</button>
+                </div>
                 <div class="sort-group">
                     <label>排序：</label>
                     <select id="weapon-sort">
@@ -71,6 +74,7 @@
                 </div>
             </div>
             <div id="weapon-grid" class="weapon-grid"></div>
+            <div id="weapon-table-wrap" class="weapon-table-wrap" hidden></div>
         </section>
 
         <!-- 干员页面 -->
@@ -181,32 +185,43 @@
         </section>
     </main>
 
-    <!-- 武器详情弹窗 -->
-    <div id="weapon-modal" class="modal">
+    <!-- 武器详情抽屉 -->
+    <div id="weapon-modal" class="modal" role="dialog" aria-modal="true" aria-label="武器详情" aria-hidden="true">
         <div class="modal-overlay"></div>
         <div class="modal-content">
-            <button class="modal-close">&times;</button>
+            <button class="modal-close" aria-label="关闭">&times;</button>
             <div id="modal-body"></div>
         </div>
     </div>
 
-    <!-- 干员详情弹窗 -->
-    <div id="operator-modal" class="modal">
+    <!-- 干员详情抽屉 -->
+    <div id="operator-modal" class="modal" role="dialog" aria-modal="true" aria-label="干员档案" aria-hidden="true">
         <div class="modal-overlay"></div>
         <div class="modal-content">
-            <button class="modal-close">&times;</button>
+            <button class="modal-close" aria-label="关闭">&times;</button>
             <div id="operator-modal-body"></div>
         </div>
     </div>
 
-    <!-- 配件详情弹窗 -->
-    <div id="attachment-modal" class="modal">
+    <!-- 配件详情抽屉 -->
+    <div id="attachment-modal" class="modal" role="dialog" aria-modal="true" aria-label="配件详情" aria-hidden="true">
         <div class="modal-overlay"></div>
         <div class="modal-content">
-            <button class="modal-close">&times;</button>
+            <button class="modal-close" aria-label="关闭">&times;</button>
             <div id="attachment-modal-body"></div>
         </div>
     </div>
+
+    <!-- 通用信息抽屉（专属瞄具等一次性内容） -->
+    <div id="info-modal" class="modal" role="dialog" aria-modal="true" aria-label="详细信息" aria-hidden="true">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" aria-label="关闭">&times;</button>
+            <div id="info-modal-body"></div>
+        </div>
+    </div>
+
+    <button id="back-to-top" type="button" aria-label="回到顶部" title="回到顶部">↑</button>
 
     <footer class="footer">
         <p>R6资料库 · 数据来源: Ubisoft 官方设计师笔记 / GitHub hanslhansl 实测 / 灰机wiki / Liquipedia / Fandom Wiki</p>

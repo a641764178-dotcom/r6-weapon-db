@@ -82,6 +82,7 @@
     let currentFilter = 'all';
     let currentSearch = '';
     let currentSort = 'name';
+    let currentView = 'card';   // card | table
 
     function getFilteredWeapons() {
         let weapons = [...WEAPONS];
@@ -111,9 +112,86 @@
         return weapons;
     }
 
+    // ---- 表格视图：保留武器立绘，一屏看更多行，数值等宽右对齐便于竖扫 ----
+    const TABLE_COLS = [
+        { key: 'name', label: '武器', sortable: true },
+        { key: 'type', label: '类型', sortable: false },
+        { key: 'damage', label: '伤害', sortable: true, num: true },
+        { key: 'rpm', label: '射速', sortable: true, num: true },
+        { key: 'mag', label: '弹匣', sortable: false, num: true },
+        { key: 'dps', label: 'DPS', sortable: true, num: true },
+        { key: 'ttk', label: 'TTK (s)', sortable: false, num: true, title: '击倒 100 血目标所需秒数（不含首发延迟与伤害衰减）' },
+        { key: 'operators', label: '可用干员', sortable: false }
+    ];
+
+    function weaponTableHTML(weapons) {
+        const dpsList = weapons.filter(w => w.rpm > 0).map(calcDPS);
+        const topDPS = dpsList.length ? Math.max(...dpsList) : 0;
+
+        const head = `<tr>${TABLE_COLS.map(c => `
+            <th class="${c.num ? 'num' : ''}${currentSort === c.key ? ' sorted' : ''}"${c.sortable ? ` data-sort="${c.key}" role="button" tabindex="0"` : ''}${c.title ? ` title="${c.title}"` : ''}>
+                ${c.label}${c.sortable ? '<i class="sort-arrow">↕</i>' : ''}
+            </th>`).join('')}</tr>`;
+
+        const row = w => {
+            const dps = calcDPS(w);
+            const ttk = calcTTK(w);
+            const isTop = w.rpm > 0 && topDPS > 0 && Math.round(dps) >= Math.round(topDPS);
+            const thumb = (typeof thumbImgHTML === 'function') ? thumbImgHTML(w.name, 'wt-thumb') : '';
+            return `<tr class="wt-row" data-name="${w.name.replace(/'/g, "\\'")}" tabindex="0">
+                <td class="wt-name">
+                    ${thumb || '<i class="wt-thumb-fb">🔫</i>'}
+                    <span>${esc(w.name)}</span>
+                </td>
+                <td><span class="weapon-type-badge ${w.type}">${TYPE_NAMES[w.type]}</span></td>
+                <td class="num">${w.damage}</td>
+                <td class="num">${w.rpm || '—'}</td>
+                <td class="num">${w.mag}</td>
+                <td class="num${isTop ? ' top' : ''}">${w.rpm > 0 ? Math.round(dps) : '—'}</td>
+                <td class="num">${w.rpm > 0 && typeof ttk === 'number' ? (ttk / 1000).toFixed(2) : '—'}</td>
+                <td class="wt-ops">${esc((w.operators || []).join('、'))}</td>
+            </tr>`;
+        };
+
+        const renderGroup = (title, sub) => sub.length
+            ? `<div class="weapon-group-title"><span>${title}</span><em>${sub.length} 把</em></div>
+               <table class="weapon-table"><thead>${head}</thead><tbody>${sub.map(row).join('')}</tbody></table>`
+            : '';
+
+        if (currentFilter === 'all') {
+            return renderGroup('🔫 主武器', weapons.filter(w => isPrimary(w.type)))
+                + renderGroup('🔫 副武器', weapons.filter(w => isSecondary(w.type)))
+                + renderGroup('🧰 其他', weapons.filter(w => !isPrimary(w.type) && !isSecondary(w.type)));
+        }
+        return `<table class="weapon-table"><thead>${head}</thead><tbody>${weapons.map(row).join('')}</tbody></table>`;
+    }
+
+    function bindWeaponTable(wrap) {
+        wrap.querySelectorAll('.wt-row').forEach(tr => {
+            const open = () => showWeaponDetail(tr.dataset.name);
+            tr.addEventListener('click', open);
+            tr.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+            });
+        });
+        wrap.querySelectorAll('th[data-sort]').forEach(th => {
+            const sort = () => {
+                currentSort = th.dataset.sort;
+                const sel = $('#weapon-sort');
+                if (sel) sel.value = currentSort;
+                renderWeaponGrid();
+            };
+            th.addEventListener('click', sort);
+            th.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sort(); }
+            });
+        });
+    }
+
     function renderWeaponGrid() {
         const weapons = getFilteredWeapons();
         const grid = $('#weapon-grid');
+        const tableWrap = $('#weapon-table-wrap');
         const count = $('#weapon-count');
 
         // 统计主副武器数量
@@ -121,9 +199,25 @@
         const secondaryCount = weapons.filter(w => isSecondary(w.type)).length;
         count.textContent = `共 ${weapons.length} 把武器（主武器 ${primaryCount} / 副武器 ${secondaryCount}）`;
 
+        if (!grid) return;
+        const isTable = currentView === 'table';
+
         if (weapons.length === 0) {
-            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted);">没有匹配的武器</div>';
+            const empty = '<div class="empty-state">没有匹配的武器 —— 试试清空搜索词，或把筛选切回「全部」</div>';
+            if (isTable && tableWrap) { tableWrap.innerHTML = empty; tableWrap.hidden = false; grid.hidden = true; }
+            else { grid.innerHTML = empty; grid.hidden = false; if (tableWrap) tableWrap.hidden = true; }
             return;
+        }
+
+        if (tableWrap) {
+            tableWrap.hidden = !isTable;
+            grid.hidden = isTable;
+            if (isTable) {
+                tableWrap.innerHTML = weaponTableHTML(weapons);
+                bindWeaponTable(tableWrap);
+                return;
+            }
+            tableWrap.innerHTML = '';
         }
 
         // 「全部」视图下主武器 / 副武器分两个区块展示，不再混在一起
@@ -154,14 +248,14 @@
             const attTags = [];
             w.barrels.forEach(b => {
                 const isNew = w.y7s3_new?.barrels?.includes(b);
-                attTags.push(`<span class="att-tag${isNew ? ' new' : ''}">${BARREL_NAMES[b]}</span>`);
+                attTags.push(attChipHTML(b, 'barrel', { className: 'att-tag', newIn: isNew, title: `${BARREL_NAMES[b]} · 查看配件详情` }));
             });
             w.grips.forEach(g => {
                 const isNew = w.y7s3_new?.grips?.includes(g);
-                attTags.push(`<span class="att-tag${isNew ? ' new' : ''}">${GRIP_NAMES[g]}</span>`);
+                attTags.push(attChipHTML(g, 'grip', { className: 'att-tag', newIn: isNew, title: `${GRIP_NAMES[g]} · 查看配件详情` }));
             });
             if (w.barrels.length === 0 && w.grips.length === 0) {
-                attTags.push('<span class="att-tag" style="color:var(--danger)">无配件</span>');
+                attTags.push('<span class="att-tag empty">无配件</span>');
             }
 
             return `
@@ -222,16 +316,27 @@
         });
     });
 
-    // 搜索框
+    // 搜索框（防抖 180ms，避免每敲一键重建上百张卡片）
+    let searchTimer = null;
     $('#weapon-search').addEventListener('input', e => {
-        currentSearch = e.target.value;
-        renderWeaponGrid();
+        const v = e.target.value;
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => { currentSearch = v; renderWeaponGrid(); }, 180);
     });
 
     // 排序
     $('#weapon-sort').addEventListener('change', e => {
         currentSort = e.target.value;
         renderWeaponGrid();
+    });
+
+    // 视图切换：卡片 / 表格
+    $$('.view-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentView = btn.dataset.view;
+            $$('.view-btn').forEach(b => b.classList.toggle('active', b === btn));
+            renderWeaponGrid();
+        });
     });
 
     // ---- 武器详情弹窗 ----
@@ -543,7 +648,12 @@
                         ${fams.map(f => {
                             const fam = SD[f];
                             if (!fam) return '';
-                            const head = `<span class="sight-family-name${fam.variants.length ? ' modal-att-item sight-item' : ''}"${fam.variants.length ? ` data-att-key="${f}" data-att-slot="sight"` : ''}>${fam.icon} ${fam.name}<em>${fam.nameEn}</em>${fam.noSlot ? '<b class="noslot">不占配件槽</b>' : ''}</span>`;
+                            // 家族标题也带一枚代表 ICON（取首款型号的图），与枪管/握把的 chip 视觉一致
+                            const rep = (fam.variants && fam.variants[0]) ? fam.variants[0].icon : null;
+                            const repIcon = (rep && String(rep).startsWith('images/'))
+                                ? `<img class="att-chip-img" src="${rep}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('icon-broken');this.remove()">`
+                                : `<i class="att-chip-glyph">${fam.icon || '🔭'}</i>`;
+                            const head = `<span class="sight-family-name${fam.variants.length ? ' modal-att-item sight-item' : ''}"${fam.variants.length ? ` data-att-key="${f}" data-att-slot="sight"` : ''}>${repIcon}${fam.name}<em>${fam.nameEn}</em>${fam.noSlot ? '<b class="noslot">不占配件槽</b>' : ''}</span>`;
                             if (!fam.variants.length) {
                                 return `<div class="sight-family">${head}</div>`;
                             }
@@ -577,7 +687,7 @@
                     <div class="modal-att-list">
                         ${w.barrels.map(b => {
                             const isNew = w.y7s3_new?.barrels?.includes(b);
-                            return `<span class="modal-att-item${isNew ? ' y7s3-new' : ''}" data-att-key="${b}" data-att-slot="barrel">${BARREL_NAMES[b]}</span>`;
+                            return attChipHTML(b, 'barrel', { className: 'modal-att-item' + (isNew ? ' y7s3-new' : '') });
                         }).join('')}
                     </div>
                 </div>
@@ -595,7 +705,7 @@
                     <div class="modal-att-list">
                         ${w.grips.map(g => {
                             const isNew = w.y7s3_new?.grips?.includes(g);
-                            return `<span class="modal-att-item${isNew ? ' y7s3-new' : ''}" data-att-key="${g}" data-att-slot="grip">${GRIP_NAMES[g]}</span>`;
+                            return attChipHTML(g, 'grip', { className: 'modal-att-item' + (isNew ? ' y7s3-new' : '') });
                         }).join('')}
                     </div>
                 </div>
@@ -611,7 +721,7 @@
                 <div class="modal-att-group">
                     <div class="modal-att-group-title">🔴 下挂配件</div>
                     <div class="modal-att-list">
-                        <span class="modal-att-item" data-att-key="laser_sight" data-att-slot="underbarrel">激光瞄准器</span>
+                        ${attChipHTML('laser_sight', 'underbarrel', { className: 'modal-att-item' })}
                     </div>
                 </div>
             `;
@@ -791,7 +901,7 @@
             });
         });
 
-        modal.classList.add('active');
+        openDrawer(modal);
     };
 
     // 后坐力百分比工具函数
@@ -800,15 +910,43 @@
         return map[level] || '50%';
     }
 
-    // 关闭弹窗（武器详情 + 配件详情，遍历绑定避免只取到第一个）
+    // ---- 统一抽屉控制 ----
+    // 武器 / 干员 / 配件三个二级详情共用同一套开关：滚动锁 + 焦点进入 + 关闭后焦点归位
+    let drawerReturnFocus = null;
+
+    function openDrawer(modalEl) {
+        if (!modalEl) return;
+        drawerReturnFocus = document.activeElement;
+        modalEl.classList.add('active');
+        modalEl.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+        const content = modalEl.querySelector('.modal-content');
+        if (content) content.scrollTop = 0;
+        const btn = modalEl.querySelector('.modal-close');
+        if (btn) btn.focus();
+    }
+
+    function closeDrawer(modalEl, keepFocus) {
+        if (!modalEl) return;
+        modalEl.classList.remove('active');
+        modalEl.setAttribute('aria-hidden', 'true');
+        if (!$$('.modal.active').length) document.body.classList.remove('modal-open');
+        if (!keepFocus) {
+            if (drawerReturnFocus && typeof drawerReturnFocus.focus === 'function') {
+                drawerReturnFocus.focus();
+            }
+            drawerReturnFocus = null;
+        }
+    }
+
     $$('.modal-close').forEach(btn => {
-        btn.addEventListener('click', () => btn.closest('.modal').classList.remove('active'));
+        btn.addEventListener('click', () => closeDrawer(btn.closest('.modal')));
     });
     $$('.modal-overlay').forEach(ov => {
-        ov.addEventListener('click', () => ov.closest('.modal').classList.remove('active'));
+        ov.addEventListener('click', () => closeDrawer(ov.closest('.modal')));
     });
     document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') $$('.modal').forEach(m => m.classList.remove('active'));
+        if (e.key === 'Escape') $$('.modal.active').forEach(closeDrawer);
     });
 
     // ---- 配件图鉴 ----
@@ -837,6 +975,54 @@
             ATTACHMENT_INDEX[k] = { ...ATTACHMENT_DATA.grips[k], _key: k, _kind: 'grip' };
         for (const k in ATTACHMENT_DATA.underbarrel)
             ATTACHMENT_INDEX[k] = { ...ATTACHMENT_DATA.underbarrel[k], _key: k, _kind: 'underbarrel' };
+    }
+
+    // ---- 统一配件视觉组件 ----
+    // 站内所有出现配件名的地方（武器卡 / 武器详情 / 配件图鉴）都走这里，保证「图标 + 名称」一致
+    function attRecord(key, kind) {
+        if (kind === 'sight') return ATTACHMENT_INDEX[key] || null;
+        if (kind === 'barrel') return ATTACHMENT_DATA.barrels[key] || null;
+        if (kind === 'grip') return ATTACHMENT_DATA.grips[key] || null;
+        if (kind === 'underbarrel') return ATTACHMENT_DATA.underbarrel[key] || null;
+        return null;
+    }
+
+    function attIconURL(key, kind) {
+        const a = attRecord(key, kind);
+        if (!a) return null;
+        const img = a.image || (a._variant && a._variant.icon);
+        return (typeof img === 'string' && img.startsWith('images/')) ? img : null;
+    }
+
+    // 无官方 ICON 时的统一占位：用配件自己的 emoji，样式与有图时对齐，不再出现裸文字
+    function attGlyph(key, kind) {
+        const a = attRecord(key, kind);
+        if (a && a.icon && !String(a.icon).startsWith('images/')) return a.icon;
+        return { sight: '🔭', barrel: '🔧', grip: '✊', underbarrel: '🔴' }[kind] || '▪';
+    }
+
+    function attChipHTML(key, kind, opts) {
+        const o = opts || {};
+        const a = attRecord(key, kind);
+        const name = o.label || (a ? a.name : key);
+        const url = attIconURL(key, kind);
+        const cls = ['att-chip'];
+        if (o.className) cls.push(o.className);
+        if (o.newIn) cls.push('new');
+        if (!url) cls.push('no-icon');
+        // 图标与占位符始终同时输出：有图时占位符隐藏，图片加载失败则移除 img 让占位符顶上
+        const visual = (url
+            ? `<img class="att-chip-img" src="${url}" alt="${esc(name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('icon-broken');this.remove()">`
+            : '')
+            + `<i class="att-chip-glyph">${attGlyph(key, kind)}</i>`;
+        const attrs = [
+            `class="${cls.join(' ')}"`,
+            `data-att-key="${key}"`,
+            `data-att-slot="${kind}"`,
+            o.title !== false ? `title="${esc(typeof o.title === 'string' ? o.title : name + ' · 点击查看效果')}"` : '',
+            o.disabled ? '' : 'role="button" tabindex="0"'
+        ].filter(Boolean).join(' ');
+        return `<span ${attrs}>${visual}<span class="att-chip-name">${esc(name)}</span></span>`;
     }
 
     // 统计可用某配件的武器数
@@ -869,6 +1055,54 @@
                 <div class="att-card-name-en">${a.nameEn}${a._famName ? ' · ' + a._famName : ''}</div>
                 <div class="att-card-foot">${sub}</div>
             </div>`;
+    }
+
+    // 专属 / 内置瞄具：不走配件系统，原独立页 sights-preview.html 已并入此处
+    function specialSightsHTML() {
+        if (typeof SPECIAL_SIGHTS === 'undefined' || !SPECIAL_SIGHTS.length) return '';
+        const cards = SPECIAL_SIGHTS.map((s, i) => `
+            <div class="att-card special" data-special-sight="${i}" tabindex="0" role="button">
+                <div class="att-card-visual"><div class="att-card-fallback">🔒</div></div>
+                <div class="att-card-name">${esc(s.name)}</div>
+                <div class="att-card-name-en">${esc(s.nameEn)}</div>
+                <div class="att-card-foot"><span class="att-card-count">${esc(s.weapon)}</span></div>
+            </div>`).join('');
+        return `
+            <div class="att-slot-section">
+                <div class="att-slot-head">
+                    <span class="att-slot-icon">🔒</span>
+                    <span class="att-slot-name">专属 / 内置瞄具</span>
+                    <span class="att-slot-en">Exclusive Sights</span>
+                </div>
+                <div class="att-slot-desc">以下 ${SPECIAL_SIGHTS.length} 款不走军械库配件系统：或为武器内置、或属干员技能，均不可卸换。点击查看说明。</div>
+                <div class="att-card-grid">${cards}</div>
+            </div>`;
+    }
+
+    function openSpecialSight(idx) {
+        const s = (typeof SPECIAL_SIGHTS !== 'undefined') ? SPECIAL_SIGHTS[Number(idx)] : null;
+        const modal = $('#info-modal');
+        if (!s || !modal) return;
+        $('#info-modal-body').innerHTML = `
+            <div class="att-detail-head">
+                <div class="att-detail-visual"><div class="att-detail-fallback">🔒</div></div>
+                <div class="att-detail-meta">
+                    <div class="att-detail-name">${esc(s.name)}</div>
+                    <div class="att-detail-en">${esc(s.nameEn)}</div>
+                    <div class="att-detail-tags">
+                        <span class="att-detail-slot">🔒 专属 / 内置</span>
+                    </div>
+                </div>
+            </div>
+            <div class="att-detail-section-title">绑定武器 / 干员</div>
+            <div class="att-detail-weapons">
+                <span class="att-weapon-chip" data-weapon="${esc(s.weapon)}">${esc(s.weapon)}</span>
+                ${(s.operators || []).map(n => `<span class="att-weapon-chip">${esc(n)}</span>`).join('')}
+            </div>
+            <div class="att-detail-section-title">说明</div>
+            <div class="att-detail-desc op-prose">${esc(s.desc)}</div>
+        `;
+        openDrawer(modal);
     }
 
     function renderAttachmentCards() {
@@ -916,10 +1150,13 @@
                     <div class="att-slot-desc">${slot.desc}</div>
                     ${inner}
                 </div>`;
-        }).join('');
+        }).join('') + specialSightsHTML();
 
         container.querySelectorAll('.att-card').forEach(card => {
-            const open = () => openAttachmentModal(card.dataset.attKey);
+            const open = () => {
+                if (card.dataset.specialSight !== undefined) openSpecialSight(card.dataset.specialSight);
+                else if (card.dataset.attKey) openAttachmentModal(card.dataset.attKey);
+            };
             card.addEventListener('click', open);
             card.addEventListener('keydown', e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
@@ -983,7 +1220,7 @@
             <div class="att-detail-weapons">${weapons.map(w => `<span class="att-weapon-chip">${w}</span>`).join('')}</div>
             ${!a.image ? `<div class="att-detail-note muted">⚠️ 该配件暂无官方图标素材，当前以文字符号占位（瞄具的 15 款 ICON 已取自游戏内军械库原生截图）</div>` : ''}
         `;
-        modal.classList.add('active');
+        openDrawer(modal);
     }
 
     // 配件兼容性查询
@@ -1410,7 +1647,7 @@
             c.style.cursor = 'pointer';
             c.addEventListener('click', e => {
                 e.stopPropagation();
-                c.closest('.modal')?.classList.remove('active');
+                closeDrawer(c.closest('.modal'), true);
                 focusOrg(c.dataset.org);
             });
         });
@@ -1790,6 +2027,24 @@
             opState.q = inp.value;
             renderOperators();
         });
+    }
+
+    // 武器卡内的配件 chip：点它开配件详情，不触发外层卡片的武器详情
+    const wGrid = $('#weapon-grid');
+    if (wGrid) wGrid.addEventListener('click', e => {
+        const chip = e.target.closest('.att-chip[data-att-key]');
+        if (!chip) return;
+        e.stopPropagation();
+        openAttachmentModal(chip.dataset.attKey);
+    });
+
+    // ---- 回到顶部 ----
+    const backTop = $('#back-to-top');
+    if (backTop) {
+        backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        window.addEventListener('scroll', () => {
+            backTop.classList.toggle('show', window.scrollY > 600);
+        }, { passive: true });
     }
 
     // ---- 初始化 ----

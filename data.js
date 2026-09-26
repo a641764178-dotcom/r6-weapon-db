@@ -265,6 +265,30 @@ const SIGHT_GROUPS = [
     }
 ];
 
+// 专属 / 内置瞄具：不走军械库配件系统，绑定在特定武器或干员技能上，不可卸换
+const SPECIAL_SIGHTS = [
+    {
+        name: '可变倍镜 3.5x / 8x', nameEn: 'CSRX Variable Scope',
+        weapon: 'CSRX 300', operators: ['Kali'],
+        desc: '武器内置可变倍镜，默认 3.5x，按键瞬切 8x，不可卸换。⚠️ Y11S3（2026-09-01）下调倍率：5x/12x → 3.5x/8x，同时 pump 时间 1s → 0.8s、总弹药 36 → 51。新倍率对应的 ADS 乘数官方未公布，暂缺。'
+    },
+    {
+        name: '翻起式热成像 6x', nameEn: 'Flip Sight (6x Thermal)',
+        weapon: 'OTs-03', operators: ['Glaz'],
+        desc: 'Glaz 干员专属技能。翻起后 6x 热成像，敌人在视野中高亮黄色，能穿透烟雾识别目标。属干员技能而非配件。'
+    },
+    {
+        name: '内置微型红点', nameEn: 'Integrated Micro Dot',
+        weapon: 'RG-15', operators: ['Ela', 'Zofia', 'Melusi'],
+        desc: '武器内置微型红点，不占配件槽，不可卸。数值等同于 1.0x 红点。'
+    },
+    {
+        name: '内置反射 + 消音器', nameEn: 'Integrated Reflex + Suppressor',
+        weapon: 'TACIT .45', operators: ['Solid Snake'],
+        desc: 'Y11S1 新增手枪，内置反射瞄具与消音器，两者均不可卸。'
+    }
+];
+
 // 防守方 2.5x 放大镜白名单（Y9S1 官方分配表）
 const DEF_MAGNIFIED_WHITELIST = {
     '9mm C1': ['Frost'], 'P10 RONI': ['Mozzie'], '9x19VSN': ['Tachanka'],

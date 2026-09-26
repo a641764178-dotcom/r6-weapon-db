@@ -2,6 +2,11 @@
    R6S 武器配件数据库 - 样式表
    ============================================ */
 
+/* [hidden] 必须强制生效：UA 样式表里的 [hidden]{display:none} 优先级
+   低于本文件的类选择器（如 .weapon-grid{display:grid}），否则 hidden=true
+   的元素照样显示 —— 卡片/表格视图切换就是栽在这里 */
+[hidden] { display: none !important; }
+
 :root {
     --bg-primary: #0a0e14;
     --bg-secondary: #111820;
@@ -2831,9 +2836,21 @@ body.modal-open { overflow: hidden; }
     transition: var(--transition);
 }
 .view-btn:hover { color: var(--text-primary); }
-.view-btn.active { background: var(--accent-glow); color: var(--accent); }
+/* 激活态要一眼可辨：底色 + 描边 + 加粗，三重视觉线索 */
+.view-btn.active {
+    background: var(--accent-glow);
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
+    font-weight: 600;
+}
+.view-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 /* 3. 武器表格视图（保留立绘） */
+.view-hint {
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    padding: 2px 2px 8px;
+}
 .weapon-table-wrap { overflow-x: auto; }
 .weapon-table {
     width: 100%;

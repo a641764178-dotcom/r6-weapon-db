@@ -213,7 +213,9 @@
             tableWrap.hidden = !isTable;
             grid.hidden = isTable;
             if (isTable) {
-                tableWrap.innerHTML = weaponTableHTML(weapons);
+                // 顶部一行说明，让"表格模式已生效"这件事一眼可见
+                tableWrap.innerHTML = '<div class="view-hint">表格视图 · 点任意一行看武器详情，点表头可排序</div>'
+                    + weaponTableHTML(weapons);
                 bindWeaponTable(tableWrap);
                 return;
             }
@@ -330,12 +332,27 @@
         renderWeaponGrid();
     });
 
-    // 视图切换：卡片 / 表格
+    // 视图切换：卡片 / 表格（偏好写入 localStorage，刷新后保持）
+    const VIEW_KEY = 'r6db.weaponView';
+    try {
+        const saved = localStorage.getItem(VIEW_KEY);
+        if (saved === 'card' || saved === 'table') currentView = saved;
+    } catch (e) { /* 隐私模式下 localStorage 不可用，忽略 */ }
+
+    function applyViewButtons() {
+        $$('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === currentView));
+    }
+    applyViewButtons();
+
     $$('.view-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             currentView = btn.dataset.view;
-            $$('.view-btn').forEach(b => b.classList.toggle('active', b === btn));
+            try { localStorage.setItem(VIEW_KEY, currentView); } catch (e) {}
+            applyViewButtons();
             renderWeaponGrid();
+            // 切完把列表顶部带回视野，否则停在页面中段会以为"没变化"
+            const bar = $('.stats-bar');
+            if (bar && bar.scrollIntoView) bar.scrollIntoView({ block: 'start' });
         });
     });
 

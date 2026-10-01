@@ -2842,6 +2842,13 @@ const OPERATORS = [
 // ---- 官方更新信息 ----
 const UPDATES = [
     {
+        type: 'patch',
+        date: '2026-09-29',
+        title: 'Y11S3 热修复 (Update 3.50 / 1.000.155) — PS5 Pro 性能模式与废土巡回赛匹配修复',
+        content: '<ul><li>🖥️ <strong>PS5 Pro 性能模式修复</strong>：修复 Y11S2 起 PS5 Pro 性能模式帧率/稳定性异常的问题</li><li>🏁 <strong>废土巡回赛匹配修复</strong>：修复「对局已开始」提示后出现的持续匹配延迟，队伍可正常载入活动地图</li><li>🎁 <strong>黑冰军械库礼包恢复上架</strong>：此前下架的黑冰礼包已修复并可正常购买</li><li>⚙️ 各平台通用稳定性修复（减少崩溃与卡顿）</li><li>⚠️ <strong>无武器伤害 / 射速 / 弹匣 / 配件兼容性变更</strong>，纯技术性 Bug 修复，本站主表未改动</li></ul>',
+        link: ''
+    },
+    {
         type: 'info',
         date: '2026-09-23',
         title: '废土巡回赛（Wasteland Circuit）限时活动开启 — 无人机竞速，9/23–10/13',

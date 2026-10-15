@@ -1,6 +1,7 @@
 // ============================================
 // R6S 武器配件数据库 - 数据层
-// 版本基准: Y11S3 "Operation Split Fire" (2026-09-01 上线) + Y11S3.1 中期补丁 (2026-09-22, Update 3.49) — 主表已落地
+// 版本基准: Y11S3 "Operation Split Fire" (2026-09-01 上线) + Y11S3.1 中期补丁 (2026-09-22, Update 3.49) + 热修复 (2026-09-29, Update 3.50) — 主表已落地
+// 数据核查: 2026-10-15 复核 Ubisoft 官方 news-updates / 设计师笔记 / 配件改动 —— 无新补丁、无武器数值变更，主表维持不动
 // 瞄具体系已按 Y9S1 "Deadly Omen" 重构: 1.0x / 2.5x / 3.5x 三大类
 // 分类体系: 主武器7类 + 副武器4类
 // ============================================
@@ -2841,6 +2842,20 @@ const OPERATORS = [
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'info',
+        date: '2026-10-15',
+        title: '传奇分段（Legend Division）正式上线 — 最高竞技播放列表，配套条件与安全要求生效',
+        content: '<ul><li>🏆 <strong>Y11S3 中期的最高竞技播放列表「传奇分段」于 10 月 15 日开放</strong>（原计划标为「赛季中期」，此前一直处于「未上线」状态）</li><li>✅ <strong>准入条件</strong>：本季达到 <strong>Champion</strong> 段位 / 账号等级 <strong>200+</strong> / 上赛季达到 <strong>白金及以上</strong> / 绑定 App <strong>两步验证</strong></li><li>🛡️ <strong>PC 端安全要求</strong>（即 R6 ShieldGuard Secure Platform 首次实装）：需开启 <strong>Secure Boot</strong> / <strong>TPM 2.0</strong> / <strong>内存完整性 (HVCI)</strong></li><li>📊 该播放列表为单人队列（SoloQ），配有<strong>区域锁定排行榜</strong>；本季参与者可获专属武器挂件与干员卡片背景</li><li>🚫 <strong>10/14 育碧史上最大规模封号潮</strong>：配合传奇分段上线，共封禁 <strong>50,000+</strong> 账号，官方称与账号共享、账号买卖、规避既往封禁相关</li><li>⚠️ <strong>无武器伤害 / 射速 / 弹匣 / 配件兼容性变更</strong>，纯竞技系统与安全层上线，本站主表未改动</li></ul>',
+        link: 'https://siege.gg/news/rainbow-six-sieges-legend-division-requirements-explained'
+    },
+    {
+        type: 'info',
+        date: '2026-10-14',
+        title: '「怪医诅咒」(Doktor\'s Curse) 万圣节活动开启 — 10/14–11/2，33 件限定外观',
+        content: '<ul><li>🎃 <strong>围攻最受欢迎的万圣节限时活动回归，10/14 – 11/2</strong>（部分媒体按预告片记 10/15 开启，官方公告为 10/14）</li><li>🕵️ <strong>非对称捉迷藏玩法</strong>：猎人与怪物两阵营，可自由选择追捕或躲藏；场地为「怪医实验室」(Doktor\'s Lab)，由 <strong>俱乐部会所 (Clubhouse)</strong> 大幅改造而成，含新增隐藏路线与藏身点</li><li>🎁 <strong>33 件活动专属装饰</strong> + 免费活动补给包 + 活动挑战奖励</li><li>👕 <strong>新增干员同捆</strong>：<strong>Hibana / Mute / Grim</strong>（本季新增可玩干员亦为这三位）</li><li>💰 <strong>M590A1「硒刻轨迹」纪念物</strong>可直购，附赠 5 个活动补给包</li><li>📺 <strong>Twitch Drops</strong>：活动期间观看合资格直播可领取额外奖励</li><li>⚠️ <strong>纯外观 / 活动模式，无武器伤害 / 射速 / 弹匣 / 配件数值或分发变更</strong>，本站主表未改动</li></ul>',
+        link: 'https://news.17173.com/content/10152026/035048831.shtml'
+    },
     {
         type: 'patch',
         date: '2026-09-29',

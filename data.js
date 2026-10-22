@@ -2859,8 +2859,8 @@ const UPDATES = [
     {
         type: 'info',
         date: '2026-10-14',
-        title: '「怪医诅咒」(Doktor\'s Curse) 万圣节活动开启 — 10/14–11/2，33 件限定外观',
-        content: '<ul><li>🎃 <strong>围攻最受欢迎的万圣节限时活动回归，10/14 – 11/2</strong>（部分媒体按预告片记 10/15 开启，官方公告为 10/14）</li><li>🕵️ <strong>非对称捉迷藏玩法</strong>：猎人与怪物两阵营，可自由选择追捕或躲藏；场地为「怪医实验室」(Doktor\'s Lab)，由 <strong>俱乐部会所 (Clubhouse)</strong> 大幅改造而成，含新增隐藏路线与藏身点</li><li>🎁 <strong>33 件活动专属装饰</strong> + 免费活动补给包 + 活动挑战奖励</li><li>👕 <strong>新增干员同捆</strong>：<strong>Hibana / Mute / Grim</strong>（本季新增可玩干员亦为这三位）</li><li>💰 <strong>M590A1「硒刻轨迹」纪念物</strong>可直购，附赠 5 个活动补给包</li><li>📺 <strong>Twitch Drops</strong>：活动期间观看合资格直播可领取额外奖励</li><li>⚠️ <strong>纯外观 / 活动模式，无武器伤害 / 射速 / 弹匣 / 配件数值或分发变更</strong>，本站主表未改动</li></ul>',
+        title: '「怪医诅咒」(Doktor\'s Curse) 万圣节活动开启 — 10/15–11/2，33 件限定外观',
+        content: '<ul><li>🎃 <strong>围攻最受欢迎的万圣节限时活动回归，10/15 – 11/2</strong>（10/14 为官网公告发布日，活动实际自 10/15 开启；育碧官网新闻页标注 "From October 15th to November 2nd"）</li><li>🕵️ <strong>非对称捉迷藏玩法</strong>：猎人与怪物两阵营，可自由选择追捕或躲藏；场地为「怪医实验室」(Doktor\'s Lab)，由 <strong>俱乐部会所 (Clubhouse)</strong> 大幅改造而成，含新增隐藏路线与藏身点</li><li>🎁 <strong>33 件活动专属装饰</strong> + 免费活动补给包 + 活动挑战奖励</li><li>👕 <strong>新增干员同捆</strong>：<strong>Hibana / Mute / Grim</strong>（本季新增可玩干员亦为这三位）</li><li>💰 <strong>M590A1「硒刻轨迹」纪念物</strong>可直购，附赠 5 个活动补给包</li><li>📺 <strong>Twitch Drops</strong>：活动期间观看合资格直播可领取额外奖励</li><li>⚠️ <strong>纯外观 / 活动模式，无武器伤害 / 射速 / 弹匣 / 配件数值或分发变更</strong>，本站主表未改动</li></ul>',
         link: 'https://news.17173.com/content/10152026/035048831.shtml'
     },
     {

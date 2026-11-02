@@ -508,10 +508,10 @@ const WEAPONS = [
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
     { name: 'POF-9', type: 'ar', damage: 37, rpm: 740, mag: 50, operators: ['Sens'], side: 'atk',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
-      grips: ['vertical_grip'],
+      grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
     { name: 'PCX-33', type: 'ar', damage: 36, rpm: 745, mag: 31, operators: ['Skopos'], side: 'def',
-      barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
+      barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: [] } },
     { name: 'XK23', type: 'ar', damage: 49, rpm: 675, mag: 35, operators: ['Dokkaebi','Rauora','Sens'], side: 'atk',
@@ -538,7 +538,7 @@ const WEAPONS = [
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['compensator','extended_barrel'], grips: ['angled_grip'] } },
     { name: 'P90', type: 'smg', damage: 22, rpm: 970, mag: 50, operators: ['Doc','Rook','Solis'], side: 'def',
-      barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
+      barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: [],
       y7s3_new: { barrels: ['compensator'], grips: [] } },
     { name: 'MP5SD', type: 'smg', damage: 30, rpm: 800, mag: 30, operators: ['Echo'], side: 'def',
@@ -564,11 +564,11 @@ const WEAPONS = [
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
     { name: 'M12', type: 'smg', damage: 42, rpm: 550, mag: 30, operators: ['Caveira'], side: 'def',
       barrels: ['compensator','flash_hider','suppressor','extended_barrel'],
-      grips: [],
+      grips: ['angled_grip'],
       y7s3_new: { barrels: ['compensator'], grips: [] } },
     { name: 'PDW9', type: 'smg', damage: 34, rpm: 800, mag: 50, operators: ['Jackal','Osa'], side: 'atk',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
-      grips: ['vertical_grip'],
+      grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
     { name: 'Vector .45', type: 'smg', damage: 23, rpm: 1200, mag: 25, operators: ['Mira','Goyo'], side: 'def',
       barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
@@ -587,7 +587,7 @@ const WEAPONS = [
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
     { name: 'Mx4 Storm', type: 'smg', damage: 26, rpm: 950, mag: 30, operators: ['Alibi'], side: 'def',
-      barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
+      barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: [] } },
     { name: 'AUG A3', type: 'smg', damage: 36, rpm: 700, mag: 31, operators: ['Kaid'], side: 'def',
@@ -595,7 +595,7 @@ const WEAPONS = [
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: ['extended_barrel'], grips: [] } },
     { name: 'P10 RONI', type: 'smg', damage: 26, rpm: 980, mag: 15, operators: ['Mozzie','Aruni'], side: 'def',
-      barrels: ['muzzle_brake','compensator','flash_hider','suppressor'],
+      barrels: ['muzzle_brake','compensator','flash_hider','suppressor','extended_barrel'],
       grips: ['vertical_grip','angled_grip'],
       y7s3_new: { barrels: [], grips: [] } },
     { name: 'UZK50GI', type: 'smg', damage: 36, rpm: 700, mag: 22, operators: ['Thorn'], side: 'def',
@@ -656,7 +656,7 @@ const WEAPONS = [
       y7s3_new: { barrels: [], grips: ['vertical_grip','angled_grip'] } },
     { name: 'CAMRS', type: 'dmr', damage: 69, rpm: 442, mag: 20, operators: ['Buck','Brava'], side: 'atk',
       barrels: ['muzzle_brake','suppressor'],
-      grips: [],
+      grips: ['angled_grip'],
       y7s3_new: { barrels: [], grips: [] },
       notes: 'Skeleton Key占用握把槽' },
     { name: 'SR-25', type: 'dmr', damage: 61, rpm: 439, mag: 20, operators: ['Blackbeard','Flores','Striker'], side: 'atk',
@@ -712,7 +712,7 @@ const WEAPONS = [
     { name: 'TCSG12', type: 'slug', damage: 75, rpm: 487, mag: 10, operators: ['Kaid','Goyo','Sentry'], side: 'def',
       barrels: ['suppressor'], grips: ['vertical_grip','angled_grip'], y7s3_new: { barrels: [], grips: [] }, notes: '半自动独头弹' },
     { name: 'Glaive-12', type: 'shotgun_sec', damage: 67, rpm: 0, mag: 4, operators: ['Denari','Valkyrie'], side: 'def',
-      barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] }, notes: '独头霰弹枪（副武器，按游戏内分类归 shotgun_sec）' },
+      barrels: [], grips: ['angled_grip'], y7s3_new: { barrels: [], grips: [] }, notes: '独头霰弹枪（副武器，按游戏内分类归 shotgun_sec）' },
 
 
     // ============================================================
@@ -783,7 +783,7 @@ const WEAPONS = [
 
     // ===== 冲锋枪·次要 (Secondary SMG / Machine Pistol) =====
     { name: 'C75 Auto', type: 'smg_sec', damage: 35, rpm: 1000, mag: 26, operators: ['Dokkaebi','Vigil','Thorn','Kali','Sentry'], side: 'mixed',
-      barrels: ['compensator','suppressor'],
+      barrels: ['suppressor'],
       grips: [],
       y7s3_new: { barrels: [], grips: [] } },
     { name: 'SMG-11', type: 'smg_sec', damage: 32, rpm: 1270, mag: 16, operators: ['Smoke','Mute','Sledge','Amaru','Solis'], side: 'mixed',
@@ -926,7 +926,7 @@ const WEAPON_EXTENDED = {
     },
     'C8-SFW': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.7, reloadEmpty: 3.3,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '极高后坐力，Skeleton Key占用下挂' },
         falloff: { start: 25, end: 35, min: 24 },
@@ -988,7 +988,7 @@ const WEAPON_EXTENDED = {
     'AR-15.50': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
         sightNote: '2.5x 放大镜仅进攻方干员可用；防守方 Tubarão 亦在官方白名单内；3.5x 望远镜仅进攻方 DMR 可用',
-        barrelNote: '枪口制退器仅 Maverick 可用 —— Tubarão 于 Y11S3 被移除该配件（武器级列表无法区分干员，故保留在册）',
+        barrelNote: '本枪的枪口制退器存在干员级限制 —— 具体可用配置请查看对应干员档案（下方「使用干员」可点击进入）',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，单发后坐力大但有恢复时间；Y11S3 首发后坐力提升' },
@@ -996,7 +996,7 @@ const WEAPON_EXTENDED = {
     },
     'AK-74M': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '典型AK后坐力模式，Y11S2新增全部握把可改善控枪' },
         falloff: { start: 25, end: 35, min: 26 }
@@ -1272,7 +1272,7 @@ const WEAPON_EXTENDED = {
     },
     'DP27': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: true, mobility: 50,
+        underbarrel: false, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 5.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来稳定的后坐力' },
         falloff: { start: 30, end: 40, min: 40 }
@@ -1309,7 +1309,7 @@ const WEAPON_EXTENDED = {
     'CAMRS': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
         sightNote: '3.5x 望远镜仅进攻方 DMR 可用',
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，后坐力中等' },
         falloff: { start: 30, end: 40, min: 49 }
@@ -1325,7 +1325,7 @@ const WEAPON_EXTENDED = {
     'Mk 14 EBR': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
         sightNote: '2.5x 放大镜仅进攻方干员可用；防守方 Aruni 亦在官方白名单内；3.5x 望远镜仅进攻方 DMR 可用',
-        barrelNote: '枪口制退器仅 Dokkaebi 可用 —— Aruni 于 Y11S3 被移除该配件（武器级列表无法区分干员，故保留在册）',
+        barrelNote: '本枪的枪口制退器存在干员级限制 —— 具体可用配置请查看对应干员档案（下方「使用干员」可点击进入）',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，中等后坐力；Y11S3 首发后坐力提升' },
@@ -1352,7 +1352,7 @@ const WEAPON_EXTENDED = {
     //   - 数据源优先级: 育碧官网 > 灰机wiki > Fandom Wiki (需确认为Siege数据)
     'M870': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，单发后坐力大但有充足恢复时间' },
         falloff: { start: 5, midStart: 7, mid: 31, midEnd: 10, end: 13, min: 18, pellets: 8 } // [GitHub实测Y11S1.1] 42→31→18
@@ -1360,7 +1360,7 @@ const WEAPON_EXTENDED = {
     'M590A1': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         sightNote: '2.5x 放大镜仅进攻方干员可用',
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，后坐力大但可控' },
         falloff: { start: 5, midStart: 7, mid: 36, midEnd: 10, end: 13, min: 21, pellets: 8 } // [GitHub实测Y11S1.1] 48→36→21
@@ -1368,7 +1368,7 @@ const WEAPON_EXTENDED = {
     'M1014': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         sightNote: '2.5x 放大镜仅进攻方干员可用',
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，连续射击后坐力累积' },
         falloff: { start: 5, midStart: 7, mid: 22, midEnd: 10, end: 13, min: 13, pellets: 8 } // [Y11S3.1官网dmg30 + 本站霰弹衰减规则推算] 30→22→13（原 28→21→12）
@@ -1376,35 +1376,35 @@ const WEAPON_EXTENDED = {
     'SG-CQB': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         sightNote: '2.5x 放大镜仅进攻方干员可用',
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，单发伤害高' },
         falloff: { start: 5, midStart: 7, mid: 33, midEnd: 10, end: 13, min: 19, pellets: 8 } // [GitHub实测Y11S1.1] 44→33→19
     },
     'SASG-12': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '半自动，AK平台，弹匣供弹可快速换弹' },
         falloff: { start: 5, midStart: 7, mid: 19, midEnd: 10, end: 13, min: 11, pellets: 8 } // [GitHub实测Y11S1.1] 26→19→11
     },
     'SUPER 90': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，惯性闭锁系统后坐力适中' },
         falloff: { start: 5, midStart: 7, mid: 20, midEnd: 10, end: 13, min: 12, pellets: 8 } // [GitHub实测Y11S1.1] 27→20→12
     },
     'SPAS-12': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，后坐力中等' },
         falloff: { start: 5, midStart: 7, mid: 23, midEnd: 10, end: 13, min: 13, pellets: 8 } // [GitHub实测Y11S1.1] 31→23→13
     },
     'SPAS-15': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，弹匣供弹，后坐力平稳' },
         falloff: { start: 5, midStart: 7, mid: 19, midEnd: 10, end: 13, min: 11, pellets: 8 } // [Y11S3.1官网dmg26 + 本站霰弹衰减规则推算] 26→19→11（原 24→18→10）
@@ -1412,14 +1412,14 @@ const WEAPON_EXTENDED = {
     'SuperNova': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         sightNote: '2.5x 放大镜仅进攻方干员可用',
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，ComforTech缓冲系统' },
         falloff: { start: 5, midStart: 7, mid: 36, midEnd: 10, end: 13, min: 21, pellets: 8 } // [GitHub实测Y11S1.1] 48→36→21
     },
     'FO-12': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.34, reloadEmpty: 3.29,
         recoil: { vertical: 'very_high', horizontal: 'high', pattern: '全自动霰弹枪，极高射速带来剧烈后坐力' },
         falloffExt: { start: 6, end: 13, min: 16 },
@@ -1427,7 +1427,7 @@ const WEAPON_EXTENDED = {
     },
     'SIX12': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 4.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '旋转弹仓供弹，后坐力中等' },
         falloff: { start: 5, midStart: 7, mid: 34, midEnd: 10, end: 13, min: 20, pellets: 8 } // [GitHub实测Y11S1.1] 46→34→20
@@ -1435,7 +1435,7 @@ const WEAPON_EXTENDED = {
     'SIX12 SD': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         sightNote: '2.5x 放大镜仅进攻方干员可用',
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 4.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '自带消音器的旋转弹仓霰弹枪' },
         falloff: { start: 5, midStart: 7, mid: 34, midEnd: 10, end: 13, min: 20, pellets: 8 } // [GitHub实测Y11S1.1] 46→34→20（与SIX12相同）
@@ -1443,7 +1443,7 @@ const WEAPON_EXTENDED = {
     'ITA12L': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         sightNote: '2.5x 放大镜仅进攻方干员可用',
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，长管版ITA12' },
         falloff: { start: 5, midStart: 7, mid: 30, midEnd: 10, end: 13, min: 18, pellets: 8 } // 基于同类武器衰减模式
@@ -1455,7 +1455,7 @@ const WEAPON_EXTENDED = {
     'BOSG.12.2': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         sightNote: '2.5x 放大镜仅进攻方干员可用；防守方 Vigil 亦在官方白名单内',
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.0,
         recoil: { vertical: 'very_high', horizontal: 'low', pattern: '双管独头弹，巨大的单发后坐力' },
         falloff: { start: 15, end: 25, min: 75 } // [GitHub实测Y11S1.1] 125→75 (Y9S4.2: 衰减15-25m, 最低60%)
@@ -1463,7 +1463,7 @@ const WEAPON_EXTENDED = {
     'ACS12': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         sightNote: '2.5x 放大镜仅 Alibi/Maestro/Azami 可用',
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.8,
         recoil: { vertical: 'high', horizontal: 'medium', pattern: '半自动独头弹，30发弹匣持续输出' },
         falloff: { start: 15, end: 25, min: 41 } // [GitHub实测Y11S1.1] 69→41 (Y9S4.2: 衰减15-25m, 最低60%)
@@ -1471,14 +1471,14 @@ const WEAPON_EXTENDED = {
     'TCSG12': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         sightNote: '2.5x 放大镜仅 Goyo/Kaid 可用',
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动独头弹，450RPM射速' },
         falloff: { start: 15, end: 25, min: 45 } // [GitHub实测Y11S1.1] 75→45 (Y9S4.2: 57→75buff, 衰减15-25m, 最低60%)
     },
     'Glaive-12': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.0,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '独头霰弹枪' },
         falloff: { start: 15, end: 25, min: 40 } // 独头霰弹枪统一衰减: 15-25m, 最低60% → 67×0.6≈40
@@ -1487,14 +1487,14 @@ const WEAPON_EXTENDED = {
     // === 副武器 - 霰弹枪 ===
     'ITA12S': {
         sights: [],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.0,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '副武器泵动霰弹枪，用于破墙' },
         falloff: { start: 5, midStart: 7, mid: 21, midEnd: 10, end: 13, min: 13, pellets: 8 } // [GitHub实测Y11S1.1] 29→21→13
     },
     'Super Shorty': {
         sights: [],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 2.5,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '短管霰弹枪，散布极大，用于破墙' },
         falloff: { start: 5, midStart: 7, mid: 26, midEnd: 10, end: 13, min: 15, pellets: 8 } // [灰机wiki面板35×8 + 同类衰减模式推算] 35→26→15
@@ -1503,7 +1503,7 @@ const WEAPON_EXTENDED = {
     // === 副武器 - 冲锋枪 ===
     'C75 Auto': {
         sights: [],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'high', horizontal: 'high', pattern: '1000RPM射速，后坐力大且铁瞄遮挡严重' },
         falloff: { start: 18, end: 28, min: 21 }
@@ -1518,14 +1518,14 @@ const WEAPON_EXTENDED = {
     },
     'SMG-12': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.0, reloadEmpty: 2.6,
         recoil: { vertical: 'very_high', horizontal: 'very_high', pattern: '极高后坐力，全游戏最难控制武器之一' },
         falloff: { start: 17, end: 28, min: 9 } // [Y11S3 实测] 16→9 (17-28m)，40m 维持 9
     },
     'Bearing 9': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 1.9, reloadEmpty: 2.5,
         recoil: { vertical: 'high', horizontal: 'high', pattern: '1100RPM高射速，后坐力大' },
         falloff: { start: 18, end: 28, min: 19 },
@@ -1533,7 +1533,7 @@ const WEAPON_EXTENDED = {
     },
     'SPSMG9': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 1.9, reloadEmpty: 2.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，副武器中较可控' },
         falloffExt: { start: 19, end: 28, min: 31 },
@@ -1541,7 +1541,7 @@ const WEAPON_EXTENDED = {
     },
     'Reaper MK2': {
         sights: ['red_dot', 'holographic', 'reflex'],
-        underbarrel: false, mobility: 50,
+        underbarrel: true, mobility: 50,
         reloadTactical: 2.0, reloadEmpty: 2.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: 'Y11S2.3优化：后坐力阶段延后至第0/3/10/25发（原0/3/7/13），连续射击更平稳，通用副武器SMG' },
         falloff: { start: 18, end: 28, min: 18 }
@@ -1573,36 +1573,59 @@ const WEAPON_EXTENDED = {
         falloff: { start: 12, end: 14, min: 42 }
     },
     'LFP586': {
-        sights: [], underbarrel: false, mobility: 50,
+        sights: [], underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 2.5,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '左轮，单发后坐力极大' },
         falloff: { start: 12, end: 14, min: 46 }
     },
     'Keratos .357': {
-        sights: [], underbarrel: false, mobility: 50,
+        sights: [], underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 2.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '底部枪管设计降低上跳' },
         falloff: { start: 12, end: 14, min: 46 }
     },
 
     // === 2026-09-07 依 GitHub 实测补齐手枪/左轮衰减 ===
-    '.44 Mag Semi-Auto': { falloff: { start: 12, end: 14, min: 32 } },
-    '.44 Vendetta': { falloff: { start: 12, end: 14, min: 46 } },
-    '1911 TACOPS': { falloff: { start: 12, end: 14, min: 33 } },
-    'GSH-18': { falloff: { start: 12, end: 14, min: 26 } },
-    'Luison': { falloff: { start: 12, end: 14, min: 39 } },
-    'M45 MEUSOC': { falloff: { start: 12, end: 14, min: 34 } },
-    'Mk1 9mm': { falloff: { start: 12, end: 14, min: 28 } },
-    'P-10C': { falloff: { start: 12, end: 14, min: 24 } },
-    'P226 MK 25': { falloff: { start: 12, end: 14, min: 30 } },
-    'P229': { falloff: { start: 12, end: 14, min: 30 } },
-    'P9': { falloff: { start: 12, end: 14, min: 27 } },
-    'PRB92': { falloff: { start: 12, end: 14, min: 25 } },
-    'Q-929': { falloff: { start: 12, end: 14, min: 36 } },
-    'RG15': { falloff: { start: 12, end: 14, min: 22 } },
-    'SDP 9mm': { falloff: { start: 12, end: 14, min: 28 } },
-    'TACIT .45': { falloff: { start: 12, end: 14, min: 31 } },
-    'USP40': { falloff: { start: 12, end: 14, min: 28 } },
+    '.44 Mag Semi-Auto': { underbarrel: true, falloff: { start: 12, end: 14, min: 32 } },
+    '.44 Vendetta': { underbarrel: true, falloff: { start: 12, end: 14, min: 46 } },
+    '1911 TACOPS': { underbarrel: true, falloff: { start: 12, end: 14, min: 33 } },
+    'GSH-18': { underbarrel: true, falloff: { start: 12, end: 14, min: 26 } },
+    'Luison': { underbarrel: true, falloff: { start: 12, end: 14, min: 39 } },
+    'M45 MEUSOC': { underbarrel: true, falloff: { start: 12, end: 14, min: 34 } },
+    'Mk1 9mm': { underbarrel: true, falloff: { start: 12, end: 14, min: 28 } },
+    'P-10C': { underbarrel: true, falloff: { start: 12, end: 14, min: 24 } },
+    'P226 MK 25': { underbarrel: true, falloff: { start: 12, end: 14, min: 30 } },
+    'P229': { underbarrel: true, falloff: { start: 12, end: 14, min: 30 } },
+    'P9': { underbarrel: true, falloff: { start: 12, end: 14, min: 27 } },
+    'PRB92': { underbarrel: true, falloff: { start: 12, end: 14, min: 25 } },
+    'Q-929': { underbarrel: true, falloff: { start: 12, end: 14, min: 36 } },
+    'RG15': { underbarrel: true, falloff: { start: 12, end: 14, min: 22 } },
+    'SDP 9mm': { underbarrel: true, falloff: { start: 12, end: 14, min: 28 } },
+    'TACIT .45': { underbarrel: true, falloff: { start: 12, end: 14, min: 31 } },
+    'USP40': { underbarrel: true, falloff: { start: 12, end: 14, min: 28 } },
+};
+
+// ================================================================
+// 干员级配件例外表
+//   WEAPONS[].barrels / grips 是「武器级」清单（这把枪设计上支持的配件），
+//   但同一把枪给不同干员用时，个别配件可能被单独移除。此表专门记录这类差异，
+//   由【干员档案】呈现（武器界面只作中性指路，不列具体干员）。
+//   结构: { 干员: { 武器: { barrels?: [...不可用], grips?: [...不可用], note: '说明' } } }
+//   依据: 官方补丁笔记 / Designer's Notes 明文
+// ================================================================
+const OPERATOR_ATTACHMENT_EXCEPTIONS = {
+    'Tubarão': {
+        'AR-15.50': {
+            barrels: ['muzzle_brake'],
+            note: 'Y11S3 起该干员的 AR-15.50 不可装枪口制退器（Maverick 仍可装）'
+        }
+    },
+    'Aruni': {
+        'Mk 14 EBR': {
+            barrels: ['muzzle_brake'],
+            note: 'Y11S3 起该干员的 Mk 14 EBR 不可装枪口制退器（Dokkaebi 仍可装）'
+        }
+    }
 };
 
 // ---- 武器详细档案 ----
@@ -2845,6 +2868,13 @@ const OPERATORS = [
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'info',
+        date: '2026-11-02',
+        title: '配件数据全面修订 — 57 处校正（激光 / 延伸枪管 / 拐角握把）+ C75 Auto 纠错，配件差异改由干员档案呈现',
+        content: '<ul><li>🔴 <strong>C75 Auto 纠错</strong>：该枪<strong>只有消音器</strong>，原数据误列「补偿器」（Fandom / IMFDB / 官方玩法指南等 5 源一致：customization very limited，仅 suppressor + laser）</li><li>🔧 <strong>激光瞄准器全量校正 47 处</strong>：此前本站把全部霰弹枪（13）、独头弹（3）、副武器霰弹（3）、狙击枪、左轮及多数手枪误标为「无激光」。依据手测源 + Fandom 逐把复核，现仅 <strong>DP27 与 CSRX 300</strong> 为无激光（DP27 官方明示「除专属瞄具外不可改装」）</li><li>📏 <strong>延伸枪管补齐 4 把</strong>：PCX-33 / P90 / Mx4 Storm / P10 RONI</li><li>✊ <strong>拐角握把补齐 5 把</strong>：POF-9 / M12 / PDW9 / CAMRS / Glaive-12</li><li>🏷️ <strong>移除过时的「Y7S3 新增」星级标记</strong>：该标记（2022 年）早已失效——Y9S1 新增的水平前握把反而从未标注，属误导信息，现已全部去掉</li><li>👤 <strong>配件差异改由干员档案呈现</strong>：武器界面只展示「武器级」配件清单（这把枪设计上支持什么），并在存在差异时给出中性指路；<strong>具体某干员实际能装什么，请看该干员档案</strong>——已标注 Y11S3 移除的两处：Tubarão 的 AR-15.50、Aruni 的 Mk 14 EBR 均不可装枪口制退器（Maverick / Dokkaebi 仍可装）</li><li>⚠️ 本次为<strong>数据准确性与展示口径</strong>修订，不含游戏内平衡改动；武器伤害 / 射速 / 弹匣 / 衰减主表零改动</li></ul>',
+        link: ''
+    },
     {
         type: 'info',
         date: '2026-10-27',

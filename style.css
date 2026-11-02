@@ -2233,6 +2233,47 @@ body.modal-open { overflow: hidden; }
 .op-weapon-chip:hover .op-weapon-name { color: var(--accent); }
 .op-weapon-chip em { margin-left: 2px; }
 
+/* 干员级配件限制：chip 角标 + 限制区块 */
+.op-weapon-chip.has-limit {
+    border-color: rgba(255, 167, 38, 0.45);
+    background: rgba(255, 167, 38, 0.07);
+}
+.op-wlimit-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    margin-left: 2px;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 400;
+    color: var(--warning);
+    background: rgba(255, 167, 38, 0.18);
+    border-radius: 50%;
+    flex: 0 0 auto;
+}
+.op-wlimit-group {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: rgba(255, 167, 38, 0.06);
+    border: 1px solid rgba(255, 167, 38, 0.25);
+    border-radius: var(--radius);
+}
+.op-wlimit-group .op-wgroup-title { color: var(--warning); margin-bottom: 6px; }
+.op-wlimit-list { margin: 0; padding-left: 18px; }
+.op-wlimit-list li { font-size: 12px; line-height: 1.7; color: var(--text-primary); }
+.op-wlimit-wn { font-weight: 500; color: var(--warning); }
+.op-wlimit-why { color: var(--text-muted); font-size: 11px; }
+.op-wlimit-foot {
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px dashed rgba(255, 167, 38, 0.22);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
 /* 干员详情：主武器 / 副武器 分组 */
 .op-wgroup { margin-bottom: 10px; }
 .op-wgroup-title {

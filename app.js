@@ -1306,11 +1306,17 @@
         }
 
         function renderCompatItem(w, slot, att) {
-            const ext = (typeof WEAPON_EXTENDED !== 'undefined') ? WEAPON_EXTENDED[w.name] : null;
-            const note = ext ? (slot === 'barrel' ? ext.barrelNote : ext.gripNote) : null;
-            const attName = (slot === 'barrel' ? BARREL_NAMES[att] : GRIP_NAMES[att]) || att;
-            const opDiff = (note && String(note).includes(attName))
-                ? '<span style="font-size:10px;color:var(--warning)">⚠️ 部分干员不可用</span>' : '';
+            const slotKey = slot === 'barrel' ? 'barrels' : 'grips';
+            let opDiff = '';
+            if (typeof OPERATOR_ATTACHMENT_EXCEPTIONS !== 'undefined') {
+                const blockedBy = Object.keys(OPERATOR_ATTACHMENT_EXCEPTIONS).filter(op => {
+                    const ex = OPERATOR_ATTACHMENT_EXCEPTIONS[op][w.name];
+                    return !!(ex && ex[slotKey] && ex[slotKey].includes(att));
+                });
+                if (blockedBy.length) {
+                    opDiff = `<span style="font-size:10px;color:var(--warning)">⚠️ ${esc(blockedBy.join(' / '))} 不可用</span>`;
+                }
+            }
             const dotColor = `var(--${w.type})`;
             return `
                 <div class="compat-item" style="cursor:pointer" onclick="showWeaponDetail('${w.name.replace(/'/g, "\\'")}')">
@@ -1714,6 +1720,38 @@
         return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
+    // ---- 干员级配件例外 ----
+    // 取某干员对某武器的配件限制（无则 null）
+    function opWeaponException(opName, weaponName) {
+        if (typeof OPERATOR_ATTACHMENT_EXCEPTIONS === 'undefined') return null;
+        const m = OPERATOR_ATTACHMENT_EXCEPTIONS[opName];
+        return (m && m[weaponName]) || null;
+    }
+    // 该武器在 slot（'barrels' | 'grips'）上是否存在任何干员级限制
+    function weaponHasOpLimit(weaponName, slotKey) {
+        if (typeof OPERATOR_ATTACHMENT_EXCEPTIONS === 'undefined') return false;
+        return Object.keys(OPERATOR_ATTACHMENT_EXCEPTIONS).some(op => {
+            const ex = OPERATOR_ATTACHMENT_EXCEPTIONS[op][weaponName];
+            return !!(ex && ex[slotKey] && ex[slotKey].length);
+        });
+    }
+    // 某干员在某武器上实际可装的配件（扣除该干员的例外）
+    function operatorAttachments(opName, weaponName) {
+        const w = WEAPONS.find(x => x.name === weaponName);
+        const ext = (typeof WEAPON_EXTENDED !== 'undefined') ? WEAPON_EXTENDED[weaponName] : null;
+        const ex = opWeaponException(opName, weaponName) || {};
+        const rm = (list, blocked) => (list || []).filter(k => !(blocked || []).includes(k));
+        return {
+            barrels: rm(w && w.barrels, ex.barrels),
+            grips: rm(w && w.grips, ex.grips),
+            blockedBarrels: ex.barrels || [],
+            blockedGrips: ex.grips || [],
+            laser: !!(ext && ext.underbarrel),
+            hasSights: !!(ext && ext.sights && ext.sights.length),
+            note: ex.note || ''
+        };
+    }
+
     // 长文本按段落渲染
     function para(text, cls) {
         return String(text).split(/\n+/).map(s => s.trim()).filter(Boolean)
@@ -1735,13 +1773,25 @@
         const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
 
         // 武器按「主武器 / 副武器」分组展示
+        // 每把武器同时带上「该干员实际可用配件」—— 配件差异属干员视角，不在武器界面展开
         const weaponChip = w => {
             const wd = WEAPONS.find(x => x.name === w);
             const cat = wd ? (TYPE_NAMES[wd.type] || wd.type) : '';
-            return `<span class="op-weapon-chip" data-weapon="${w.replace(/'/g, "\\'")}" title="查看 ${esc(w)} 详情">
+            const att = operatorAttachments(o.name, w);
+            const limited = !!(att.blockedBarrels.length || att.blockedGrips.length);
+            const bits = [];
+            if (att.barrels.length) bits.push('枪管 ' + att.barrels.map(b => BARREL_NAMES[b] || b).join('、'));
+            if (att.grips.length) bits.push('握把 ' + att.grips.map(g => GRIP_NAMES[g] || g).join('、'));
+            if (att.laser) bits.push('下挂 激光');
+            if (!att.barrels.length && !att.grips.length && !att.laser) bits.push('无可装配件');
+            if (att.blockedBarrels.length) bits.push('⚠ 不可装 ' + att.blockedBarrels.map(b => BARREL_NAMES[b] || b).join('、'));
+            if (att.blockedGrips.length) bits.push('⚠ 不可装 ' + att.blockedGrips.map(g => GRIP_NAMES[g] || g).join('、'));
+            const title = `${o.name} 的 ${w} —— ${bits.join('；')}｜点击查看武器详情`;
+            return `<span class="op-weapon-chip${limited ? ' has-limit' : ''}" data-weapon="${w.replace(/'/g, "\\'")}" title="${esc(title)}">
                         ${thumbImgHTML(w, 'op-weapon-thumb')}
                         <span class="op-weapon-name">${esc(w)}</span>
                         ${cat ? `<em>${esc(cat)}</em>` : ''}
+                        ${limited ? '<b class="op-wlimit-badge">⚠</b>' : ''}
                     </span>`;
         };
         const opWeaponNames = o.weapons || [];
@@ -1759,9 +1809,27 @@
                    <div class="op-detail-weapons">${names.map(weaponChip).join('')}</div>
                </div>`
             : '';
+        // ---- 该干员的配件限制（干员视角，武器界面不展开）----
+        const exMap = (typeof OPERATOR_ATTACHMENT_EXCEPTIONS !== 'undefined'
+            && OPERATOR_ATTACHMENT_EXCEPTIONS[o.name]) || {};
+        const limitItems = Object.keys(exMap).map(wn => {
+            const ex = exMap[wn];
+            const slots = [];
+            if ((ex.barrels || []).length) slots.push('枪管：不可装 ' + ex.barrels.map(b => BARREL_NAMES[b] || b).join('、'));
+            if ((ex.grips || []).length) slots.push('握把：不可装 ' + ex.grips.map(g => GRIP_NAMES[g] || g).join('、'));
+            return `<li><strong class="op-wlimit-wn">${esc(wn)}</strong> — ${esc(slots.join('；'))}${ex.note ? `<span class="op-wlimit-why">（${esc(ex.note)}）</span>` : ''}</li>`;
+        }).join('');
+        const limitBlock = limitItems ? `
+            <div class="op-wgroup op-wlimit-group">
+                <div class="op-wgroup-title">⚙️ 本干员配件限制 · ${Object.keys(exMap).length}</div>
+                <ul class="op-wlimit-list">${limitItems}</ul>
+                <div class="op-wlimit-foot">武器界面展示的是<strong>武器级</strong>配件清单；同一把枪在不同干员手中可能被单独移除个别配件，以上为本干员的实际差异。</div>
+            </div>` : '';
+
         const weapons = wGroup('主武器', primNames, '🔫')
             + wGroup('副武器', secNames, '🔫')
-            + wGroup('其他', otherNames, '🧰');
+            + wGroup('其他', otherNames, '🧰')
+            + limitBlock;
 
         // ---- 独立技能面板 ----
         const gTitleRaw = o.gadget_zh || o.gadget;

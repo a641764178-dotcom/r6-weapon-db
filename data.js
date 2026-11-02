@@ -1,7 +1,8 @@
 // ============================================
 // R6S 武器配件数据库 - 数据层
 // 版本基准: Y11S3 "Operation Split Fire" (2026-09-01) + Y11S3.1 (2026-09-22, Update 3.49) + 热修复 (2026-09-29, Update 3.50) + Y11S3.2 季中更新 (2026-10-15, Update 3.51 / 1.000.157) — 主表已落地
-// 数据核查: 2026-10-18 复核 Ubisoft 官方 news-updates / Y11S3.2 补丁笔记 / 设计师笔记 —— 武器主表数值零改动；干员技能数值与武器分发已同步（Noor / Tachanka / Goyo / Solid Snake / Valkyrie / Ram / Clash）
+// 版本基准补记: 热修复 (2026-10-22, Update 3.54 / 1.000.160) — Osa 漏洞修复并重新启用，武器主表零改动
+// 数据核查: 2026-11-02 复核 Ubisoft 官方 news-updates / Steam 官方 feed / 官方路线图 —— 自 10/15 Y11S3.2 后无平衡性补丁、无设计师笔记、无配件改动；10/22 热修复（3.54）仅修 Osa 漏洞；Y11S4 揭晓面板已确认为 11/15 大阪 Major 总决赛日
 // 瞄具体系已按 Y9S1 "Deadly Omen" 重构: 1.0x / 2.5x / 3.5x 三大类
 // 分类体系: 主武器7类 + 副武器4类
 // ============================================
@@ -2842,6 +2843,20 @@ const OPERATORS = [
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'info',
+        date: '2026-10-27',
+        title: 'BLAST R6 大阪 Major 赛程公布 (11/6–15) — Y11S4 揭晓面板定于 11/15 总决赛日，路线图预告新武器',
+        content: '<ul><li>🏆 <strong>BLAST R6 大阪 Major：11/6 – 11/15</strong>，20 支战队争夺 <strong>$600,000</strong> 奖池与 SI 积分（通往 2027 巴西 Six Invitational）；GSL 小组赛 11/6–8、瑞士轮 11/9–11、季后赛 11/13–15（大阪 ATC Hall，唯一开放现场售票阶段）</li><li>🎬 <strong>Y11S4 揭晓面板定于 11/15 总决赛日</strong>，观看满 30 分钟可领取专属 Reveal 挂件（官方 Twitch Drops 公告确认）— 此前仅为第三方推测，现已由育碧官方口径证实</li><li>🗺️ <strong>官方路线图（10/13 更新）Y11S4 预告</strong>：最后一次干员重制（Remaster）、<strong>新增武器</strong>、面向多名进攻方的<strong>新次要装备</strong>、人质模式重做、Testing Grounds「半加固」测试、新社交中心、3 张现代化地图、Grand Larceny 活动回归</li><li>👥 <strong>Y11S4 不新增干员</strong>：自 <strong>Y12 起每季回归一名新干员</strong>（4 名/年），故 Y11 剩余期间干员总数维持 <strong>78</strong>（攻 39 / 防 39）</li><li>🔫 <strong>赛事 Twitch Drops 武器皮肤与本站干员↔武器映射逐条吻合</strong>：<strong>L85A2</strong>（Sledge / Thatcher）、<strong>PARA-308</strong>（Capitão / Brava）、<strong>FMG-9</strong>（Smoke / Nøkk / Denari）— 已对照官方公告校验，3 把武器的持有干员 0 差异</li><li>⚠️ <strong>纯赛事 / 路线图信息，无武器伤害 / 射速 / 弹匣 / 衰减 / 配件任何变更</strong>，本站武器主表未改动</li></ul>',
+        link: 'https://www.ubisoft.com/en-us/esports/rainbow-six/siege/news-updates/4yFeI3FrEjqkll0g20ifAp/r6se-r6-osaka-major-predictions-launch'
+    },
+    {
+        type: 'patch',
+        date: '2026-10-22',
+        title: 'Y11S3 热修复 (Update 3.54 / 1.000.160) — Osa 漏洞修复，干员重新启用',
+        content: '<ul><li>🛠️ <strong>10/22 全平台停机热修复</strong>（维护约 60 分钟），主因为修复 Osa 相关<strong>漏洞</strong>；热修复上线后 Osa 已重新开放选用</li><li>🔍 <strong>背景</strong>：Y11S3.2 季中更新（10/15）放宽 Osa 透明护盾部署限制（身后空间 0.3m → <strong>0.005m</strong>）后出现可被滥用的漏洞，育碧先行临时禁用该干员，再以本热修复修复</li><li>⚙️ 附带通用<strong>性能与稳定性修复</strong>（崩溃 / 卡顿）</li><li>ℹ️ <strong>该热修复未在官网 news-updates 页面单独发布条目</strong>，仅通过官方 @Rainbow6Game 账号与游戏内维护公告公布 — 本站据官方公告与多家媒体交叉确认后补录</li><li>⚠️ <strong>无武器伤害 / 射速 / 弹匣 / 衰减 / 配件兼容性变更</strong>，亦无配件分发调整；本站武器主表未改动</li></ul>',
+        link: ''
+    },
     {
         type: 'patch',
         date: '2026-10-15',

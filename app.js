@@ -249,12 +249,10 @@
             // 配件预览标签
             const attTags = [];
             w.barrels.forEach(b => {
-                const isNew = w.y7s3_new?.barrels?.includes(b);
-                attTags.push(attChipHTML(b, 'barrel', { className: 'att-tag', newIn: isNew, title: `${BARREL_NAMES[b]} · 查看配件详情` }));
+                attTags.push(attChipHTML(b, 'barrel', { className: 'att-tag', title: `${BARREL_NAMES[b]} · 查看配件详情` }));
             });
             w.grips.forEach(g => {
-                const isNew = w.y7s3_new?.grips?.includes(g);
-                attTags.push(attChipHTML(g, 'grip', { className: 'att-tag', newIn: isNew, title: `${GRIP_NAMES[g]} · 查看配件详情` }));
+                attTags.push(attChipHTML(g, 'grip', { className: 'att-tag', title: `${GRIP_NAMES[g]} · 查看配件详情` }));
             });
             if (w.barrels.length === 0 && w.grips.length === 0) {
                 attTags.push('<span class="att-tag empty">无配件</span>');
@@ -698,15 +696,15 @@
         // 2. 枪管配件
         let barrelHTML = '';
         if (w.barrels.length > 0) {
+            const barrelNote = (ext && ext.barrelNote)
+                ? `<div class="sight-note">⚠️ ${ext.barrelNote}</div>` : '';
             barrelHTML = `
                 <div class="modal-att-group">
                     <div class="modal-att-group-title">🔧 枪管配件</div>
                     <div class="modal-att-list">
-                        ${w.barrels.map(b => {
-                            const isNew = w.y7s3_new?.barrels?.includes(b);
-                            return attChipHTML(b, 'barrel', { className: 'modal-att-item' + (isNew ? ' y7s3-new' : '') });
-                        }).join('')}
+                        ${w.barrels.map(b => attChipHTML(b, 'barrel', { className: 'modal-att-item' })).join('')}
                     </div>
+                    ${barrelNote}
                 </div>
             `;
         } else {
@@ -716,15 +714,15 @@
         // 3. 握把配件
         let gripHTML = '';
         if (w.grips.length > 0) {
+            const gripNote = (ext && ext.gripNote)
+                ? `<div class="sight-note">⚠️ ${ext.gripNote}</div>` : '';
             gripHTML = `
                 <div class="modal-att-group">
                     <div class="modal-att-group-title">✊ 握把配件</div>
                     <div class="modal-att-list">
-                        ${w.grips.map(g => {
-                            const isNew = w.y7s3_new?.grips?.includes(g);
-                            return attChipHTML(g, 'grip', { className: 'modal-att-item' + (isNew ? ' y7s3-new' : '') });
-                        }).join('')}
+                        ${w.grips.map(g => attChipHTML(g, 'grip', { className: 'modal-att-item' })).join('')}
                     </div>
+                    ${gripNote}
                 </div>
             `;
         } else {
@@ -826,7 +824,7 @@
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">可用配件 <span style="font-size:11px;color:var(--accent);font-weight:400">★ = Y7S3新增 · 点击配件查看效果</span></div>
+                <div class="modal-section-title">可用配件 <span style="font-size:11px;color:var(--text-muted);font-weight:400">当前版本 Y11S3 · 点击配件查看效果</span></div>
                 ${sightsHTML}
                 ${barrelHTML}
                 ${gripHTML}
@@ -1308,16 +1306,18 @@
         }
 
         function renderCompatItem(w, slot, att) {
-            const isNew = slot === 'barrel'
-                ? w.y7s3_new?.barrels?.includes(att)
-                : w.y7s3_new?.grips?.includes(att);
+            const ext = (typeof WEAPON_EXTENDED !== 'undefined') ? WEAPON_EXTENDED[w.name] : null;
+            const note = ext ? (slot === 'barrel' ? ext.barrelNote : ext.gripNote) : null;
+            const attName = (slot === 'barrel' ? BARREL_NAMES[att] : GRIP_NAMES[att]) || att;
+            const opDiff = (note && String(note).includes(attName))
+                ? '<span style="font-size:10px;color:var(--warning)">⚠️ 部分干员不可用</span>' : '';
             const dotColor = `var(--${w.type})`;
             return `
                 <div class="compat-item" style="cursor:pointer" onclick="showWeaponDetail('${w.name.replace(/'/g, "\\'")}')">
                     <span class="weapon-type-dot" style="background:${dotColor}"></span>
                     <span style="font-weight:500">${w.name}</span>
                     <span style="font-size:11px;color:var(--text-muted);margin-left:auto">${TYPE_NAMES[w.type]}</span>
-                    ${isNew ? '<span style="font-size:10px;color:var(--accent)">★Y7S3</span>' : ''}
+                    ${opDiff}
                 </div>
             `;
         }

@@ -988,6 +988,7 @@ const WEAPON_EXTENDED = {
     'AR-15.50': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
         sightNote: '2.5x 放大镜仅进攻方干员可用；防守方 Tubarão 亦在官方白名单内；3.5x 望远镜仅进攻方 DMR 可用',
+        barrelNote: '枪口制退器仅 Maverick 可用 —— Tubarão 于 Y11S3 被移除该配件（武器级列表无法区分干员，故保留在册）',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，单发后坐力大但有恢复时间；Y11S3 首发后坐力提升' },
@@ -1324,6 +1325,7 @@ const WEAPON_EXTENDED = {
     'Mk 14 EBR': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
         sightNote: '2.5x 放大镜仅进攻方干员可用；防守方 Aruni 亦在官方白名单内；3.5x 望远镜仅进攻方 DMR 可用',
+        barrelNote: '枪口制退器仅 Dokkaebi 可用 —— Aruni 于 Y11S3 被移除该配件（武器级列表无法区分干员，故保留在册）',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，中等后坐力；Y11S3 首发后坐力提升' },

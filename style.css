@@ -1231,17 +1231,6 @@ body.modal-open { overflow: hidden; }
     font-weight: 500;
 }
 
-.modal-att-item.y7s3-new {
-    background: rgba(79,195,247,0.1);
-    border-color: rgba(79,195,247,0.3);
-    color: var(--accent);
-}
-
-.modal-att-item.y7s3-new::after {
-    content: ' ★';
-    font-size: 11px;
-}
-
 .modal-att-item.unavailable {
     background: rgba(239,83,80,0.1);
     border-color: rgba(239,83,80,0.2);

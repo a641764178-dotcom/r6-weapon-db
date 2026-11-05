@@ -1445,6 +1445,12 @@
     // ============================================================
     const SPEED_LABEL = { fast: '3 速', medium: '2 速', slow: '1 速' };
     const DIFF_LABEL = { easy: '简单', normal: '普通', hard: '困难' };
+    // speed 关键词 → 点数（快=3 点、中=2 点、慢=1 点），用于卡片护甲/速度圆点显示
+    const SPEED_POINTS = { fast: 3, medium: 2, slow: 1 };
+    function SPEED_STARS(speed) {
+        const n = SPEED_POINTS[speed] || 0;
+        return '●'.repeat(n);
+    }
     const COUNTRY_FLAG = {
         us: '🇺🇸', gb: '🇬🇧', fr: '🇫🇷', de: '🇩🇪', ru: '🇷🇺', ca: '🇨🇦', br: '🇧🇷',
         jp: '🇯🇵', kr: '🇰🇷', cn: '🇨🇳', au: '🇦🇺', nl: '🇳🇱', pl: '🇵🇱', se: '🇸🇪',
@@ -1590,7 +1596,7 @@
 
     function filteredOperators() {
         const q = opState.q.trim().toLowerCase();
-        return OPERATORS.filter(o => {
+        const list = OPERATORS.filter(o => {
             if (opState.side !== 'all' && o.side !== opState.side) return false;
             if (!q) return true;
             const hay = [o.name, o.realname, o.gadget, o.affiliation, o.birthplace,
@@ -1598,6 +1604,13 @@
                 .filter(Boolean).join(' ').toLowerCase();
             return hay.includes(q);
         });
+        // 按推出时间升序（最早推出在前），缺日期的排最后
+        list.sort((a, b) => {
+            const da = a.releasedate || '9999';
+            const db = b.releasedate || '9999';
+            return da.localeCompare(db) || String(a.name).localeCompare(String(b.name));
+        });
+        return list;
     }
 
     // 干员页签：卡片网格，点击弹出完整档案弹窗
@@ -1610,21 +1623,28 @@
 
         box.innerHTML = list.map(o => {
             const badge = o.side === 'atk'
-                ? '<b class="op-side atk">⚔️ 进攻</b>'
-                : o.side === 'def' ? '<b class="op-side def">🛡️ 防守</b>' : '';
+                ? '<b class="op-side atk">攻</b>'
+                : o.side === 'def' ? '<b class="op-side def">守</b>' : '';
             const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
+            // 技能图标（叠加在肖像左下角），无则用干员图标兜底
+            const gIcon = o.gadgetIcon
+                ? `<img class="op-card-gadget-icon" src="${o.gadgetIcon}" alt="${esc(o.gadgetIconName || o.gadget || '技能')}" loading="lazy" onerror="this.remove()">`
+                : '';
+            // 护甲 / 速度 小圆点
+            const armorDots = o.armor ? `<span class="op-dots armor" title="护甲 ${o.armor}">${'●'.repeat(parseInt(o.armor) || 0)}</span>` : '';
+            const speedDots = o.speed ? `<span class="op-dots speed" title="速度 ${SPEED_LABEL[o.speed] || o.speed}">${SPEED_STARS(o.speed)}</span>` : '';
             return `
                 <div class="op-card" data-op="${o.name.replace(/'/g, "\\'")}" tabindex="0" role="button"
-                     aria-label="查看 ${esc(o.name)} 的完整档案" title="点击查看 ${esc(o.name)} 档案">
-                    <div class="op-card-visual">${opVisualHTML(o, 'op-card-portrait', o.name[0])}</div>
-                    <div class="op-card-name">${esc(o.name)}${flag ? ' ' + flag : ''}</div>
-                    <div class="op-card-meta">
+                     aria-label="查看 ${esc(o.name)} 的完整档案" title="${esc(o.name)} · ${esc(o.gadget_zh || o.gadget || '')} · 点击查看档案">
+                    <div class="op-card-visual">${opVisualHTML(o, 'op-card-portrait', o.name[0])}${gIcon}</div>
+                    <div class="op-card-bar">
+                        <span class="op-card-name">${esc(o.name)}${flag ? ' ' + flag : ''}</span>
                         ${badge}
-                        ${o.armor ? `<span class="op-stat">🛡 ${o.armor}</span>` : ''}
-                        ${o.speed ? `<span class="op-stat">🏃 ${SPEED_LABEL[o.speed] || o.speed}</span>` : ''}
                     </div>
-                    <div class="op-card-org">${o.affiliation ? orgChipHTML(o.affiliation, { size: 18 }) : '<span class="muted">暂无组织</span>'}</div>
-                    <div class="op-card-gadget">${(o.gadget_zh || o.gadget) ? esc(o.gadget_zh || o.gadget) : '<span class="muted">无固定独特技能</span>'}</div>
+                    <div class="op-card-sub">
+                        ${armorDots}${speedDots}
+                        <span class="op-card-gadget-name">${esc(o.gadget_zh || o.gadget || '')}</span>
+                    </div>
                 </div>`;
         }).join('');
 

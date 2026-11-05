@@ -2012,8 +2012,8 @@ body.modal-open { overflow: hidden; }
 .op-count { margin-left: auto; font-size: 11px; color: var(--text-muted); }
 
 .operator-cards {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
     gap: 10px;
 }
 
@@ -2097,50 +2097,80 @@ body.modal-open { overflow: hidden; }
 }
 .op-entry.flash, .op-card.flash, .org-card.flash { animation: opFlash 1.7s ease-out 1; }
 .op-card {
-    padding: 12px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: 8px;
     text-align: center;
     cursor: pointer;
-    transition: transform .15s, border-color .15s, background .15s;
+    overflow: hidden;
+    transition: transform .15s, border-color .15s, box-shadow .15s;
 }
-.op-card:hover { transform: translateY(-3px); border-color: var(--accent); background: var(--bg-card-hover); }
+.op-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 6px 18px rgba(0,0,0,.35); }
 .op-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .op-card-visual {
-    height: 104px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 8px;
-    background: linear-gradient(160deg, #141b24 0%, #1d2632 100%);
-    border: 1px solid var(--border);
-    border-radius: 6px;
+    position: relative;
+    height: 132px;
+    display: flex; align-items: flex-end; justify-content: center;
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.30));
     overflow: hidden;
 }
 .op-card-visual img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
-/* 干员立绘：优先占满视觉区，底部对齐避免悬空 */
+/* 干员立绘：占满视觉区，底部对齐 */
 .op-card-portrait { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; }
-/* 无立绘时回退到军械库圆形小图标，居中显示 */
-.op-card-visual .op-icon-fallback { width: 52px; height: 52px; object-fit: contain; }
+/* 无立绘时回退到军械库圆形小图标 */
+.op-card-visual .op-icon-fallback { width: 56px; height: 56px; object-fit: contain; margin-bottom: 16px; }
 .op-card-fallback {
-    width: 46px; height: 46px;
+    width: 52px; height: 52px;
     display: flex; align-items: center; justify-content: center;
     border-radius: 50%;
     background: var(--bg-card-hover);
     border: 1px solid var(--border-light);
-    font-size: 18px; font-weight: 700; color: var(--text-secondary);
+    font-size: 20px; font-weight: 700; color: var(--text-secondary);
+    margin-bottom: 16px;
 }
-.op-card-name { font-size: 12px; font-weight: 600; color: var(--text-primary); line-height: 1.35; }
-.op-card-meta { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 6px; }
-.op-card-org { display: flex; justify-content: center; margin-top: 5px; min-height: 18px; }
-.op-side { font-size: 11px; padding: 1px 6px; border-radius: 3px; font-weight: 700; }
+/* 技能图标：叠加在肖像左下角，带底色圆角底 */
+.op-card-gadget-icon {
+    position: absolute;
+    left: 6px; bottom: 6px;
+    width: 34px; height: 34px;
+    object-fit: contain;
+    padding: 3px;
+    background: rgba(0,0,0,.55);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+}
+/* 底部名字条（深色横条，类似育碧官网） */
+.op-card-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 8px 4px;
+    background: var(--bg-card);
+}
+.op-card-name { font-size: 12px; font-weight: 700; color: var(--text-primary); line-height: 1.3; letter-spacing: .3px; }
+.op-card-sub {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 8px 8px;
+    flex-wrap: wrap;
+}
+.op-dots { font-size: 9px; letter-spacing: 1px; line-height: 1; }
+.op-dots.armor { color: var(--text-secondary); }
+.op-dots.speed { color: var(--accent); }
+.op-card-gadget-name {
+    font-size: 10px; color: var(--text-muted);
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.op-side { font-size: 10px; padding: 0 5px; border-radius: 3px; font-weight: 700; line-height: 1.5; flex: 0 0 auto; }
 .op-side.atk { background: rgba(232,166,52,.18); color: var(--attack); }
 .op-side.def { background: rgba(74,158,255,.18); color: var(--defense); }
 .op-stat { font-size: 11px; padding: 1px 5px; border-radius: 3px; background: var(--bg-card-hover); color: var(--text-secondary); border: 1px solid var(--border); }
-.op-card-gadget {
-    margin-top: 7px; padding-top: 6px;
-    border-top: 1px dashed var(--border);
-    font-size: 11px; line-height: 1.35; color: var(--text-muted);
-}
 .muted { color: var(--text-muted); }
 
 /* ---- 干员详情弹窗 ---- */
@@ -2388,7 +2418,12 @@ body.modal-open { overflow: hidden; }
     position: relative;
     overflow: hidden;
 }
-.op-card::after {
+
+.op-card-visual {
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.30));
+}
+/* 肖像区 hover 顶部光晕 */
+.op-card-visual::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -2397,11 +2432,7 @@ body.modal-open { overflow: hidden; }
     transition: var(--transition);
     pointer-events: none;
 }
-.op-card:hover::after { opacity: 1; }
-
-.op-card-visual {
-    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
-}
+.op-card:hover .op-card-visual::after { opacity: 1; }
 
 /* ---- 干员弹窗：分区标签 ---- */
 #operator-modal .modal-content { max-width: 920px; }

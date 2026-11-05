@@ -351,12 +351,14 @@ const WEAPON_CATEGORY = {
 };
 
 // ---- 干员游戏内排列顺序 ----
-// 来源: 灰机wiki CTU 分组顺序 + timesaver.gg release order 双源交叉
-// 规则: 进攻方/防守方各自按「发布时间升序」排列；同日发布的干员按游戏内 CTU 固定顺序。
+// 来源: 游戏内干员选择界面截图 + 灰机wiki CTU 分组顺序 + timesaver.gg release order 交叉
+// 规则: Striker/Sentry(新兵, 替代原 Recruit) 固定置顶各自阵营最前;
+//       其余干员按「发布时间升序」排列, 同日发布的按游戏内 CTU 固定顺序。
 // 新干员官方上线后，追加到对应阵营数组末尾即可（时间顺延）。
 // ⚠️ 这是干员页签排序的唯一权威依据，不要再依赖 releasedate 的字母序平局。
 const OPERATOR_ORDER = {
     atk: [
+        'Striker',                                                                              // 新兵(替代 Recruit), 置顶
         'Sledge','Thatcher','Ash','Thermite','Twitch','Montagne','Glaz','Fuze','Blitz','IQ',   // 初始 (SAS→FBI→GIGN→Spetsnaz→GSG9)
         'Buck','Blackbeard','Capitão','Hibana',                                               // Y1
         'Jackal','Ying','Zofia','Dokkaebi',                                                    // Y2
@@ -366,11 +368,12 @@ const OPERATOR_ORDER = {
         'Flores','Osa',                                                                        // Y6
         'Sens','Grim',                                                                         // Y7
         'Brava','Ram',                                                                         // Y8
-        'Deimos','Striker',                                                                    // Y9
+        'Deimos',                                                                              // Y9
         'Rauora',                                                                              // Y10
         'Solid Snake'                                                                          // Y11
     ],
     def: [
+        'Sentry',                                                                               // 新兵(替代 Recruit), 置顶
         'Smoke','Mute','Castle','Pulse','Doc','Rook','Kapkan','Tachanka','Jäger','Bandit',     // 初始 (SAS→FBI→GIGN→Spetsnaz→GSG9)
         'Frost','Valkyrie','Caveira','Echo',                                                   // Y1
         'Mira','Lesion','Ela','Vigil',                                                         // Y2
@@ -380,7 +383,7 @@ const OPERATOR_ORDER = {
         'Thunderbird','Thorn',                                                                 // Y6
         'Azami','Solis',                                                                       // Y7
         'Fenrir','Tubarão',                                                                    // Y8
-        'Sentry','Skopos',                                                                     // Y9
+        'Skopos',                                                                              // Y9
         'Denari',                                                                              // Y10
         'Noor'                                                                                 // Y11
     ]

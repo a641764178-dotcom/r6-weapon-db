@@ -1224,7 +1224,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 5.5, reloadEmpty: 6.5,
         recoil: { vertical: 'high', horizontal: 'medium', pattern: '高垂直后坐力，弹链供弹换弹极慢' },
-        falloff: { start: 30, end: 40, min: 31 }
+        falloff: { start: 30, end: 40, min: 32 }
     },
     '6P41': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
@@ -1245,14 +1245,14 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 3.4, reloadEmpty: 4.4,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，弹鼓供弹' },
-        falloff: { start: 30, end: 40, min: 29 }
+        falloff: { start: 30, end: 40, min: 30 }
     },
     'LMG-E': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
         underbarrel: true, mobility: 50,
         reloadTactical: 5.0, reloadEmpty: 6.0,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，150发弹匣' },
-        falloff: { start: 30, end: 40, min: 26 }
+        falloff: { start: 30, end: 40, min: 27 }
     },
     'ALDA 5.56': {
         sights: ['red_dot', 'holographic', 'reflex'],
@@ -1266,7 +1266,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 4.5, reloadEmpty: 5.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，短枪管版本' },
-        falloff: { start: 30, end: 40, min: 31 }
+        falloff: { start: 30, end: 40, min: 32 }
     },
     'DP27': {
         sights: ['red_dot', 'holographic', 'reflex'],
@@ -1518,7 +1518,7 @@ const WEAPON_EXTENDED = {
         underbarrel: true, mobility: 50,
         reloadTactical: 2.0, reloadEmpty: 2.6,
         recoil: { vertical: 'very_high', horizontal: 'very_high', pattern: '极高后坐力，全游戏最难控制武器之一' },
-        falloff: { start: 17, end: 28, min: 9 } // [Y11S3 实测] 16→9 (17-28m)，40m 维持 9
+        falloff: { start: 18, end: 28, min: 9 } // [Y11S3 实测] 16→9 (18-28m)，40m 维持 9
     },
     'Bearing 9': {
         sights: ['red_dot', 'holographic', 'reflex'],
@@ -1534,7 +1534,7 @@ const WEAPON_EXTENDED = {
         reloadTactical: 1.9, reloadEmpty: 2.5,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，副武器中较可控' },
         falloffExt: { start: 19, end: 28, min: 31 },
-        falloff: { start: 17, end: 27, min: 21 } // [Y11S3 实测] 35→21 (17-27m),
+        falloff: { start: 18, end: 27, min: 21 } // [Y11S3 实测] 35→21 (18-27m),
     },
     'Reaper MK2': {
         sights: ['red_dot', 'holographic', 'reflex'],
@@ -2883,6 +2883,13 @@ const OPERATORS = [
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'info',
+        date: '2026-11-05',
+        title: 'P0×6 伤害衰减裁决放行 — LMG 最低伤害补 +1（4 把）+ SMG-12 / SPSMG9 首降米数 17→18',
+        content: '<ul><li>📏 <strong>LMG 最低伤害补 +1（4 把）</strong>：GitHub 实测 40m 采样点确认本站漏算了 LMG 衰减公式的「+1」项。规则为 <strong>min = floor(damage × 0.65) + 1</strong>（唯一例外 G8A1 走纯 floor）。修正：<strong>M249 31→32</strong>、<strong>M249 SAW 31→32</strong>、<strong>T-95 LSW 29→30</strong>、<strong>LMG-E 26→27</strong>。全站 8 把 LMG 现已全部符合规则（6P41=30 / ALDA 5.56=23 / DP27=40 / G8A1=24 本已正确）</li><li>🎯 <strong>SMG-12 / SPSMG9 首降米数 17→18</strong>：`falloff.start` 全站口径为「伤害首个下降的米数」，GitHub 实测 17m 仍满伤（16 / 35）、<strong>18m 才首降</strong>（15 / 34），故 start 记 17 有误，改为 18（三源交叉确认）</li><li>✅ 此为连续 5 轮复核确认的 P0 待裁决项，依据 GitHub 手测源（40m 采样点 + 逐米衰减）+ 全站公式一致性，现正式放行</li><li>⚠️ 本次为<strong>数据准确性</strong>修订（衰减最低值），不涉及伤害 / 射速 / 弹匣主表，亦非游戏内平衡改动</li></ul>',
+        link: ''
+    },
     {
         type: 'info',
         date: '2026-11-05',

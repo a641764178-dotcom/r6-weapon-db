@@ -1594,17 +1594,6 @@
         return `<div class="op-card-fallback">${initial}</div>`;
     }
 
-    // 初始 20 位干员同日（2015-12-01）发布，游戏内按 CTU 固定顺序排列。
-    // 此表给出每位在各自阵营内的序号，用于打破同日期排序歧义。
-    const OP_LAUNCH_TIEBREAK = {
-        // 进攻方（SAS → FBI → GIGN → Spetsnaz → GSG9）
-        'Sledge': 1, 'Thatcher': 2, 'Ash': 3, 'Thermite': 4, 'Twitch': 5,
-        'Montagne': 6, 'Glaz': 7, 'Fuze': 8, 'Blitz': 9, 'IQ': 10,
-        // 防守方（SAS → FBI → GIGN → Spetsnaz → GSG9）
-        'Smoke': 1, 'Mute': 2, 'Castle': 3, 'Pulse': 4, 'Doc': 5,
-        'Rook': 6, 'Kapkan': 7, 'Tachanka': 8, 'Jäger': 9, 'Bandit': 10
-    };
-
     function filteredOperators() {
         const q = opState.q.trim().toLowerCase();
         const list = OPERATORS.filter(o => {
@@ -1615,17 +1604,17 @@
                 .filter(Boolean).join(' ').toLowerCase();
             return hay.includes(q);
         });
-        // 按推出时间升序（最早推出在前）；同日发布时按游戏内 CTU 顺序（OP_LAUNCH_TIEBREAK）排序
+        // 按游戏内权威顺序排序（OPERATOR_ORDER，发布顺序 + 同日 CTU 顺序）
+        // 全局顺序：进攻方整体在前（0..N-1）、防守方整体在后（N..），各自内部按 OPERATOR_ORDER；
+        // 未收录的干员（理论上不应有）兜底排在最后
+        const orderMap = {};
+        (OPERATOR_ORDER.atk || []).forEach((n, i) => orderMap[n] = i);
+        const atkCount = (OPERATOR_ORDER.atk || []).length;
+        (OPERATOR_ORDER.def || []).forEach((n, i) => orderMap[n] = atkCount + i);
+        const idx = n => (n in orderMap) ? orderMap[n] : 99999;
         list.sort((a, b) => {
-            const da = a.releasedate || '9999';
-            const db = b.releasedate || '9999';
-            const dc = da.localeCompare(db);
-            if (dc !== 0) return dc;
-            const ta = OP_LAUNCH_TIEBREAK[a.name] || 0;
-            const tb = OP_LAUNCH_TIEBREAK[b.name] || 0;
-            if (ta && tb) return ta - tb;
-            if (ta) return -1;
-            if (tb) return 1;
+            const ia = idx(a.name), ib = idx(b.name);
+            if (ia !== ib) return ia - ib;
             return String(a.name).localeCompare(String(b.name));
         });
         return list;

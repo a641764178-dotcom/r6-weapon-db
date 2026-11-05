@@ -350,6 +350,42 @@ const WEAPON_CATEGORY = {
     shotgun_sec: 'secondary', pistol: 'secondary', smg_sec: 'secondary', revolver: 'secondary'
 };
 
+// ---- 干员游戏内排列顺序 ----
+// 来源: 灰机wiki CTU 分组顺序 + timesaver.gg release order 双源交叉
+// 规则: 进攻方/防守方各自按「发布时间升序」排列；同日发布的干员按游戏内 CTU 固定顺序。
+// 新干员官方上线后，追加到对应阵营数组末尾即可（时间顺延）。
+// ⚠️ 这是干员页签排序的唯一权威依据，不要再依赖 releasedate 的字母序平局。
+const OPERATOR_ORDER = {
+    atk: [
+        'Sledge','Thatcher','Ash','Thermite','Twitch','Montagne','Glaz','Fuze','Blitz','IQ',   // 初始 (SAS→FBI→GIGN→Spetsnaz→GSG9)
+        'Buck','Blackbeard','Capitão','Hibana',                                               // Y1
+        'Jackal','Ying','Zofia','Dokkaebi',                                                    // Y2
+        'Lion','Finka','Maverick','Nomad',                                                     // Y3
+        'Gridlock','Nøkk','Amaru','Kali',                                                      // Y4
+        'Iana','Ace','Zero',                                                                   // Y5
+        'Flores','Osa',                                                                        // Y6
+        'Sens','Grim',                                                                         // Y7
+        'Brava','Ram',                                                                         // Y8
+        'Deimos','Striker',                                                                    // Y9
+        'Rauora',                                                                              // Y10
+        'Solid Snake'                                                                          // Y11
+    ],
+    def: [
+        'Smoke','Mute','Castle','Pulse','Doc','Rook','Kapkan','Tachanka','Jäger','Bandit',     // 初始 (SAS→FBI→GIGN→Spetsnaz→GSG9)
+        'Frost','Valkyrie','Caveira','Echo',                                                   // Y1
+        'Mira','Lesion','Ela','Vigil',                                                         // Y2
+        'Alibi','Maestro','Clash','Kaid',                                                      // Y3
+        'Mozzie','Warden','Goyo','Wamai',                                                      // Y4
+        'Oryx','Melusi','Aruni',                                                               // Y5
+        'Thunderbird','Thorn',                                                                 // Y6
+        'Azami','Solis',                                                                       // Y7
+        'Fenrir','Tubarão',                                                                    // Y8
+        'Sentry','Skopos',                                                                     // Y9
+        'Denari',                                                                              // Y10
+        'Noor'                                                                                 // Y11
+    ]
+};
+
 // ---- 干员图标 ----
 // 来源: r6operators npm包 (marcopixel), 通过 jsDelivr CDN 加载
 // URL格式: https://cdn.jsdelivr.net/npm/r6operators@2.12.0/dist/icons/{key}.svg
@@ -2678,7 +2714,7 @@ const WEAPON_IMAGES = {
     'MP5SD':           { thumb: 'e/e7/R6S_MP5SD.png', recoil: null, huijiRecoil: '7/7e/Backlash_mp5sd_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
     '9x19VSN':         { thumb: 'f/f8/R6S_9x19VSN.png', recoil: null, huijiRecoil: '5/5c/Backlash_9x19vsn_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
     'MP7':             { thumb: '7/7d/R6S_MP7.png', recoil: null, huijiRecoil: 'f/f9/Backlash_mp7_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
-    '9mm C1':          { thumb: 'b/b4/R6S_9mmC1.jpg', recoil: null, huijiRecoil: 'd/da/Backlash_9mmc1_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
+    '9mm C1':          { thumb: '8/89/R6S_9mm_C1.png', recoil: null, huijiRecoil: 'd/da/Backlash_9mmc1_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
     'MPX':             { thumb: '0/0b/R6S_MPX.png', recoil: null, huijiRecoil: '8/8f/Backlash_mpx_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
     'M12':             { thumb: 'a/ad/R6S_M12.png', recoil: null, huijiRecoil: '6/67/Backlash_m12_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },
     'PDW9':            { thumb: '8/88/R6S_PDW9.png', recoil: null, huijiRecoil: '0/0d/Backlash_pdw9_%E6%97%A0%E6%8F%A1%E6%8A%8A_%E6%97%A0%E6%9E%AA%E5%8F%A3.jpg' },

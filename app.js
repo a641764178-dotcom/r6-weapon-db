@@ -1654,7 +1654,7 @@
                 if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
-        scope.querySelectorAll('.op-weapon-chip').forEach(chip => {
+        scope.querySelectorAll('.op-weapon-card').forEach(chip => {
             chip.style.cursor = 'pointer';
             chip.addEventListener('click', e => {
                 e.stopPropagation();
@@ -1741,11 +1741,25 @@
         const ext = (typeof WEAPON_EXTENDED !== 'undefined') ? WEAPON_EXTENDED[weaponName] : null;
         const ex = opWeaponException(opName, weaponName) || {};
         const rm = (list, blocked) => (list || []).filter(k => !(blocked || []).includes(k));
+        // 瞄具：武器级 sights + 防守方 2.5x 白名单（Y10S3 后仅 5 组 DMR/独头霰弹枪保留）
+        const wSights = (ext && ext.sights) ? ext.sights.slice() : [];
+        const isDef = (o => { const op = OPERATORS.find(x => x.name === o); return op && op.side === 'def'; })(opName);
+        let blockedSights = [];
+        if (isDef && wSights.includes('magnified')) {
+            const wl = (typeof DEF_MAGNIFIED_WHITELIST !== 'undefined')
+                ? (DEF_MAGNIFIED_WHITELIST[weaponName] || []) : [];
+            if (!wl.includes(opName)) {
+                wSights.splice(wSights.indexOf('magnified'), 1);
+                blockedSights.push('magnified');
+            }
+        }
         return {
             barrels: rm(w && w.barrels, ex.barrels),
             grips: rm(w && w.grips, ex.grips),
+            sights: wSights,
             blockedBarrels: ex.barrels || [],
             blockedGrips: ex.grips || [],
+            blockedSights,
             laser: !!(ext && ext.underbarrel),
             hasSights: !!(ext && ext.sights && ext.sights.length),
             note: ex.note || ''
@@ -1773,25 +1787,41 @@
         const flag = (o.country || []).map(c => COUNTRY_FLAG[c] || '').join('');
 
         // 武器按「主武器 / 副武器」分组展示
-        // 每把武器同时带上「该干员实际可用配件」—— 配件差异属干员视角，不在武器界面展开
+        // 每把武器直接平铺「该干员实际可用配件」与「被移除配件」，差异在干员界面一眼可见
         const weaponChip = w => {
             const wd = WEAPONS.find(x => x.name === w);
             const cat = wd ? (TYPE_NAMES[wd.type] || wd.type) : '';
             const att = operatorAttachments(o.name, w);
-            const limited = !!(att.blockedBarrels.length || att.blockedGrips.length);
-            const bits = [];
-            if (att.barrels.length) bits.push('枪管 ' + att.barrels.map(b => BARREL_NAMES[b] || b).join('、'));
-            if (att.grips.length) bits.push('握把 ' + att.grips.map(g => GRIP_NAMES[g] || g).join('、'));
-            if (att.laser) bits.push('下挂 激光');
-            if (!att.barrels.length && !att.grips.length && !att.laser) bits.push('无可装配件');
-            if (att.blockedBarrels.length) bits.push('⚠ 不可装 ' + att.blockedBarrels.map(b => BARREL_NAMES[b] || b).join('、'));
-            if (att.blockedGrips.length) bits.push('⚠ 不可装 ' + att.blockedGrips.map(g => GRIP_NAMES[g] || g).join('、'));
-            const title = `${o.name} 的 ${w} —— ${bits.join('；')}｜点击查看武器详情`;
-            return `<span class="op-weapon-chip${limited ? ' has-limit' : ''}" data-weapon="${w.replace(/'/g, "\\'")}" title="${esc(title)}">
-                        ${thumbImgHTML(w, 'op-weapon-thumb')}
-                        <span class="op-weapon-name">${esc(w)}</span>
-                        ${cat ? `<em>${esc(cat)}</em>` : ''}
-                        ${limited ? '<b class="op-wlimit-badge">⚠</b>' : ''}
+            const limited = !!(att.blockedBarrels.length || att.blockedGrips.length || att.blockedSights.length);
+
+            // 可用配件行（含瞄具 / 枪管 / 握把 / 下挂）
+            const availRows = [];
+            if (att.sights.length) availRows.push(`<span class="op-watt-row"><b>瞄具</b>${att.sights.map(s => `<i class="op-watt-item">${SIGHT_NAMES[s] || s}</i>`).join('')}</span>`);
+            if (att.barrels.length) availRows.push(`<span class="op-watt-row"><b>枪管</b>${att.barrels.map(b => `<i class="op-watt-item">${BARREL_NAMES[b] || b}</i>`).join('')}</span>`);
+            if (att.grips.length) availRows.push(`<span class="op-watt-row"><b>握把</b>${att.grips.map(g => `<i class="op-watt-item">${GRIP_NAMES[g] || g}</i>`).join('')}</span>`);
+            if (att.laser) availRows.push(`<span class="op-watt-row"><b>下挂</b><i class="op-watt-item">激光瞄准器</i></span>`);
+            if (!availRows.length) availRows.push(`<span class="op-watt-row"><i class="op-watt-empty">无可装配件</i></span>`);
+
+            // 被移除配件（干员级差异，高亮警示）
+            const removedRows = [];
+            if (att.blockedSights.length) removedRows.push(`<span class="op-watt-row op-watt-removed"><b>缺瞄具</b>${att.blockedSights.map(s => `<i class="op-watt-item">${SIGHT_NAMES[s] || s}</i>`).join('')}</span>`);
+            if (att.blockedBarrels.length) removedRows.push(`<span class="op-watt-row op-watt-removed"><b>缺枪管</b>${att.blockedBarrels.map(b => `<i class="op-watt-item">${BARREL_NAMES[b] || b}</i>`).join('')}</span>`);
+            if (att.blockedGrips.length) removedRows.push(`<span class="op-watt-row op-watt-removed"><b>缺握把</b>${att.blockedGrips.map(g => `<i class="op-watt-item">${GRIP_NAMES[g] || g}</i>`).join('')}</span>`);
+
+            const removedBlock = removedRows.length
+                ? `<div class="op-watt-removed-block">${removedRows.join('')}${att.note ? `<div class="op-watt-note">${esc(att.note)}</div>` : ''}</div>`
+                : '';
+
+            const title = `点击查看 ${w} 完整武器详情`;
+            return `<span class="op-weapon-card${limited ? ' has-limit' : ''}" data-weapon="${w.replace(/'/g, "\\'")}" title="${esc(title)}">
+                        <span class="op-weapon-card-head">
+                            ${thumbImgHTML(w, 'op-weapon-thumb')}
+                            <span class="op-weapon-name">${esc(w)}</span>
+                            ${cat ? `<em>${esc(cat)}</em>` : ''}
+                            ${limited ? '<b class="op-wlimit-badge">⚠</b>' : ''}
+                        </span>
+                        <span class="op-watt-list">${availRows.join('')}</span>
+                        ${removedBlock}
                     </span>`;
         };
         const opWeaponNames = o.weapons || [];
@@ -1809,21 +1839,17 @@
                    <div class="op-detail-weapons">${names.map(weaponChip).join('')}</div>
                </div>`
             : '';
-        // ---- 该干员的配件限制（干员视角，武器界面不展开）----
-        const exMap = (typeof OPERATOR_ATTACHMENT_EXCEPTIONS !== 'undefined'
-            && OPERATOR_ATTACHMENT_EXCEPTIONS[o.name]) || {};
-        const limitItems = Object.keys(exMap).map(wn => {
-            const ex = exMap[wn];
-            const slots = [];
-            if ((ex.barrels || []).length) slots.push('枪管：不可装 ' + ex.barrels.map(b => BARREL_NAMES[b] || b).join('、'));
-            if ((ex.grips || []).length) slots.push('握把：不可装 ' + ex.grips.map(g => GRIP_NAMES[g] || g).join('、'));
-            return `<li><strong class="op-wlimit-wn">${esc(wn)}</strong> — ${esc(slots.join('；'))}${ex.note ? `<span class="op-wlimit-why">（${esc(ex.note)}）</span>` : ''}</li>`;
-        }).join('');
-        const limitBlock = limitItems ? `
+        // ---- 该干员的配件差异已直接内联到每把武器卡（可用 + 缺），此处仅放一个轻量图例 ----
+        const hasAnyDiff = opWeaponNames.some(w => {
+            const att = operatorAttachments(o.name, w);
+            return att.blockedBarrels.length || att.blockedGrips.length || att.blockedSights.length;
+        });
+        const limitBlock = hasAnyDiff ? `
             <div class="op-wgroup op-wlimit-group">
-                <div class="op-wgroup-title">⚙️ 本干员配件限制 · ${Object.keys(exMap).length}</div>
-                <ul class="op-wlimit-list">${limitItems}</ul>
-                <div class="op-wlimit-foot">武器界面展示的是<strong>武器级</strong>配件清单；同一把枪在不同干员手中可能被单独移除个别配件，以上为本干员的实际差异。</div>
+                <div class="op-wgroup-title">⚙️ 配件差异说明</div>
+                <div class="op-wlimit-foot" style="margin-top:0;padding-top:0;border-top:0">
+                    上方每把武器列出的是<strong>本干员实际可用的配件</strong>；其中「<span class="op-watt-removed-inline">缺…</span>」标记的，是这把枪在武器级默认清单里存在、但<strong>该干员被单独移除</strong>的配件（依据官方补丁笔记 / Designer's Notes）。
+                </div>
             </div>` : '';
 
         const weapons = wGroup('主武器', primNames, '🔫')

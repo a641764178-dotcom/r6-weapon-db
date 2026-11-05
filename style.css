@@ -2172,14 +2172,7 @@ body.modal-open { overflow: hidden; }
     margin: 2px 0 10px;
 }
 .op-detail-desc { margin-top: 6px; font-size: 12px; line-height: 1.7; color: var(--text-secondary); }
-.op-detail-weapons { display: flex; flex-wrap: wrap; gap: 6px; }
-.op-weapon-chip {
-    padding: 4px 10px; font-size: 11px; border-radius: 4px;
-    background: var(--bg-card-hover); border: 1px solid var(--border-light); color: var(--text-secondary);
-    transition: border-color .15s, color .15s;
-}
-.op-weapon-chip:hover { border-color: var(--accent); color: var(--accent); }
-.op-weapon-chip em { font-style: normal; margin-left: 5px; font-size: 11px; color: var(--text-muted); }
+.op-detail-weapons { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
 .op-detail-profile { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
 .op-detail-profile div { font-size: 12px; color: var(--text-primary); }
 .op-detail-profile span { display: inline-block; min-width: 52px; color: var(--text-muted); font-size: 11px; }
@@ -2212,13 +2205,7 @@ body.modal-open { overflow: hidden; }
     color: var(--text-muted);
 }
 
-/* 武器 chip 缩略图版 */
-.op-weapon-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 4px 12px 4px 5px;
-}
+/* 武器缩略图 + 名称（干员武器卡内复用） */
 .op-weapon-thumb {
     width: 52px;
     height: 26px;
@@ -2230,14 +2217,65 @@ body.modal-open { overflow: hidden; }
     padding: 1px;
 }
 .op-weapon-name { font-weight: 600; color: var(--text-primary); }
-.op-weapon-chip:hover .op-weapon-name { color: var(--accent); }
-.op-weapon-chip em { margin-left: 2px; }
 
-/* 干员级配件限制：chip 角标 + 限制区块 */
-.op-weapon-chip.has-limit {
-    border-color: rgba(255, 167, 38, 0.45);
-    background: rgba(255, 167, 38, 0.07);
+/* 干员级配件差异：武器卡片（可用配件平铺 + 缺的配件高亮） */
+.op-weapon-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+    background: var(--bg-card-hover);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
 }
+.op-weapon-card:hover { border-color: var(--accent); background: var(--bg-card); }
+.op-weapon-card-head {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+.op-weapon-card-head .op-weapon-name { font-weight: 600; color: var(--text-primary); }
+.op-weapon-card-head em { font-style: normal; margin-left: auto; font-size: 11px; color: var(--text-muted); }
+.op-watt-list { display: flex; flex-direction: column; gap: 3px; }
+.op-watt-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; font-size: 11px; line-height: 1.5; }
+.op-watt-row b { flex: 0 0 auto; font-size: 10px; font-weight: 600; color: var(--text-muted); min-width: 30px; }
+.op-watt-item {
+    font-style: normal;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: rgba(79, 195, 247, 0.08);
+    border: 1px solid var(--border-light);
+    color: var(--text-secondary);
+}
+.op-watt-empty { font-style: normal; color: var(--text-muted); }
+.op-watt-removed-block {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 2px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    background: rgba(255, 167, 38, 0.08);
+    border: 1px dashed rgba(255, 167, 38, 0.4);
+}
+.op-watt-removed b { color: var(--warning); }
+.op-watt-removed .op-watt-item {
+    background: rgba(255, 167, 38, 0.12);
+    border-color: rgba(255, 167, 38, 0.35);
+    color: var(--warning);
+    text-decoration: line-through;
+}
+.op-watt-note { font-size: 10px; line-height: 1.5; color: var(--text-muted); }
+.op-watt-removed-inline { color: var(--warning); font-weight: 500; }
+.op-weapon-card.has-limit {
+    border-color: rgba(255, 167, 38, 0.45);
+    background: rgba(255, 167, 38, 0.05);
+}
+
+/* 干员级配件差异角标（保留） */
 .op-wlimit-badge {
     display: inline-flex;
     align-items: center;

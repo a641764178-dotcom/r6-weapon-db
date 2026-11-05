@@ -294,12 +294,9 @@ const SPECIAL_SIGHTS = [
 
 // 防守方 2.5x 放大镜白名单（Y9S1 官方分配表）
 const DEF_MAGNIFIED_WHITELIST = {
-    '9mm C1': ['Frost'], 'P10 RONI': ['Mozzie'], '9x19VSN': ['Tachanka'],
     'ACS12': ['Alibi', 'Maestro', 'Azami'], 'AR-15.50': ['Tubarão'],
-    'BOSG.12.2': ['Vigil'], 'Mk 14 EBR': ['Aruni'], 'MP5K': ['Wamai'],
-    'MP5': ['Doc', 'Melusi', 'Rook'], 'P90': ['Doc', 'Rook'],
-    'TCSG12': ['Goyo', 'Kaid'], 'UMP45': ['Castle'],
-    'UZK50GI': ['Thorn'], 'Vector .45': ['Goyo']
+    'BOSG.12.2': ['Vigil'], 'Mk 14 EBR': ['Aruni'],
+    'TCSG12': ['Goyo', 'Kaid']
 };
 
 // ADS时间基准 + 转角握把效果
@@ -1061,8 +1058,8 @@ const WEAPON_EXTENDED = {
         falloffExt: { start: 18, end: 28, min: 30 },
     },
     'MP5K': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅 Wamai 可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，适合近距离扫射' },
@@ -1070,8 +1067,8 @@ const WEAPON_EXTENDED = {
         falloffExt: { start: 20, end: 28, min: 26 },
     },
     'UMP45': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅 Castle 可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'very_low', horizontal: 'very_low', pattern: '几乎无后坐力，激光般稳定' },
@@ -1079,8 +1076,8 @@ const WEAPON_EXTENDED = {
         falloffExt: { start: 18, end: 28, min: 37 },
     },
     'MP5': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅 Doc/Melusi/Rook 可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 2.3, reloadEmpty: 2.9,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低后坐力，滚柱闭锁带来平稳射击' },
@@ -1088,8 +1085,8 @@ const WEAPON_EXTENDED = {
         falloffExt: { start: 19, end: 27, min: 24 },
     },
     'P90': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅 Doc/Rook 可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，高射速需要控制' },
@@ -1104,8 +1101,8 @@ const WEAPON_EXTENDED = {
         falloff: { start: 18, end: 28, min: 18 }
     },
     '9x19VSN': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅 Tachanka 可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '非常稳定的弹道' },
@@ -1122,8 +1119,8 @@ const WEAPON_EXTENDED = {
         falloffExt: { start: 20, end: 28, min: 28 },
     },
     '9mm C1': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅 Frost 可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'low', horizontal: 'low', pattern: '低射速带来极低后坐力' },
@@ -1155,8 +1152,8 @@ const WEAPON_EXTENDED = {
         falloffExt: { start: 18, end: 28, min: 30 },
     },
     'Vector .45': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅 Goyo 可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 2.0, reloadEmpty: 2.8,
         recoil: { vertical: 'very_low', horizontal: 'high', pattern: '垂直极低(Super V系统)，水平随机且大' },
@@ -1203,8 +1200,8 @@ const WEAPON_EXTENDED = {
         falloffExt: { start: 19, end: 27, min: 32 },
     },
     'P10 RONI': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅 Mozzie 可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 2.2, reloadEmpty: 2.8,
         recoil: { vertical: 'medium', horizontal: 'medium', pattern: '中等后坐力，15发弹匣限制火力持续' },
@@ -1212,8 +1209,8 @@ const WEAPON_EXTENDED = {
         falloffExt: { start: 19, end: 27, min: 23 },
     },
     'UZK50GI': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅 Thorn 可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 2.4, reloadEmpty: 3.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '中等后坐力，整体可控' },
@@ -1299,13 +1296,12 @@ const WEAPON_EXTENDED = {
         falloff: { start: 30, end: 40, min: 49 }
     },
     'OTs-03': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
-        sightNote: '3.5x 望远镜仅进攻方 DMR 可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+        specialNote: '专属 HDS 折叠式热成像瞄准镜（4x，可切换架设/收起，不可移除）；标准瞄具仅 1.0x（红点/全息/反射，无 Reflex C）',
         underbarrel: true, mobility: 50,
         reloadTactical: 2.8, reloadEmpty: 3.5,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '半自动，后坐力大但射速慢有恢复时间' },
-        falloff: { start: 30, end: 40, min: 57 },
-        specialNote: '热感瞄准镜可切换'
+        falloff: { start: 30, end: 40, min: 57 }
     },
     'CAMRS': {
         sights: ['red_dot', 'holographic', 'reflex', 'magnified', 'telescopic'],
@@ -1359,24 +1355,24 @@ const WEAPON_EXTENDED = {
         falloff: { start: 5, midStart: 7, mid: 31, midEnd: 10, end: 13, min: 18, pellets: 8 } // [GitHub实测Y11S1.1] 42→31→18
     },
     'M590A1': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅进攻方干员可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，后坐力大但可控' },
         falloff: { start: 5, midStart: 7, mid: 36, midEnd: 10, end: 13, min: 21, pellets: 8 } // [GitHub实测Y11S1.1] 48→36→21
     },
     'M1014': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅进攻方干员可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '半自动，连续射击后坐力累积' },
         falloff: { start: 5, midStart: 7, mid: 22, midEnd: 10, end: 13, min: 13, pellets: 8 } // [Y11S3.1官网dmg30 + 本站霰弹衰减规则推算] 30→22→13（原 28→21→12）
     },
     'SG-CQB': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅进攻方干员可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，单发伤害高' },
@@ -1411,8 +1407,8 @@ const WEAPON_EXTENDED = {
         falloff: { start: 5, midStart: 7, mid: 19, midEnd: 10, end: 13, min: 11, pellets: 8 } // [Y11S3.1官网dmg26 + 本站霰弹衰减规则推算] 26→19→11（原 24→18→10）
     },
     'SuperNova': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅进攻方干员可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，ComforTech缓冲系统' },
@@ -1427,23 +1423,23 @@ const WEAPON_EXTENDED = {
         falloff: { start: 5, midStart: 7, mid: 18, midEnd: 10, end: 13, min: 10, pellets: 8 } // [GitHub实测Y11S1.1] 24→18→10,
     },
     'SIX12': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
+        sights: ['red_dot', 'holographic', 'reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 4.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '旋转弹仓供弹，后坐力中等' },
         falloff: { start: 5, midStart: 7, mid: 34, midEnd: 10, end: 13, min: 20, pellets: 8 } // [GitHub实测Y11S1.1] 46→34→20
     },
     'SIX12 SD': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅进攻方干员可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 4.0, reloadEmpty: 4.0,
         recoil: { vertical: 'medium', horizontal: 'low', pattern: '自带消音器的旋转弹仓霰弹枪' },
         falloff: { start: 5, midStart: 7, mid: 34, midEnd: 10, end: 13, min: 20, pellets: 8 } // [GitHub实测Y11S1.1] 46→34→20（与SIX12相同）
     },
     'ITA12L': {
-        sights: ['red_dot', 'holographic', 'reflex', 'magnified'],
-        sightNote: '2.5x 放大镜仅进攻方干员可用',
+        sights: ['red_dot', 'holographic', 'reflex'],
+
         underbarrel: true, mobility: 50,
         reloadTactical: 4.6, reloadEmpty: 4.6,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '泵动霰弹枪，长管版ITA12' },
@@ -1487,14 +1483,14 @@ const WEAPON_EXTENDED = {
 
     // === 副武器 - 霰弹枪 ===
     'ITA12S': {
-        sights: [],
+        sights: ['red_dot','holographic','reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 3.0, reloadEmpty: 3.0,
         recoil: { vertical: 'high', horizontal: 'low', pattern: '副武器泵动霰弹枪，用于破墙' },
         falloff: { start: 5, midStart: 7, mid: 21, midEnd: 10, end: 13, min: 13, pellets: 8 } // [GitHub实测Y11S1.1] 29→21→13
     },
     'Super Shorty': {
-        sights: [],
+        sights: ['red_dot','holographic','reflex'],
         underbarrel: true, mobility: 50,
         reloadTactical: 2.5, reloadEmpty: 2.5,
         recoil: { vertical: 'very_high', horizontal: 'medium', pattern: '短管霰弹枪，散布极大，用于破墙' },
@@ -2887,6 +2883,13 @@ const OPERATORS = [
 
 // ---- 官方更新信息 ----
 const UPDATES = [
+    {
+        type: 'info',
+        date: '2026-11-05',
+        title: '瞄具数据全量核验 — 修正防守方 2.5x 白名单过时问题（Y10S3 已移除自动武器放大镜）+ 霰弹枪/OTs-03 精修',
+        content: '<ul><li>🔭 <strong>防守方 2.5x 白名单修正</strong>：本站此前沿用 <strong>Y9S1</strong> 的防守方 2.5x 白名单（14 组），但 <strong>Y10S3「Operation High Stakes」已移除防守方「自动武器」的放大镜</strong>（官方原文：Goyo/Doc/Rook/Frost/Echo/Tachanka/Castle 移除，<strong>DMR 与独头霰弹枪除外</strong>）。据此删除 9 组自动武器（9mm C1 / P10 RONI / 9x19VSN / MP5K / MP5 / P90 / UMP45 / UZK50GI / Vector .45），白名单缩减为 5 组（ACS12 / AR-15.50 / BOSG.12.2 / Mk 14 EBR / TCSG12）</li><li>🔧 <strong>霰弹枪 2.5x 误标修正 7 把</strong>：M590A1 / M1014 / SG-CQB / SuperNova / SIX12 / SIX12 SD / ITA12L 此前误标「magnified」，实际霰弹枪（非独头弹）仅有 1.0x 瞄具</li><li>🔫 <strong>副武器霰弹枪补瞄具 2 把</strong>：ITA12S / Super Shorty 此前 sights 为空，实有红点/全息/反射</li><li>🎯 <strong>OTs-03 修正</strong>：此前误标 magnified + telescopic，实为专属 <strong>HDS 折叠式热成像镜（4x，不可移除）</strong> + 标准 1.0x 瞄具（红点/全息/反射，无 Reflex C）</li><li>📌 <strong>数据源结论</strong>：瞄具以官方 Y9S1/Y10S3 Designer\'s Notes 为权威；Fandom 的 WeaponAttachments 模板对「干员级 2.5x 分发」有缺口（如 MP5 的 Doc/Rook 专属 2.5x 未单独建模），需结合官方白名单交叉校验</li><li>⚠️ 本次为<strong>数据准确性</strong>修订，不含游戏内平衡改动；武器伤害 / 射速 / 弹匣主表零改动</li></ul>',
+        link: ''
+    },
     {
         type: 'info',
         date: '2026-11-04',

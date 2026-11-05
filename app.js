@@ -1567,6 +1567,13 @@
         return OPERATOR_ICON_CDN + op.icon;
     }
 
+    // 干员图标徽章（详情头部名字旁的小图标），加载失败自动隐藏
+    function opIconHTML(op) {
+        const url = operatorIconURL(op);
+        if (!url) return '';
+        return `<img class="op-detail-icon" src="${url}" alt="${esc(op.name)} 图标" loading="lazy" onerror="this.remove()">`;
+    }
+
     // 干员立绘加载失败的降级链：立绘 → 军械库圆形头像 → 首字母占位
     window.__opImgFallback = function (img, iconUrl, initial) {
         if (!img) return;
@@ -1975,7 +1982,10 @@
                     ${opVisualHTML(o, 'op-detail-portrait', o.name[0])}
                 </div>
                 <div class="op-detail-meta">
-                    <div class="op-detail-name">${o.name} ${flag}</div>
+                    <div class="op-detail-name">
+                        ${opIconHTML(o)}
+                        <span>${o.name} ${flag}</span>
+                    </div>
                     ${o.realname ? `<div class="op-detail-en">${esc(o.realname)}</div>` : ''}
                     <div class="op-detail-tags">
                         <span class="op-tag ${o.side}">${o.side === 'atk' ? '⚔️ 进攻方' : o.side === 'def' ? '🛡️ 防守方' : '双阵营'}</span>

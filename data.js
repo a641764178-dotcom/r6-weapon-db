@@ -339,7 +339,7 @@ const TYPE_NAMES = {
     ar: '突击步枪', smg: '冲锋枪', lmg: '轻机枪',
     sniper: '狙击步枪', dmr: '射手步枪', shotgun: '霰弹枪', slug: '独头霰弹枪',
     // 副武器
-    shotgun_sec: '霰弹枪(次要)', pistol: '手枪', smg_sec: '冲锋枪(次要)', revolver: '左轮手枪'
+    shotgun_sec: '霰弹枪(次要)', pistol: '手枪', smg_sec: '冲锋枪(次要)', revolver: '左轮'
 };
 
 const WEAPON_CATEGORY = {
@@ -772,9 +772,9 @@ const WEAPONS = [
     { name: 'TACIT .45', type: 'pistol', damage: 52, rpm: 0, mag: 8, operators: ['Solid Snake'], side: 'atk',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] },
       notes: 'Y11S1新增，内置消音器+反射瞄具' },
-    { name: 'Bailiff 410', type: 'pistol', damage: 30, rpm: 0, mag: 5, operators: ['Maestro','Alibi','Oryx','Doc','Grim','Noor'], side: 'def',
+    { name: 'Bailiff 410', type: 'revolver', damage: 30, rpm: 0, mag: 5, operators: ['Maestro','Alibi','Oryx','Doc','Grim','Noor'], side: 'def',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] },
-      notes: '副武器左轮霰弹枪，主要用于开洞' },
+      notes: '特殊左轮霰弹枪：转轮式枪膛发射 .410 口径霰弹（单发多弹丸），主要用于破坏墙面开洞' },
     { name: '.44 Vendetta', type: 'revolver', damage: 78, rpm: 0, mag: 6, operators: ['Deimos'], side: 'atk',
       barrels: [], grips: [], y7s3_new: { barrels: [], grips: [] },
       notes: 'Deimos专属高伤害左轮' },
@@ -2612,6 +2612,17 @@ const WEAPON_DETAILS = {
         trivia: [
             'Chiappa Rhino 独特之处在于枪管对齐最下面的弹膛（而非通常的最上面），大幅降低了射击时枪口上跳。',
             '是游戏中唯一可以装消音器的左轮手枪。'
+        ]
+    },
+    'Bailiff 410': {
+        realName: 'Taurus Judge',
+        caliber: '.410 Bore 霰弹',
+        country: '🇧🇷 巴西',
+        manufacturer: 'Taurus',
+        trivia: [
+            'Bailiff 410 是游戏中唯一的「左轮霰弹枪」：采用转轮式枪膛，但发射的是 .410 口径霰弹（单发多弹丸），现实原型为 Taurus Judge 系列。',
+            '正因发射霰弹，它既能对人造成伤害，也能像霰弹枪一样破坏软墙面开洞——是少数同时兼顾「战斗」与「开洞」功能的副武器。',
+            '游戏内内置红点瞄具，固定不可更换；分类归入「左轮」而非「手枪」，以体现其转轮霰弹枪的特殊定位。'
         ]
     }
 };

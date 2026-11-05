@@ -2741,7 +2741,7 @@ body.modal-open { overflow: hidden; }
 .world-timeline::before {
     content: '';
     position: absolute;
-    left: 62px; top: 6px; bottom: 6px;
+    left: 78px; top: 6px; bottom: 6px;
     width: 1px;
     background: linear-gradient(180deg, var(--accent-dim), rgba(42,122,168,.1));
 }
@@ -2749,17 +2749,18 @@ body.modal-open { overflow: hidden; }
 .tl-item {
     position: relative;
     display: flex;
-    gap: 16px;
+    gap: 20px;
     margin-bottom: 14px;
 }
 .tl-year {
-    flex: 0 0 58px;
+    flex: 0 0 74px;
     text-align: right;
     font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     color: var(--accent);
     padding-top: 12px;
+    padding-right: 14px;
 }
 .tl-year em {
     display: block;
@@ -2780,7 +2781,7 @@ body.modal-open { overflow: hidden; }
 .tl-body::before {
     content: '';
     position: absolute;
-    left: -21px; top: 18px;
+    left: -20px; top: 18px;
     width: 9px; height: 9px;
     border-radius: 50%;
     background: var(--accent);
@@ -2877,8 +2878,10 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 768px) {
     #operator-modal .modal-content { width: 96%; padding: 22px 16px; }
     .op-tab-btn { flex: 1 1 44%; min-width: 0; }
-    .world-timeline::before { left: 50px; }
-    .tl-year { flex-basis: 46px; font-size: 12px; }
+    .world-timeline::before { left: 62px; }
+    .tl-year { flex-basis: 58px; padding-right: 10px; font-size: 12px; }
+    .tl-item { gap: 14px; }
+    .tl-body::before { left: -18px; }
     .org-cards { grid-template-columns: 1fr; }
 }
 

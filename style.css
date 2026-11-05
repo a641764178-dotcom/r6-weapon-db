@@ -1991,7 +1991,7 @@ body.modal-open { overflow: hidden; }
     margin: 14px 0 18px;
 }
 .op-filters { display: flex; gap: 6px; }
-.op-filter {
+.op-filter, .org-filter {
     padding: 6px 14px;
     font-size: 12px;
     font-weight: 600;
@@ -2002,8 +2002,8 @@ body.modal-open { overflow: hidden; }
     cursor: pointer;
     transition: all .15s;
 }
-.op-filter:hover { border-color: var(--accent); color: var(--text-primary); }
-.op-filter.active {
+.op-filter:hover, .org-filter:hover { border-color: var(--accent); color: var(--text-primary); }
+.op-filter.active, .org-filter.active {
     background: var(--accent-glow);
     border-color: var(--accent);
     color: var(--accent);
